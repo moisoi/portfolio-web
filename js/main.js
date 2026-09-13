@@ -553,6 +553,23 @@ const Stats = {
 };
 
 /* ============================================================
+   Stack wall — auto-scrolling tech pills in About
+   ============================================================ */
+const StackWall = {
+  init() {
+    const wall = $("#stack-wall");
+    if (!wall) return;
+    const pill = (t) => `<span class="stack-pill"><i aria-hidden="true"></i>${t}</span>`;
+    const fwd = SITE.marquee.map(pill).join("");
+    const rev = [...SITE.marquee].reverse().map(pill).join("");
+    // duplicate each strip so the -50% translate loops seamlessly
+    wall.innerHTML =
+      `<div class="stack-row">${fwd}${fwd}</div>` +
+      `<div class="stack-row reverse">${rev}${rev}</div>`;
+  },
+};
+
+/* ============================================================
    Skills (rendered from SITE)
    ============================================================ */
 const Skills = {
@@ -1005,6 +1022,7 @@ document.addEventListener("DOMContentLoaded", () => {
   HeroCanvas.init();
   Typewriter.init();
   Marquee.init();
+  StackWall.init();
   Skills.init();
   Projects.init();
   Timeline.init();

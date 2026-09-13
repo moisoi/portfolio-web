@@ -609,6 +609,11 @@ const Bot = (() => {
     els.input.addEventListener("keydown", (e) => {
       if (e.key === "Enter") { e.preventDefault(); sendUser(els.input.value); }
     });
+
+    // Quick-question bar (persistent suggestions above the input)
+    $$(".qbtn").forEach((b) =>
+      b.addEventListener("click", () => sendUser(b.dataset.ask))
+    );
     window.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && opened) close();
     });

@@ -199,9 +199,11 @@
   stack<span class="tk-p">: [</span><span class="tk-s">"React Native"</span><span class="tk-p">,</span> <span class="tk-s">"Next.js"</span><span class="tk-p">,</span> <span class="tk-s">"NestJS"</span><span class="tk-p">,</span> <span class="tk-s">"Supabase"</span><span class="tk-p">],</span>
   loves<span class="tk-p">: [</span><span class="tk-s">"clean APIs"</span><span class="tk-p">,</span> <span class="tk-s">"AI workflows"</span><span class="tk-p">,</span> <span class="tk-s">"buna"</span><span class="tk-p">],</span>
   hireable<span class="tk-p">:</span> <span class="tk-k">true</span>  <span class="tk-c">// ← try me</span>
-<span class="tk-p">};</span></code></pre>
+<span class="tk-p">};</span><span class="code-cursor" aria-hidden="true"></span></code></pre>
           </aside>
         </div>
+
+        <div class="stack-wall" id="stack-wall" data-reveal aria-hidden="true"></div>
 
         <div class="stats-row">
           <div class="stat" data-reveal style="--d:.1s"><span class="num" data-count="5" data-suffix="+">0</span><span class="label">Years in CS</span></div>
@@ -372,11 +374,15 @@
 
   <!-- ================= AI ASSISTANT ================= -->
   <div class="bot-teaser" id="bot-teaser" role="status">
-    👋 Hi! I'm <strong>Messa</strong> — Messay's AI assistant. Ask me anything about his work!
+    👋 <strong>Ask my AI about my work</strong> — skills, projects, hiring, booking a call…
   </div>
 
-  <button class="bot-launcher" id="bot-launcher" aria-label="Chat with Messa, the AI assistant" aria-expanded="false">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+  <button class="bot-launcher" id="bot-launcher" aria-label="Chat with my portfolio AI assistant" aria-expanded="false">
+    <span class="bl-ico" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+    </span>
+    <span class="bl-label">Chat with my portfolio</span>
+    <span class="bl-label-open">Close chat</span>
     <span class="bot-badge" id="bot-badge" hidden>1</span>
   </button>
 
@@ -384,15 +390,27 @@
     <div class="bot-head">
       <div class="bot-avatar" aria-hidden="true">🤖<span class="status-dot"></span></div>
       <div class="bot-head-info">
-        <h3>Messa</h3>
-        <p><b>● Online</b> — AI assistant, trained on Messay's portfolio</p>
+        <h3>Ask my AI about my work</h3>
+        <p>Messa · <b>● Online</b> — instant answers, trained on this portfolio</p>
       </div>
       <button class="bot-close" id="bot-close" aria-label="Close chat">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </button>
     </div>
 
+    <div class="bot-tagline" aria-hidden="true"><span class="spark">✨</span> skills · projects · experience · hiring · booking</div>
+
     <div class="bot-body" id="bot-body" role="log" aria-live="polite"></div>
+
+    <div class="bot-quickbar" role="group" aria-label="Quick questions">
+      <button class="qbtn" data-ask="What's his stack?">🧰 Stack</button>
+      <button class="qbtn" data-ask="Show projects">🚀 Projects</button>
+      <button class="qbtn" data-ask="His experience?">💼 Experience</button>
+      <button class="qbtn" data-ask="Is he available?">📅 Availability</button>
+      <button class="qbtn" data-ask="Book a call">📞 Book a call</button>
+      <button class="qbtn" data-ask="Get his contact">✉️ Contact</button>
+      <button class="qbtn" data-ask="Send me his CV">⤓ CV</button>
+    </div>
 
     <div class="bot-input-row">
       <input type="text" id="bot-input" placeholder="Ask about skills, projects, hiring…" autocomplete="off" aria-label="Message the assistant" />
