@@ -15,12 +15,13 @@ zero dependencies. Designed to make recruiters stop scrolling and start explorin
 | **About** | Animated count-up stats, syntax-highlighted `developer.ts` code card, spotlight hover effects |
 | **Skills** | Animated proficiency bars grouped by discipline + infinite tech marquee |
 | **Projects** | Filterable grid, 3D tilt cards with shine sweep, rich detail modals |
-| **Experience** | Alternating scroll-revealed timeline (work + education) |
+| **Experience** | Alternating scroll-revealed timeline (work, education **and volunteering**) |
+| **Beyond the code** | Certificates & community work cards (MMCY, Red Cross, YWCA) |
 | **Testimonials** | Auto-playing carousel with dots & arrows |
 | **Contact** | Validated form with success state, one-click email copy, **live Addis Ababa local time** |
 | **Résumé & CV** | Print-ready A4 résumé page (`resume.html`) with one-click "Download PDF", plus a **direct-download CV** (`assets/Messay_Mohammed_CV.pdf`, regenerable via `tools/make_cv.py`) |
 | **📅 Booking** | **Cal.com "Book a call"** CTAs in the nav, hero, contact cards, mobile menu, résumé page, command palette and bot |
-| **🤖 AI Assistant ("Messa")** | Floating chat bot that answers recruiter questions — skills, projects, experience, availability, salary, contact — with quick-reply chips, action buttons (navigate / copy email / open résumé / open case studies), typing indicator, follow-up memory, and graceful fallbacks. 100% client-side: no servers, no API keys, works offline & on GitHub Pages |
+| **🤖 AI Assistant ("Messa")** | Floating chat bot that answers recruiter questions — skills, projects (by name), experience, education, certificates, volunteering, availability, salary, phone/email/contact, booking — with quick-reply chips, action buttons (navigate / copy email / open case studies / download CV / book a call), typing indicator, follow-up memory, and graceful fallbacks. 100% client-side: no servers, no API keys, works offline & on GitHub Pages |
 | **Extras** | Dark/light theme (persisted), custom cursor, toast notifications, film grain overlay, scroll-reveal animations, full `prefers-reduced-motion` support |
 | **Easter eggs 🥚** | Konami code (`↑ ↑ ↓ ↓ ← → ← → B A`) fires confetti party mode; a hidden hello in the browser console for curious recruiters |
 
@@ -44,20 +45,25 @@ Everything recruiters read lives in **one place**: the `SITE` object at the top 
 (name, email, typed roles, skills, projects, timeline, testimonials, marquee tech).
 Edit it and the page re-renders — no other file changes needed.
 
-> ⚠️ **Before publishing, update these placeholders:**
-> - `SITE.email` (`hello@messay.dev`) → your real email (also appears in the hero socials `mailto:` in `index.html`)
-> - Project `repo` / `demo` links → real project URLs
-> - LinkedIn URL in the hero socials
-> - Experience/education entries and stats → your true history
-> - Testimonial quotes → real ones once you have them
-> - `BOT_PROFILE` at the top of `js/bot.js` → availability, salary stance, languages (the assistant speaks with this data)
-> - To swap the CV: drop your own PDF at `assets/Messay_Mohammed_CV.pdf`, or edit the `CONTENT` dict in `tools/make_cv.py` and re-run `python3 tools/make_cv.py`
+> ✏️ **Content now reflects Messay's real CV** (Dewel Marketing & Consultancy, Meteku Teshome PLC,
+> HILCOE, volunteering, MMCY certificate). To update later:
+> - All site + bot content lives in the `SITE` object at the top of `js/main.js`
+> - Bot-specific answers (availability, salary stance, fun facts) → `BOT_PROFILE` in `js/bot.js`
+> - To swap the CV PDF: drop a new file at `assets/Messay_Mohammed_CV.pdf`, or edit the `CONTENT`
+>   dict in `tools/make_cv.py` and re-run `python3 tools/make_cv.py`
+> - When the two client projects get public repos/demos, update their `repo`/`demo` links in `SITE.projects`
 
 ### 📅 Booking & CV links
 
 - Booking: `SITE.cal` in `js/main.js` → https://cal.com/messay-mohammed-w47ggg
   (hardcoded in `index.html` nav/hero/contact — search & replace if it ever changes)
 - CV download: `SITE.cvFile` → `assets/Messay_Mohammed_CV.pdf`
+
+### 🧪 Tests
+
+Conversation & rendering test harnesses live outside the repo; from the project you can run
+`node --check js/main.js && node --check js/bot.js` for syntax safety. The bot suite covers
+36 recruiter-style questions end-to-end.
 
 ### 🤖 About the AI assistant
 

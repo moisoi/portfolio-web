@@ -15,79 +15,67 @@ OUT = os.path.join(os.path.dirname(__file__), "..", "assets", "Messay_Mohammed_C
 INK = (23, 23, 31)
 MUTED = (88, 88, 98)
 ACC = (63, 92, 0)       # dark olive (matches the site's light-theme accent)
-LIME = (178, 219, 51)   # print-safe lime for the header rule
+LIME = (178, 219, 51)   # print-safe lime for section rules
 
 CONTENT = {
     "name": "Messay Mohammed",
     "role": "FULL STACK DEVELOPER",
     "contact": [
-        "Addis Ababa, Ethiopia · Open to remote",
-        "hello@messay.dev",
+        "Bole, Addis Ababa, Ethiopia",
+        "0900 651 948",
+        "messaymohammed@gmail.com",
         "github.com/moisoi",
+        "linkedin.com/in/messay-seid-398000252",
     ],
     "summary": (
-        "Full stack developer with 3+ years of experience designing, building, and shipping web products "
-        "end-to-end. Comfortable owning features from database schema to pixel-perfect UI, with a focus on "
-        "performance, accessibility, and maintainable code. Quick to learn, obsessive about quality, and "
-        "happiest when shipping software that real people use."
+        "Computer Science graduate skilled in full stack development and digital content creation. "
+        "Built responsive mobile apps with React Native + Supabase and web apps using React/Next.js. "
+        "Experienced with AI tools for different workflows. Detail-oriented problem-solver with a "
+        "clean-code focus and UI/UX awareness. Reliable through freelance projects."
     ),
     "experience": [
         {
-            "title": "Full Stack Developer",
-            "org": "Freelance & Contract",
-            "date": "2024 — Present",
+            "title": "Full Stack Developer (Contract)",
+            "org": "Meteku Teshome General Work PLC · Addis Ababa",
+            "date": "Feb 2026",
             "points": [
-                "Ship end-to-end web products for startups and local businesses — schema design to deployment.",
-                "Delivered marketplace, POS, and analytics platforms used by real customers daily.",
-                "Advise clients on architecture, performance budgets, and accessibility.",
+                "Developed the Business Forms Telegram Mini App using React + Vite (frontend) and Node.js + NestJS (backend).",
+                "Automated forms for petty cash requests, purchase orders, and employee attendance.",
+                "Generated business reports with export functionality for client management.",
             ],
         },
         {
-            "title": "Frontend Developer",
-            "org": "Product Studio, Addis Ababa",
-            "date": "2023 — 2024",
+            "title": "Full Stack Mobile Developer (Contract)",
+            "org": "Dewel Marketing and Consultancy · Addis Ababa",
+            "date": "Sep – Dec 2025",
             "points": [
-                "Built and maintained React applications serving thousands of monthly users.",
-                "Introduced a component system that cut UI development time by ~40%.",
-                "Paired with designers to ship pixel-perfect, responsive interfaces.",
+                "Built the Student Sports Hub mobile app with React Native + Supabase for grades 1–12 students and parents across Addis Ababa.",
+                "Real-time stories, match schedules, team rosters, and sports updates.",
+                "Scalable database architecture supporting multiple schools.",
             ],
         },
-        {
-            "title": "Web Development Intern",
-            "org": "Tech Startup, Remote",
-            "date": "2022 — 2023",
-            "points": [
-                "Learned production workflows: code review, Git flow, CI/CD, agile sprints.",
-                "Shipped first production features and owned bug fixes end-to-end.",
-            ],
-        },
-    ],
-    "projects": [
-        ("Gebeya Marketplace", "React · Node.js · PostgreSQL",
-         "Two-sided marketplace for Ethiopian artisans with escrow payments and sub-second page loads."),
-        ("BunaPOS", "PWA · IndexedDB · React",
-         "Offline-first café point-of-sale with background sync — full functionality with zero connectivity."),
-        ("Selam Chat", "WebSockets · Redis · MongoDB",
-         "Real-time messaging with rooms & presence, load-tested to 2k concurrent connections per node."),
-        ("SnapCV API", "Python · FastAPI · OCR",
-         "Resume-parsing API turning messy PDFs into structured JSON with 92% field accuracy."),
-    ],
-    "skills": [
-        ("Frontend", "JavaScript / TypeScript, React, Next.js, HTML/CSS, Tailwind"),
-        ("Backend", "Node.js, Express, Python, FastAPI, PostgreSQL, MongoDB"),
-        ("Tools", "Git, Docker, Linux, CI/CD, Vercel, Figma"),
     ],
     "education": {
-        "title": "BSc, Computer Science",
-        "org": "Addis Ababa University",
-        "date": "2019 — 2023",
-        "points": [
-            "Led the student dev club; organized hackathons.",
-            "Focus: software engineering, databases, algorithms.",
-        ],
+        "title": "Bachelor of Computer Science",
+        "org": "HILCOE School of Computer Science and Technology · Addis Ababa",
+        "date": "Sep 2020 – Jul 2025",
     },
-    "languages": "Amharic (native) · English (professional fluency)",
-    "highlights": "24+ projects built · 12+ clients shipped for · Open to remote worldwide",
+    "skills": [
+        ("Frontend", "HTML5, CSS3, JavaScript, TypeScript, Tailwind CSS, React.js, Next.js"),
+        ("Backend", "Node.js, NestJS, Express.js, FastAPI"),
+        ("Databases", "PostgreSQL, MySQL, Redis, Firebase, Supabase"),
+        ("Mobile", "React Native, Expo, Telegram Mini Apps"),
+        ("Others", "Docker, RESTful API design, WebSockets, JWT, OAuth 2.0, RBAC, Git/GitHub/GitLab CI/CD, penetration testing basics"),
+    ],
+    "volunteer": [
+        ("Lead Unit Coordinator & Teacher — YWCA (Jun – Aug 2018)",
+         "Led a teaching team and daily academic operations; organized fundraising supporting 100+ students."),
+        ("Blood Donation Organizer — Red Cross Ethiopia (May 2018)",
+         "Facilitated and organized high-school blood donations sponsored by Red Cross Ethiopia."),
+    ],
+    "certificate": "2D & 3D Modeling for Modern Product Development — MMCY Workforce Training",
+    "languages": "Amharic (native) · English",
+    "soft": "Communication · Teamwork · Problem-solving · Time management · Leadership & ownership",
 }
 
 
@@ -102,14 +90,14 @@ class CV(FPDF):
         self.line(self.l_margin, y, self.w - self.r_margin, y)
         self.ln(2)
 
-    def bullet(self, text, color=INK):
-        self.set_font("Helvetica", "", 9.6)
+    def bullet(self, text, color=MUTED):
+        self.set_font("Helvetica", "", 9.4)
         self.set_text_color(*ACC)
         x0 = self.get_x()
-        self.cell(4.6, 4.7, chr(8226))
+        self.cell(4.6, 4.6, chr(8226))
         self.set_text_color(*color)
         xi = self.get_x()
-        self.multi_cell(self.w - self.r_margin - xi, 4.7, text, new_x="LMARGIN", new_y="NEXT")
+        self.multi_cell(self.w - self.r_margin - xi, 4.6, text, new_x="LMARGIN", new_y="NEXT")
         self.set_x(x0)
 
 
@@ -132,96 +120,94 @@ def build():
     pdf.set_font("Helvetica", "B", 10)
     pdf.set_text_color(*ACC)
     pdf.cell(0, 5, c["role"], new_x="LMARGIN", new_y="NEXT")
-    pdf.ln(1.5)
+    pdf.ln(1)
 
-    pdf.set_font("Helvetica", "", 9.3)
+    pdf.set_font("Helvetica", "", 9)
     pdf.set_text_color(*MUTED)
-    pdf.cell(0, 4.6, "  |  ".join(c["contact"]), new_x="LMARGIN", new_y="NEXT")
-    pdf.ln(1.2)
+    pdf.cell(0, 4.4, "  |  ".join(c["contact"]), new_x="LMARGIN", new_y="NEXT")
+    pdf.ln(1)
     pdf.set_draw_color(*INK)
     pdf.set_line_width(0.7)
     pdf.line(pdf.l_margin, pdf.get_y(), pdf.w - pdf.r_margin, pdf.get_y())
-    pdf.ln(4)
+    pdf.ln(3.5)
 
     # ---------- Summary ----------
-    pdf.section("Profile")
-    pdf.set_font("Helvetica", "", 9.8)
+    pdf.section("Summary")
+    pdf.set_font("Helvetica", "", 9.6)
     pdf.set_text_color(*MUTED)
-    pdf.multi_cell(0, 4.8, c["summary"], new_x="LMARGIN", new_y="NEXT")
-    pdf.ln(2.2)
+    pdf.multi_cell(0, 4.7, c["summary"], new_x="LMARGIN", new_y="NEXT")
+    pdf.ln(2)
 
     # ---------- Experience ----------
-    pdf.section("Experience")
+    pdf.section("Professional Experience")
     for job in c["experience"]:
-        pdf.set_font("Helvetica", "B", 10.6)
+        pdf.set_font("Helvetica", "B", 10.4)
         pdf.set_text_color(*INK)
-        y0 = pdf.get_y()
-        pdf.cell(pdf.epw - 34, 5, job["title"])
+        pdf.cell(pdf.epw - 30, 5, job["title"])
         pdf.set_font("Helvetica", "", 8.6)
         pdf.set_text_color(140, 140, 150)
-        pdf.cell(34, 5, job["date"], align="R", new_x="LMARGIN", new_y="NEXT")
-        pdf.set_font("Helvetica", "B", 9.2)
+        pdf.cell(30, 5, job["date"], align="R", new_x="LMARGIN", new_y="NEXT")
+        pdf.set_font("Helvetica", "B", 9.1)
         pdf.set_text_color(*ACC)
-        pdf.cell(0, 4.5, job["org"], new_x="LMARGIN", new_y="NEXT")
-        pdf.ln(0.6)
-        for p in job["points"]:
-            pdf.bullet(p, MUTED)
-        pdf.ln(1.7)
-
-    # ---------- Projects ----------
-    pdf.section("Selected Projects")
-    for name, tech, desc in c["projects"]:
-        pdf.set_font("Helvetica", "B", 9.8)
-        pdf.set_text_color(*INK)
-        pdf.cell(52, 4.7, name)
-        pdf.set_font("Helvetica", "", 8.4)
-        pdf.set_text_color(140, 140, 150)
-        pdf.cell(0, 4.7, tech, new_x="LMARGIN", new_y="NEXT")
-        pdf.set_font("Helvetica", "", 9.3)
-        pdf.set_text_color(*MUTED)
-        pdf.multi_cell(0, 4.6, desc, new_x="LMARGIN", new_y="NEXT")
-        pdf.ln(1.2)
-    pdf.ln(0.8)
-
-    # ---------- Skills ----------
-    pdf.section("Skills")
-    for label, items in c["skills"]:
-        pdf.set_font("Helvetica", "B", 9.4)
-        pdf.set_text_color(*INK)
-        pdf.cell(24, 4.8, label)
-        pdf.set_font("Helvetica", "", 9.4)
-        pdf.set_text_color(*MUTED)
-        pdf.multi_cell(0, 4.8, items, new_x="LMARGIN", new_y="NEXT")
+        pdf.cell(0, 4.4, job["org"], new_x="LMARGIN", new_y="NEXT")
         pdf.ln(0.5)
-    pdf.ln(1)
+        for p in job["points"]:
+            pdf.bullet(p)
+        pdf.ln(1.6)
 
-    # ---------- Education + extras ----------
+    # ---------- Education ----------
     pdf.section("Education")
     e = c["education"]
     pdf.set_font("Helvetica", "B", 10.2)
     pdf.set_text_color(*INK)
-    pdf.cell(pdf.epw - 34, 5, e["title"])
+    pdf.cell(pdf.epw - 32, 5, e["title"])
     pdf.set_font("Helvetica", "", 8.6)
     pdf.set_text_color(140, 140, 150)
-    pdf.cell(34, 5, e["date"], align="R", new_x="LMARGIN", new_y="NEXT")
-    pdf.set_font("Helvetica", "B", 9.2)
+    pdf.cell(32, 5, e["date"], align="R", new_x="LMARGIN", new_y="NEXT")
+    pdf.set_font("Helvetica", "B", 9.1)
     pdf.set_text_color(*ACC)
-    pdf.cell(0, 4.6, e["org"], new_x="LMARGIN", new_y="NEXT")
-    pdf.ln(0.6)
-    for p in e["points"]:
-        pdf.bullet(p, MUTED)
-    pdf.ln(1.6)
+    pdf.cell(0, 4.4, e["org"], new_x="LMARGIN", new_y="NEXT")
+    pdf.ln(2.2)
 
-    pdf.section("Languages & Highlights")
-    pdf.set_font("Helvetica", "", 9.6)
+    # ---------- Skills ----------
+    pdf.section("Skills")
+    for label, items in c["skills"]:
+        pdf.set_font("Helvetica", "B", 9.2)
+        pdf.set_text_color(*INK)
+        pdf.cell(22, 4.7, label)
+        pdf.set_font("Helvetica", "", 9.2)
+        pdf.set_text_color(*MUTED)
+        pdf.multi_cell(0, 4.7, items, new_x="LMARGIN", new_y="NEXT")
+        pdf.ln(0.4)
+    pdf.ln(1)
+
+    # ---------- Volunteer ----------
+    pdf.section("Volunteer Experience")
+    for title, desc in c["volunteer"]:
+        pdf.set_font("Helvetica", "B", 9.4)
+        pdf.set_text_color(*INK)
+        pdf.multi_cell(0, 4.7, title, new_x="LMARGIN", new_y="NEXT")
+        pdf.set_font("Helvetica", "", 9.2)
+        pdf.set_text_color(*MUTED)
+        pdf.multi_cell(0, 4.6, desc, new_x="LMARGIN", new_y="NEXT")
+        pdf.ln(1)
+    pdf.ln(0.6)
+
+    # ---------- Certificate / Languages / Soft skills ----------
+    pdf.section("Certificate · Languages · Soft Skills")
+    pdf.set_font("Helvetica", "", 9.4)
     pdf.set_text_color(*MUTED)
-    pdf.cell(0, 4.8, "Languages:  " , new_x="RIGHT")
+    pdf.cell(22, 4.7, "Certificate")
     pdf.set_text_color(*INK)
-    pdf.cell(0, 4.8, c["languages"], new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 4.7, c["certificate"], new_x="LMARGIN", new_y="NEXT")
     pdf.set_text_color(*MUTED)
-    pdf.cell(0, 4.8, "Highlights:  ", new_x="RIGHT")
+    pdf.cell(22, 4.7, "Languages")
     pdf.set_text_color(*INK)
-    pdf.cell(0, 4.8, c["highlights"], new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 4.7, c["languages"], new_x="LMARGIN", new_y="NEXT")
+    pdf.set_text_color(*MUTED)
+    pdf.cell(22, 4.7, "Soft skills")
+    pdf.set_text_color(*INK)
+    pdf.multi_cell(0, 4.7, c["soft"], new_x="LMARGIN", new_y="NEXT")
 
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     pdf.output(OUT)

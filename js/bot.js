@@ -9,14 +9,15 @@
 
 const BOT_PROFILE = {
   botName: "Messa",
-  availability: "Immediately available — open to full-time roles, contracts and freelance, remote or on-site.",
-  remote: "Yes! Messay works across time zones comfortably from Addis Ababa (GMT+3) and is open to relocation for the right opportunity.",
-  languages: "Amharic (native) and English (professional fluency).",
+  availability: "Available now — open to full-time roles, contracts and freelance, remote or on-site.",
+  remote: "Yes! Messay works across time zones comfortably from Bole, Addis Ababa (GMT+3) and is open to relocation for the right opportunity.",
+  languages: "Amharic (native) and English.",
   salary: "Compensation depends on the role, scope and location — Messay is pragmatic and happy to discuss a fair range once he understands the position. Best to reach out directly!",
   noticePeriod: "None — he can start right away.",
   funFacts: [
     "Messay runs on Ethiopian coffee — 'buna' is basically a food group for him. ☕",
-    "He once debugged a production issue from a café with spotty Wi-Fi… offline-first was born that day.",
+    "He's also a digital content creator — that's where his UI/UX eye comes from. 🎬",
+    "He built a Telegram Mini App for real business paperwork. Petty cash, automated. 🧾",
     "His favorite key combo is Cmd+K. Try it on this site 😉",
     "He reads the browser console of every site he visits. That's how he found you. 👀",
   ],
@@ -80,12 +81,8 @@ const Bot = (() => {
 
   const findProject = (norm) => {
     const aliases = {
-      gebeya: 0, marketplace: 0, artisan: 0,
-      buna: 1, bunapos: 1, "point of sale": 1, pos: 1, cafe: 1, café: 1, coffee: 1,
-      selam: 2, "chat app": 2, chat: 2, messaging: 2,
-      makeda: 3, analytics: 3, dashboard: 3,
-      axum: 4, "ui kit": 4, "component library": 4, components: 4,
-      snapcv: 5, "resume parser": 5, "cv parser": 5, ocr: 5,
+      "student sports hub": 0, "sports hub": 0, sports: 0, "school app": 0, dewel: 0, "sports app": 0,
+      "business forms": 1, "forms app": 1, "telegram mini app": 1, "mini app": 1, telegram: 1, meteku: 1, "forms": 1,
     };
     for (const [k, idx] of Object.entries(aliases)) {
       if (hasTerm(norm, k)) return idx;
@@ -139,9 +136,9 @@ const Bot = (() => {
       re: [/tell me about (him|messay)/],
       respond: () => ({
         text:
-          `${SITE.name} is a ${SITE.role} based in ${SITE.location}. He builds products end-to-end — from database schemas to pixel-perfect interfaces — with a soft spot for performance, accessibility and clean APIs.\n\nHis stack centers on React + TypeScript on the front and Node.js/Python on the back, and he's happiest when shipping software real people use.`,
+          `${SITE.name} is a ${SITE.role} based in ${SITE.location}. A Computer Science graduate (HILCOE), he builds across the stack: mobile apps with React Native + Supabase, Telegram Mini Apps, and web apps with React/Next.js.\n\nHe's shipped production software for real clients — including a school sports platform used across Addis Ababa — and pairs clean code with genuine UI/UX awareness and AI-assisted workflows.`,
         chips: ["What's his stack?", "Show projects", "His experience", "Is he available?"],
-        actions: [ACT.resume],
+        actions: [ACT.resume, ACT.downloadCV],
       }),
     },
     {
@@ -149,7 +146,7 @@ const Bot = (() => {
       kw: ["frontend", 6, "front end", 6, "front-end", 6, "ui", 3, "react", 4, "css", 3, "javascript", 3, "typescript", 3, "interface", 2],
       re: [/front.?end/],
       respond: () => ({
-        text: "On the frontend, Messay's toolkit looks like this:\n\n" + skillSummary(SITE.skillGroups[0]) + "\n\nHe cares about the details: 60fps interactions, accessible markup, and UI that feels instant.",
+        text: "On the frontend & mobile side, Messay's toolkit looks like this:\n\n" + skillSummary(SITE.skillGroups[0]) + "\n\nFrom React web apps to React Native mobile apps and Telegram Mini Apps — one codebase mindset, every screen.",
         chips: ["And backend?", "Tools & DevOps?", "Show projects"],
         actions: [ACT.skills],
       }),
@@ -179,15 +176,15 @@ const Bot = (() => {
       re: [/what.*(skills|stack|technologies)/, /does he know/],
       respond: () => ({
         text:
-          "Messay is genuinely full-stack. The short version:\n\n" +
-          "🎨 Frontend — React, TypeScript, Next.js, modern CSS\n⚙️ Backend — Node.js, Python/FastAPI, PostgreSQL, MongoDB\n🧰 Tools — Git, Docker, CI/CD, cloud deploys\n\nWant the deep dive with confidence levels?",
+          "Messay is genuinely full-stack — web and mobile. The short version:\n\n" +
+          "📱 Frontend & Mobile — React.js, Next.js, React Native + Expo, TypeScript, Tailwind\n⚙️ Backend & Data — Node.js/NestJS, Express, FastAPI, PostgreSQL, Supabase, Firebase\n🧰 Tools — Git/GitLab CI-CD, Docker, JWT/OAuth 2.0/RBAC, WebSockets, AI workflows\n\nWant the deep dive with confidence levels?",
         chips: ["Frontend detail", "Backend detail", "Tools & DevOps"],
         actions: [ACT.skills],
       }),
     },
     {
       id: "project-detail",
-      kw: ["gebeya", 12, "bunapos", 12, "buna", 9, "selam", 11, "makeda", 12, "axum", 12, "snapcv", 12, "marketplace", 7, "point of sale", 8, "chat app", 7, "chatbot", 6, "selam chat", 12, "analytics dashboard", 7, "ui kit", 8, "resume parser", 8, "cv parser", 8],
+      kw: ["student sports hub", 14, "sports hub", 12, "sports app", 10, "business forms", 14, "forms app", 10, "telegram mini app", 12, "mini app", 8, "telegram", 7, "dewel", 10, "meteku", 10, "sports", 5],
       respond: (norm) => {
         const i = findProject(norm);
         if (i < 0) return INTENTS.find((x) => x.id === "projects").respond();
@@ -247,7 +244,7 @@ const Bot = (() => {
       respond: () => ({
         text:
           "Excellent instincts! 🎯 Here's the pitch:\n\n" +
-          "✅ " + BOT_PROFILE.availability + "\n✅ Ships full-stack features end-to-end\n✅ Communicates clearly, estimates honestly\n✅ Starts " + BOT_PROFILE.noticePeriod.toLowerCase() + "\n\n" +
+          "✅ " + BOT_PROFILE.availability + "\n✅ Shipped production apps for real clients (mobile + Telegram)\n✅ Full stack: React Native, Next.js, NestJS, Supabase\n✅ Starts " + BOT_PROFILE.noticePeriod.toLowerCase() + "\n\n" +
           "The fastest way is a quick email — or grab a slot on his calendar right now.",
         chips: ["Book a call", "Get his contact", "His salary expectations"],
         actions: [ACT.bookCall, ACT.copyEmail, ACT.resume],
@@ -294,7 +291,7 @@ const Bot = (() => {
       kw: ["contact", 6, "email", 4, "e-mail", 4, "reach", 4, "get in touch", 7, "phone", 3, "talk to him", 6, "message him", 5, "contact info", 7, "address", 2, "schedule", 3, "call", 3, "meet", 2],
       re: [/how (can|do) i (contact|reach)/],
       respond: () => ({
-        text: `The fastest route to Messay:\n\n✉️ ${SITE.email}\n\nHe replies within 24 hours — usually much faster. Prefer to talk live? Book a slot on his calendar.`,
+        text: `The fastest routes to Messay:\n\n✉️ ${SITE.email}\n📞 ${SITE.phone}\n🔗 ${SITE.linkedin}\n\nHe replies within 24 hours — usually much faster. Prefer to talk live? Book a slot on his calendar.`,
         chips: ["Copy email", "Book a call", "His availability"],
         actions: [ACT.copyEmail, ACT.bookCall, ACT.email],
       }),
@@ -325,6 +322,26 @@ const Bot = (() => {
       respond: () => ({
         text: "📄 Sure! His résumé has the full story — experience, education, skills — formatted for a quick skim (recruiter-friendly, promise).\n\nYou can grab the PDF directly, or open the print-friendly page.",
         actions: [ACT.downloadCV, ACT.resume, ACT.contact],
+      }),
+    },
+    {
+      id: "certificates",
+      kw: ["certificate", 6, "certificates", 7, "certification", 6, "certified", 4, "credentials", 4, "training", 3, "courses", 3, "mmcy", 8, "modeling", 4],
+      respond: () => ({
+        text:
+          "🎓 Beyond the CS degree (HILCOE School of Computer Science & Technology), Messay holds a:\n\n• 2D & 3D Modeling for Modern Product Development — MMCY Workforce Training Certificate\n\nDesign thinking, meet engineering. There's more context in the “Beyond the code” section on this page.",
+        chips: ["His education", "Volunteering?", "Show projects"],
+        actions: [{ label: "See beyond the code", icon: "🤝", run: () => ACTIONS.scroll("beyond") }],
+      }),
+    },
+    {
+      id: "volunteering",
+      kw: ["volunteer", 8, "volunteering", 9, "volunteer work", 10, "red cross", 10, "ywca", 10, "blood donation", 8, "community", 3, "charity", 4, "ngo", 4, "fundraising", 5],
+      respond: () => ({
+        text:
+          "🤝 Messay gives back:\n\n• Red Cross Ethiopia — organized high-school blood donation drives (2018)\n• YWCA — Lead Unit Coordinator & Teacher: ran a teaching team, daily academic operations, and a fundraising initiative that supplied 100+ students\n\nLeadership and reliability aren't just on his CV — they're habits.",
+        chips: ["His experience", "Certificates?", "Get his contact"],
+        actions: [{ label: "See beyond the code", icon: "🤝", run: () => ACTIONS.scroll("beyond") }],
       }),
     },
     {

@@ -10,187 +10,109 @@
 const SITE = {
   name: "Messay Mohammed",
   role: "Full Stack Developer",
-  location: "Addis Ababa, Ethiopia",
-  email: "hello@messay.dev", // ← set your real email
+  location: "Bole, Addis Ababa, Ethiopia",
+  email: "messaymohammed@gmail.com",
+  phone: "+251 900 651 948",
+  phoneRaw: "+251900651948",
   github: "https://github.com/moisoi",
+  linkedin: "https://www.linkedin.com/in/messay-seid-398000252",
   cal: "https://cal.com/messay-mohammed-w47ggg", // Cal.com booking link
   cvFile: "assets/Messay_Mohammed_CV.pdf",       // downloadable CV
   timeZone: "Africa/Addis_Ababa",
 
   typedRoles: [
-    "fast web applications.",
-    "clean, scalable APIs.",
-    "delightful user interfaces.",
-    "products people love.",
-    "the web, from db to pixel.",
+    "mobile apps with React Native.",
+    "Telegram Mini Apps.",
+    "web apps with React & Next.js.",
+    "scalable backends with NestJS.",
+    "products with AI-powered workflows.",
   ],
 
   marquee: [
-    "JavaScript", "TypeScript", "React", "Node.js", "Python", "PostgreSQL",
-    "MongoDB", "Express", "Next.js", "Tailwind CSS", "Git & GitHub", "Docker",
-    "REST APIs", "GraphQL", "Redis", "Linux", "Figma", "CI/CD",
+    "React Native", "Expo", "React.js", "Next.js", "TypeScript", "Node.js",
+    "NestJS", "Express.js", "FastAPI", "Supabase", "Firebase", "PostgreSQL",
+    "MySQL", "Redis", "Tailwind CSS", "WebSockets", "JWT & OAuth 2.0",
+    "Docker", "GitLab CI/CD", "Telegram Mini Apps",
   ],
 
   skillGroups: [
     {
-      emoji: "🎨",
-      title: "Frontend",
+      emoji: "📱",
+      title: "Frontend & Mobile",
       skills: [
-        { name: "JavaScript / TypeScript", level: 90 },
-        { name: "React & Next.js", level: 88 },
-        { name: "HTML & Modern CSS", level: 92 },
-        { name: "Tailwind / UI Systems", level: 85 },
-        { name: "Accessibility & Performance", level: 82 },
+        { name: "React.js & Next.js", level: 90 },
+        { name: "React Native & Expo", level: 88 },
+        { name: "JavaScript / TypeScript", level: 88 },
+        { name: "HTML5, CSS3 & Tailwind", level: 90 },
+        { name: "Telegram Mini Apps", level: 84 },
       ],
     },
     {
       emoji: "⚙️",
-      title: "Backend",
+      title: "Backend & Databases",
       skills: [
-        { name: "Node.js & Express", level: 88 },
-        { name: "Python & FastAPI", level: 80 },
-        { name: "PostgreSQL / MongoDB", level: 84 },
-        { name: "REST & GraphQL APIs", level: 86 },
-        { name: "Auth, Security & Testing", level: 78 },
+        { name: "Node.js & NestJS", level: 87 },
+        { name: "Express.js & FastAPI", level: 82 },
+        { name: "PostgreSQL / MySQL", level: 84 },
+        { name: "Supabase / Firebase / Redis", level: 83 },
+        { name: "Auth — JWT, OAuth 2.0, RBAC", level: 80 },
       ],
     },
     {
       emoji: "🧰",
-      title: "Tools & DevOps",
+      title: "Tools & Practices",
       skills: [
-        { name: "Git & GitHub Flow", level: 92 },
-        { name: "Docker & Linux", level: 76 },
-        { name: "CI/CD Pipelines", level: 74 },
-        { name: "Vercel / Cloud Deploy", level: 85 },
-        { name: "Figma → Code", level: 80 },
+        { name: "Git, GitHub & GitLab CI/CD", level: 88 },
+        { name: "RESTful APIs & WebSockets", level: 86 },
+        { name: "Docker", level: 78 },
+        { name: "AI-assisted development", level: 85 },
+        { name: "Penetration testing basics", level: 70 },
       ],
     },
   ],
 
   projects: [
     {
-      title: "Gebeya Marketplace",
-      tagline: "A full-stack marketplace connecting Ethiopian artisans with buyers everywhere.",
-      category: "fullstack",
-      categoryLabel: "Full Stack",
+      title: "Student Sports Hub",
+      tagline: "React Native app bringing school sports to life for students & parents across Addis Ababa.",
+      category: "mobile",
+      categoryLabel: "Mobile · React Native",
       year: "2025",
-      glyph: "ገ",
+      glyph: "🏆",
       g1: "#c9f24d",
       g2: "#4be0c8",
+      client: "Dewel Marketing and Consultancy",
       description:
-        "A two-sided marketplace where local artisans list handmade goods and buyers worldwide purchase with escrow-protected payments. I owned the product end-to-end: schema design, REST API, storefront, and deployment.",
+        "A mobile app for grade 1–12 students and parents across Addis Ababa, built with React Native + Supabase on contract for Dewel Marketing and Consultancy. It brings school sports to life with real-time stories, match schedules, team rosters and updates — on a database designed to scale across multiple schools.",
       highlights: [
-        "Designed a normalized PostgreSQL schema for listings, orders & escrow",
-        "Built a React + TypeScript storefront with optimistic cart updates",
-        "Implemented seller dashboards with real-time sales analytics",
-        "Achieved sub-second page loads via image CDN & route-level code splitting",
+        "Built with React Native + Expo and a Supabase backend",
+        "Real-time stories, match schedules, team rosters & sports updates",
+        "Scalable database architecture supporting multiple schools",
+        "Designed for grade 1–12 students and parents across Addis Ababa",
       ],
-      tech: ["React", "TypeScript", "Node.js", "Express", "PostgreSQL", "Docker"],
+      tech: ["React Native", "Expo", "Supabase", "TypeScript", "PostgreSQL"],
       repo: "https://github.com/moisoi",
       demo: "https://github.com/moisoi",
     },
     {
-      title: "BunaPOS",
-      tagline: "Offline-first point-of-sale for independent cafés — works even when the Wi-Fi doesn't.",
+      title: "Business Forms Mini App",
+      tagline: "Telegram Mini App automating petty cash, purchase orders & attendance for real businesses.",
       category: "fullstack",
-      categoryLabel: "Full Stack · PWA",
-      year: "2025",
-      glyph: "☕",
-      g1: "#ffb86b",
-      g2: "#ff5f57",
-      description:
-        "A Progressive Web App POS designed for Addis Ababa's café culture: instant order entry, table management, and daily reports — fully functional offline with background sync when connectivity returns.",
-      highlights: [
-        "IndexedDB + service-worker architecture for true offline-first UX",
-        "Thermal-printer-friendly receipt rendering",
-        "Background sync queue resolves offline orders without conflicts",
-        "Installable PWA with < 150ms interaction latency on low-end devices",
-      ],
-      tech: ["PWA", "IndexedDB", "Service Workers", "React", "Node.js"],
-      repo: "https://github.com/moisoi",
-      demo: "https://github.com/moisoi",
-    },
-    {
-      title: "Selam Chat",
-      tagline: "Real-time messaging with rooms, presence, and typing indicators — 50ms round trip.",
-      category: "backend",
-      categoryLabel: "Backend · Real-time",
-      year: "2024",
-      glyph: "ሰ",
+      categoryLabel: "Full Stack · Telegram",
+      year: "2026",
+      glyph: "🧾",
       g1: "#7c6cf0",
-      g2: "#4be0c8",
-      description:
-        "A WebSocket-powered chat platform supporting group rooms, live presence, and message history. Built to explore real-time architecture at scale: fan-out, backpressure, and horizontal readiness.",
-      highlights: [
-        "WebSocket gateway with room-based pub/sub (Redis)",
-        "Presence heartbeats + typing indicators with debounced fan-out",
-        "Message pagination & search over 100k+ messages",
-        "Load-tested to 2k concurrent connections on a single node",
-      ],
-      tech: ["Node.js", "WebSockets", "Redis", "MongoDB", "React"],
-      repo: "https://github.com/moisoi",
-      demo: "https://github.com/moisoi",
-    },
-    {
-      title: "Makeda Analytics",
-      tagline: "A privacy-friendly analytics dashboard with beautiful, interactive charts.",
-      category: "frontend",
-      categoryLabel: "Frontend · Data Viz",
-      year: "2024",
-      glyph: "📊",
-      g1: "#4be0c8",
-      g2: "#7c6cf0",
-      description:
-        "A lightweight analytics dashboard that respects user privacy — no cookies, no fingerprinting. Focused on rendering performance and gorgeous data visualization with minimal bundle weight.",
-      highlights: [
-        "Hand-tuned SVG charts with 60fps hover interactions",
-        "Cookieless tracking script under 1KB gzipped",
-        "Realtime visitor map & funnel breakdowns",
-        "Dark/light theming with system preference detection",
-      ],
-      tech: ["React", "D3.js", "FastAPI", "ClickHouse", "Vite"],
-      repo: "https://github.com/moisoi",
-      demo: "https://github.com/moisoi",
-    },
-    {
-      title: "Axum UI",
-      tagline: "An open-source React component library inspired by Ethiopian design motifs.",
-      category: "frontend",
-      categoryLabel: "Open Source",
-      year: "2024",
-      glyph: "✦",
-      g1: "#c9f24d",
       g2: "#ffb86b",
+      client: "Meteku Teshome General Work PLC",
       description:
-        "A themable component library with 30+ accessible components, drawing visual inspiration from Aksumite patterns and Ethiopian textiles. Fully typed, tree-shakeable, and documented with live examples.",
+        "A Telegram Mini App that digitizes everyday business paperwork — petty cash requests, purchase orders and employee attendance — built on contract for Meteku Teshome General Work PLC. React + Vite frontend, Node.js + NestJS backend, with exportable business reports for client management.",
       highlights: [
-        "30+ WCAG-AA components with full keyboard navigation",
-        "Design-token theming engine (colors, radii, motion)",
-        "100% TypeScript with auto-generated docs",
-        "Published to npm with automated release pipeline",
+        "Automated petty cash requests, purchase orders & employee attendance",
+        "Business reports with export functionality for client management",
+        "React + Vite frontend · Node.js + NestJS backend",
+        "Delivered inside Telegram — zero install friction for users",
       ],
-      tech: ["React", "TypeScript", "Storybook", "CSS Variables", "Vitest"],
-      repo: "https://github.com/moisoi",
-      demo: "https://github.com/moisoi",
-    },
-    {
-      title: "SnapCV API",
-      tagline: "A resume-parsing API that turns messy PDFs into clean structured JSON.",
-      category: "backend",
-      categoryLabel: "Backend · API",
-      year: "2023",
-      glyph: "📄",
-      g1: "#ff5f57",
-      g2: "#c9f24d",
-      description:
-        "A FastAPI service that extracts structured data from resumes — skills, experience, education — using OCR and heuristic parsing. Built for HR teams drowning in PDFs.",
-      highlights: [
-        "OCR + rule-based parsing pipeline with 92% field accuracy",
-        "Async job queue for batch uploads (500+ resumes)",
-        "OpenAPI docs with interactive sandbox",
-        "Dockerized with health checks & structured logging",
-      ],
-      tech: ["Python", "FastAPI", "OCR", "Celery", "Redis", "Docker"],
+      tech: ["React", "Vite", "Node.js", "NestJS", "Telegram API"],
       repo: "https://github.com/moisoi",
       demo: "https://github.com/moisoi",
     },
@@ -199,69 +121,80 @@ const SITE = {
   timeline: [
     {
       kind: "work",
-      date: "2024 — Present",
-      role: "Full Stack Developer",
-      org: "Freelance & Contract",
+      date: "Feb 2026",
+      role: "Full Stack Developer (Contract)",
+      org: "Meteku Teshome General Work PLC",
+      location: "Addis Ababa",
       points: [
-        "Shipping end-to-end web products for startups and local businesses — from schema design to deployment.",
-        "Delivered marketplace, POS, and analytics platforms used by real customers daily.",
-        "Advised clients on architecture, performance budgets, and accessibility.",
+        "Developed the Business Forms Telegram Mini App — React + Vite frontend, Node.js + NestJS backend.",
+        "Automated forms for petty cash requests, purchase orders and employee attendance.",
+        "Generated business reports with export functionality for client management.",
       ],
     },
     {
       kind: "work",
-      date: "2023 — 2024",
-      role: "Frontend Developer",
-      org: "Product Studio, Addis Ababa",
+      date: "Sep 2025 – Dec 2025",
+      role: "Full Stack Mobile Developer (Contract)",
+      org: "Dewel Marketing and Consultancy",
+      location: "Addis Ababa",
       points: [
-        "Built and maintained React applications serving thousands of monthly users.",
-        "Introduced a component system that cut UI development time by ~40%.",
-        "Paired with designers to ship pixel-perfect, responsive interfaces.",
-      ],
-    },
-    {
-      kind: "work",
-      date: "2022 — 2023",
-      role: "Web Development Intern",
-      org: "Tech Startup, Remote",
-      points: [
-        "Learned production workflows: code review, Git flow, CI/CD, and agile sprints.",
-        "Shipped my first features to real users — and my first 2 a.m. hotfix. 😅",
+        "Built the Student Sports Hub mobile app with React Native + Supabase for grade 1–12 students and parents.",
+        "Shipped real-time stories, match schedules, team rosters and sports updates.",
+        "Designed a scalable database architecture supporting multiple schools.",
       ],
     },
     {
       kind: "edu",
-      date: "2019 — 2023",
-      role: "BSc, Computer Science",
-      org: "Addis Ababa University",
+      date: "Sep 2020 – Jul 2025",
+      role: "Bachelor of Computer Science",
+      org: "HILCOE School of Computer Science and Technology",
+      location: "Addis Ababa",
       points: [
-        "Focused on software engineering, databases, and algorithms.",
-        "Led the student dev club; organized hackathons and study groups.",
+        "Full-stack development focus: web, mobile, databases & APIs.",
+        "Complemented engineering with digital content creation skills.",
+      ],
+    },
+    {
+      kind: "volunteer",
+      date: "Jun 2018 – Aug 2018",
+      role: "Lead Unit Coordinator & Teacher",
+      org: "YWCA — Young Women's Christian Association",
+      location: "Addis Ababa",
+      points: [
+        "Led and coordinated a team of teachers; oversaw daily academic activities and site operations.",
+        "Organized a successful fundraising initiative supporting 100+ students with school supplies.",
+      ],
+    },
+    {
+      kind: "volunteer",
+      date: "May 2018",
+      role: "Blood Donation Organizer",
+      org: "Red Cross Ethiopia",
+      location: "Addis Ababa",
+      points: [
+        "Facilitated and organized blood donations from high school students, sponsored by Red Cross Ethiopia.",
       ],
     },
   ],
 
-  testimonials: [
+  beyond: [
     {
-      quote:
-        "Messay took our vague idea and turned it into a product our customers actually rave about. He thinks in systems, sweats the details, and ships on time — a rare combination.",
-      name: "Sara T.",
-      role: "Founder, e-commerce startup",
-      initials: "ST",
+      icon: "🎓",
+      title: "2D & 3D Modeling Certificate",
+      org: "MMCY Workforce Training",
+      text: "Certified in 2D & 3D modeling for modern product development — design thinking beyond the browser.",
     },
     {
-      quote:
-        "One of those developers who makes the whole team better. Clean code, honest estimates, and he'll happily explain the 'why' behind every technical decision.",
-      name: "Daniel K.",
-      role: "Engineering Lead",
-      initials: "DK",
+      icon: "❤️",
+      title: "Red Cross Ethiopia",
+      org: "Blood Donation Drive · May 2018",
+      text: "Facilitated and organized high-school blood donation drives sponsored by Red Cross Ethiopia.",
     },
     {
-      quote:
-        "We handed Messay a slow, dated web app and got back a fast, accessible experience our users love. Communication was excellent from kickoff to launch.",
-      name: "Hanna G.",
-      role: "Product Manager",
-      initials: "HG",
+      icon: "🤝",
+      title: "YWCA Lead Coordinator & Teacher",
+      org: "Jun 2018 – Aug 2018",
+      text: "Led a teaching team, ran daily academic operations, and drove fundraising that supplied 100+ students.",
     },
   ],
 };
@@ -689,19 +622,23 @@ const Projects = {
       )
       .join("");
 
-    // Filters
-    $$(".filter-btn").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        $$(".filter-btn").forEach((b) => b.classList.remove("active"));
-        btn.classList.add("active");
-        const f = btn.dataset.filter;
-        $$(".project-card").forEach((card) => {
-          const show = f === "all" || card.dataset.cat === f;
-          card.classList.toggle("hidden-by-filter", !show);
-          if (show) card.classList.add("in-view"); // keep revealed
-        });
-      });
-    });
+    // "More on GitHub" card — always last
+    grid.insertAdjacentHTML(
+      "beforeend",
+      `
+      <a class="project-card github-card" href="${SITE.github}" target="_blank" rel="noopener" data-reveal style="--d:.16s">
+        <div class="pc-cover" aria-hidden="true" style="--g1:#c9f24d;--g2:#7c6cf0">
+          <span class="pc-glyph">🐙</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-top"><h3>More on GitHub</h3><span class="pc-type">Open source</span></div>
+          <p class="pc-tagline">Experiments, contributions and works-in-progress live on my GitHub. The commit history doesn't lie.</p>
+          <div class="pc-links">
+            <span class="pc-link primary">Follow along →</span>
+          </div>
+        </div>
+      </a>`
+    );
 
     // 3D tilt
     if (FINE_POINTER && !REDUCED) {
@@ -771,7 +708,7 @@ const Timeline = {
       <div class="tl-item" data-reveal="${i % 2 ? "right" : "left"}" style="--d:.1s">
         <span class="tl-dot" aria-hidden="true"></span>
         <div class="tl-card">
-          <span class="tl-kind">${t.kind === "work" ? "💼 Work" : "🎓 Education"}</span>
+          <span class="tl-kind">${t.kind === "work" ? "💼 Work" : t.kind === "edu" ? "🎓 Education" : "🤝 Volunteering"}</span>
           <span class="tl-date">${t.date}</span>
           <h3>${t.role}</h3>
           <p class="org">${t.org}</p>
@@ -784,50 +721,25 @@ const Timeline = {
 };
 
 /* ============================================================
-   Testimonials slider
+   Beyond the code: certificates & volunteering
    ============================================================ */
-const Testimonials = {
-  index: 0,
+const Beyond = {
   init() {
-    const track = $("#t-track");
-    if (!track) return;
-    track.innerHTML = SITE.testimonials
+    const grid = $("#beyond-grid");
+    if (!grid) return;
+    grid.innerHTML = SITE.beyond
       .map(
-        (t, i) => `
-      <div class="t-slide ${i === 0 ? "current" : ""}" role="group" aria-label="Testimonial ${i + 1} of ${SITE.testimonials.length}">
-        <blockquote>${t.quote}</blockquote>
-        <div class="t-author">
-          <span class="t-avatar" aria-hidden="true">${t.initials}</span>
-          <div class="who"><strong>${t.name}</strong><span>${t.role}</span></div>
+        (b, i) => `
+      <div class="beyond-card" data-reveal style="--d:${0.08 + i * 0.09}s">
+        <span class="b-ico" aria-hidden="true">${b.icon}</span>
+        <div class="b-copy">
+          <h3>${b.title}</h3>
+          <p class="b-org">${b.org}</p>
+          <p class="b-text">${b.text}</p>
         </div>
       </div>`
       )
       .join("");
-
-    const dots = $("#t-dots");
-    dots.innerHTML = SITE.testimonials
-      .map((_, i) => `<button class="t-dot ${i === 0 ? "active" : ""}" data-i="${i}" aria-label="Go to testimonial ${i + 1}"></button>`)
-      .join("");
-
-    $("#t-prev").addEventListener("click", () => this.go(this.index - 1));
-    $("#t-next").addEventListener("click", () => this.go(this.index + 1));
-    dots.addEventListener("click", (e) => {
-      const d = e.target.closest(".t-dot");
-      if (d) this.go(+d.dataset.i);
-    });
-
-    // autoplay
-    this.timer = setInterval(() => this.go(this.index + 1), 6500);
-    $(".testimonial-shell").addEventListener("pointerenter", () => clearInterval(this.timer));
-    $(".testimonial-shell").addEventListener("pointerleave", () => {
-      this.timer = setInterval(() => this.go(this.index + 1), 6500);
-    });
-  },
-  go(i) {
-    const n = SITE.testimonials.length;
-    this.index = (i + n) % n;
-    $$(".t-slide").forEach((s, si) => s.classList.toggle("current", si === this.index));
-    $$(".t-dot").forEach((d, di) => d.classList.toggle("active", di === this.index));
   },
 };
 
@@ -1096,7 +1008,7 @@ document.addEventListener("DOMContentLoaded", () => {
   Skills.init();
   Projects.init();
   Timeline.init();
-  Testimonials.init();
+  Beyond.init();
   Contact.init();
   Stats.init();
   CmdK.init();
