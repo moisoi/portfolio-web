@@ -350,6 +350,38 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
   </button>
 
+  <!-- ================= AI ASSISTANT ================= -->
+  <div class="bot-teaser" id="bot-teaser" role="status">
+    👋 Hi! I'm <strong>Messa</strong> — Messay's AI assistant. Ask me anything about his work!
+  </div>
+
+  <button class="bot-launcher" id="bot-launcher" aria-label="Chat with Messa, the AI assistant" aria-expanded="false">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+    <span class="bot-badge" id="bot-badge" hidden>1</span>
+  </button>
+
+  <section class="bot-panel" id="bot-panel" aria-label="AI assistant chat">
+    <div class="bot-head">
+      <div class="bot-avatar" aria-hidden="true">🤖<span class="status-dot"></span></div>
+      <div class="bot-head-info">
+        <h3>Messa</h3>
+        <p><b>● Online</b> — AI assistant, trained on Messay's portfolio</p>
+      </div>
+      <button class="bot-close" id="bot-close" aria-label="Close chat">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <div class="bot-body" id="bot-body" role="log" aria-live="polite"></div>
+
+    <div class="bot-input-row">
+      <input type="text" id="bot-input" placeholder="Ask about skills, projects, hiring…" autocomplete="off" aria-label="Message the assistant" />
+      <button class="bot-send" id="bot-send" aria-label="Send message" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4z"/><path d="M22 2 11 13"/></svg>
+      </button>
+    </div>
+  </section>
+
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <!-- Command palette -->
@@ -372,5 +404,6 @@
   <canvas id="confetti-canvas" aria-hidden="true"></canvas>
 
   <script src="js/main.js"></script>
+  <script src="js/bot.js"></script>
 </body>
 </html>

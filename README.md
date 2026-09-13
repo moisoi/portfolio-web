@@ -19,6 +19,7 @@ zero dependencies. Designed to make recruiters stop scrolling and start explorin
 | **Testimonials** | Auto-playing carousel with dots & arrows |
 | **Contact** | Validated form with success state, one-click email copy, **live Addis Ababa local time** |
 | **Résumé** | Print-ready A4 résumé page (`resume.html`) with one-click "Download PDF" |
+| **🤖 AI Assistant ("Messa")** | Floating chat bot that answers recruiter questions — skills, projects, experience, availability, salary, contact — with quick-reply chips, action buttons (navigate / copy email / open résumé / open case studies), typing indicator, follow-up memory, and graceful fallbacks. 100% client-side: no servers, no API keys, works offline & on GitHub Pages |
 | **Extras** | Dark/light theme (persisted), custom cursor, toast notifications, film grain overlay, scroll-reveal animations, full `prefers-reduced-motion` support |
 | **Easter eggs 🥚** | Konami code (`↑ ↑ ↓ ↓ ← → ← → B A`) fires confetti party mode; a hidden hello in the browser console for curious recruiters |
 
@@ -28,6 +29,7 @@ zero dependencies. Designed to make recruiters stop scrolling and start explorin
 index.html      → the portfolio (all markup)
 css/styles.css  → design system + all component styles
 js/main.js      → SITE content object + every interaction
+js/bot.js       → "Messa" AI assistant (NLU engine + chat UI)
 resume.html     → print-friendly résumé (use browser print → PDF)
 ```
 
@@ -43,6 +45,17 @@ Edit it and the page re-renders — no other file changes needed.
 > - LinkedIn URL in the hero socials
 > - Experience/education entries and stats → your true history
 > - Testimonial quotes → real ones once you have them
+> - `BOT_PROFILE` at the top of `js/bot.js` → availability, salary stance, languages (the assistant speaks with this data)
+
+### 🤖 About the AI assistant
+
+**Messa** is a rule-based NLU assistant (keyword-weight scoring + regex boosts + intent memory
+for follow-ups like *"tell me more"* and *"and backend?"*). Because it runs entirely in the
+browser from your `SITE` data, answers always stay in sync with the page content — edit the
+data once, and both the site *and* the bot update. It handles 25+ intents: greetings,
+skills (with per-area deep dives), every project by name, experience, education, hiring,
+availability/relocation, salary, contact, location & local time, languages, résumé,
+navigation ("take me to projects"), theme switching, fun facts and easter eggs.
 
 ## 🖥️ Run locally
 

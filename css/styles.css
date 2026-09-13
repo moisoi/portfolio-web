@@ -965,7 +965,7 @@ dialog.cmdk::backdrop { background: rgba(5, 5, 10, 0.65); backdrop-filter: blur(
 
 /* ---------- Back to top ---------- */
 .back-top {
-  position: fixed; bottom: 26px; right: 26px; z-index: 180;
+  position: fixed; bottom: 104px; right: 33px; z-index: 180;
   width: 48px; height: 48px; border-radius: 14px;
   background: var(--surface-2);
   border: 1px solid var(--border-strong);
@@ -1044,4 +1044,189 @@ body.party .accent, body.party .eyebrow, body.party .brand .tld { animation: hue
   .js .hero-title .line > span { transform: none; animation: none; }
   .marquee-track { animation: none; flex-wrap: wrap; width: auto; justify-content: center; }
   .grain { display: none; }
+}
+
+/* ============================================================
+   AI Assistant — "Messa"
+   ============================================================ */
+.bot-launcher {
+  position: fixed; bottom: 26px; right: 26px; z-index: 204;
+  width: 62px; height: 62px; border-radius: 50%;
+  background: var(--grad);
+  color: var(--acc-ink);
+  display: grid; place-items: center;
+  box-shadow: 0 12px 32px -8px rgba(201, 242, 77, 0.55);
+  transition: transform 0.3s var(--ease-spring), box-shadow 0.3s;
+}
+.bot-launcher:hover { transform: scale(1.08) rotate(-4deg); }
+.bot-launcher svg { width: 27px; height: 27px; }
+.bot-launcher::before {
+  content: ""; position: absolute; inset: -5px;
+  border-radius: 50%; border: 2px solid var(--acc);
+  animation: bot-ping 2.4s ease-out infinite;
+  pointer-events: none;
+}
+body.bot-open .bot-launcher::before { animation: none; opacity: 0; }
+@keyframes bot-ping { 0% { transform: scale(0.9); opacity: 0.7; } 70%, 100% { transform: scale(1.35); opacity: 0; } }
+.bot-badge {
+  position: absolute; top: -3px; right: -3px;
+  min-width: 21px; height: 21px; padding: 0 5px;
+  border-radius: 999px; background: #ff5f57; color: #fff;
+  font-family: var(--font-mono); font-size: 0.68rem; font-weight: 600;
+  display: grid; place-items: center;
+  border: 2px solid var(--bg);
+  animation: pop-in 0.4s var(--ease-spring);
+}
+.bot-teaser {
+  position: fixed; bottom: 100px; right: 30px; z-index: 203;
+  max-width: 240px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-strong);
+  border-radius: 16px 16px 4px 16px;
+  padding: 13px 16px;
+  font-size: 0.86rem; line-height: 1.45;
+  box-shadow: var(--shadow-md);
+  opacity: 0; transform: translateY(10px) scale(0.95);
+  transition: opacity 0.4s ease, transform 0.4s var(--ease-spring);
+  pointer-events: none;
+}
+.bot-teaser.show { opacity: 1; transform: none; pointer-events: auto; }
+.bot-teaser strong { color: var(--acc); }
+
+.bot-panel {
+  position: fixed; bottom: 102px; right: 26px; z-index: 205;
+  width: 384px; max-width: calc(100vw - 32px);
+  height: min(620px, calc(100svh - 150px));
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: 20px;
+  box-shadow: var(--shadow-lg);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  transform-origin: bottom right;
+  opacity: 0; transform: scale(0.9) translateY(16px);
+  visibility: hidden;
+  transition: opacity 0.3s ease, transform 0.35s var(--ease-spring), visibility 0.35s;
+}
+.bot-panel.open { opacity: 1; transform: none; visibility: visible; }
+
+.bot-head {
+  display: flex; align-items: center; gap: 12px;
+  padding: 15px 18px;
+  background:
+    radial-gradient(200px 80px at 85% -20%, rgba(201, 242, 77, 0.18), transparent),
+    var(--surface-2);
+  border-bottom: 1px solid var(--border);
+}
+.bot-avatar {
+  width: 42px; height: 42px; border-radius: 13px; flex-shrink: 0;
+  background: var(--grad); color: var(--acc-ink);
+  display: grid; place-items: center;
+  font-size: 1.25rem;
+  position: relative;
+}
+.bot-avatar .status-dot {
+  position: absolute; bottom: -2px; right: -2px;
+  width: 12px; height: 12px; border-radius: 50%;
+  background: #28c840; border: 2.5px solid var(--surface-2);
+}
+.bot-head-info { flex: 1; min-width: 0; }
+.bot-head-info h3 { font-family: var(--font-display); font-size: 1.02rem; font-weight: 700; letter-spacing: -0.01em; }
+.bot-head-info p { font-size: 0.75rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bot-head-info p b { color: #28c840; font-weight: 600; }
+.bot-close {
+  width: 34px; height: 34px; border-radius: 10px;
+  display: grid; place-items: center;
+  color: var(--muted);
+  transition: background 0.2s, color 0.2s, transform 0.25s var(--ease-spring);
+}
+.bot-close:hover { background: var(--acc-soft); color: var(--acc); transform: rotate(90deg); }
+.bot-close svg { width: 16px; height: 16px; }
+
+.bot-body {
+  flex: 1; overflow-y: auto; overscroll-behavior: contain;
+  padding: 18px 16px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.msg-row { display: flex; gap: 9px; max-width: 88%; animation: msg-in 0.35s var(--ease-out); }
+@keyframes msg-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.msg-row.bot { align-self: flex-start; }
+.msg-row.user { align-self: flex-end; flex-direction: row-reverse; }
+.msg-ava {
+  width: 28px; height: 28px; border-radius: 9px; flex-shrink: 0; margin-top: 2px;
+  background: var(--grad); color: var(--acc-ink);
+  display: grid; place-items: center; font-size: 0.8rem;
+}
+.msg {
+  padding: 11px 15px; border-radius: 15px;
+  font-size: 0.9rem; line-height: 1.55;
+  white-space: pre-line; word-wrap: break-word;
+}
+.msg-row.bot .msg { background: var(--surface-2); border: 1px solid var(--border); border-top-left-radius: 4px; }
+.msg-row.user .msg { background: var(--acc-bg); color: var(--acc-ink); border-top-right-radius: 4px; font-weight: 500; }
+.msg b { font-weight: 600; }
+.msg-row.bot .msg b { color: var(--acc); }
+
+.msg-chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
+.mchip {
+  font-size: 0.78rem; font-weight: 500;
+  padding: 7px 13px; border-radius: 999px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text);
+  transition: all 0.2s;
+}
+.mchip:hover { border-color: var(--acc); color: var(--acc); background: var(--acc-soft); transform: translateY(-1px); }
+
+.msg-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.mact {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 0.8rem; font-weight: 600;
+  padding: 9px 16px; border-radius: 999px;
+  background: var(--acc-bg); color: var(--acc-ink);
+  transition: transform 0.25s var(--ease-spring), box-shadow 0.25s;
+}
+.mact:hover { transform: translateY(-2px); box-shadow: 0 8px 18px -6px rgba(201, 242, 77, 0.5); }
+.mact.ghost { background: transparent; border: 1px solid var(--border-strong); color: var(--text); }
+.mact.ghost:hover { border-color: var(--acc); color: var(--acc); box-shadow: none; }
+.mact svg { width: 13px; height: 13px; }
+
+.typing { display: inline-flex; gap: 5px; padding: 14px 16px; }
+.typing i {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--faint);
+  animation: typing-bounce 1.2s ease-in-out infinite;
+}
+.typing i:nth-child(2) { animation-delay: 0.15s; }
+.typing i:nth-child(3) { animation-delay: 0.3s; }
+@keyframes typing-bounce { 0%, 60%, 100% { transform: translateY(0); opacity: 0.5; } 30% { transform: translateY(-6px); opacity: 1; } }
+
+.bot-input-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 13px 14px;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+.bot-input-row input {
+  flex: 1; background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 15px;
+  color: var(--text); font-family: var(--font-body); font-size: 0.9rem;
+  transition: border-color 0.25s, box-shadow 0.25s;
+}
+.bot-input-row input:focus { outline: none; border-color: var(--acc); box-shadow: 0 0 0 4px var(--acc-soft); }
+.bot-send {
+  width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
+  background: var(--acc-bg); color: var(--acc-ink);
+  display: grid; place-items: center;
+  transition: transform 0.25s var(--ease-spring), opacity 0.2s;
+}
+.bot-send:disabled { opacity: 0.35; transform: none; cursor: not-allowed; }
+.bot-send:not(:disabled):hover { transform: translateY(-2px) scale(1.04); }
+.bot-send svg { width: 18px; height: 18px; }
+
+@media (max-width: 520px) {
+  .bot-panel { right: 12px; left: 12px; bottom: 96px; width: auto; height: min(560px, calc(100svh - 120px)); }
+  .bot-teaser { right: 16px; bottom: 96px; }
 }

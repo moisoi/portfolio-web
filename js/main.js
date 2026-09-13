@@ -911,6 +911,7 @@ const CmdK = {
     { icon: "📋", label: "Copy email address", hint: SITE.email, run: () => $("#copy-email").click() },
     { icon: "🐙", label: "Open GitHub profile", hint: "github.com/moisoi", run: () => window.open(SITE.github, "_blank") },
     { icon: "⬆️", label: "Scroll to top", hint: "home", run: () => window.scrollTo({ top: 0, behavior: "smooth" }) },
+    { icon: "🤖", label: "Chat with Messa (AI assistant)", hint: "bot", run: () => { if (typeof Bot !== "undefined") Bot.open(); } },
     { icon: "🎉", label: "Trigger confetti", hint: "easter egg", run: () => EasterEgg.party() },
   ],
   init() {
