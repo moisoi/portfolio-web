@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Messay Mohammed — Résumé</title>
+  <meta name="description" content="Résumé of Messay Mohammed, Full Stack Developer based in Addis Ababa, Ethiopia." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23c9f24d'/%3E%3Ctext x='50' y='68' font-family='Arial,sans-serif' font-size='46' font-weight='bold' text-anchor='middle' fill='%230a0a10'%3EMM%3C/text%3E%3C/svg%3E" />
+  <style>
+    :root {
+      --ink: #17171f; --muted: #55555f; --faint: #8a8a96;
+      --acc: #3f5c00; --lime: #c9f24d; --line: #e3e1d8; --bg: #f5f4ee;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Inter", system-ui, sans-serif; color: var(--ink); background: var(--bg); line-height: 1.55; font-size: 13.5px; }
+    a { color: inherit; text-decoration: none; }
+
+    .toolbar {
+      position: sticky; top: 0; z-index: 10;
+      display: flex; align-items: center; justify-content: space-between; gap: 14px;
+      padding: 14px 24px;
+      background: #0a0a10; color: #eaeaf2;
+    }
+    .toolbar .brand { font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 1.05rem; }
+    .toolbar .brand span { color: var(--lime); }
+    .toolbar .actions { display: flex; gap: 10px; }
+    .tb-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 9px 18px; border-radius: 999px; font-weight: 600; font-size: 0.85rem;
+      background: var(--lime); color: #0a0a10; border: none; cursor: pointer;
+      transition: transform .2s;
+    }
+    .tb-btn:hover { transform: translateY(-2px); }
+    .tb-btn.ghost { background: transparent; color: #eaeaf2; border: 1px solid rgba(255,255,255,.25); }
+    .tb-btn.ghost:hover { border-color: var(--lime); color: var(--lime); }
+
+    .page {
+      width: 210mm; min-height: 296mm;
+      margin: 28px auto; background: #fff;
+      padding: 18mm 16mm;
+      box-shadow: 0 20px 60px -20px rgba(23,23,31,.25);
+    }
+
+    header { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; padding-bottom: 20px; border-bottom: 3px solid var(--ink); }
+    h1 { font-family: "Space Grotesk", sans-serif; font-size: 30px; letter-spacing: -0.02em; line-height: 1.05; }
+    h1 .dot { color: var(--acc); }
+    .role { font-family: "JetBrains Mono", monospace; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--acc); margin-top: 6px; }
+    .contact { text-align: right; font-size: 12.5px; color: var(--muted); display: grid; gap: 3px; }
+    .contact strong { color: var(--ink); }
+
+    .cols { display: grid; grid-template-columns: 1.9fr 1fr; gap: 10mm; margin-top: 8mm; }
+    section { margin-bottom: 7mm; }
+    h2 {
+      font-family: "JetBrains Mono", monospace; font-size: 11px; font-weight: 600;
+      letter-spacing: .18em; text-transform: uppercase; color: var(--acc);
+      display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+    }
+    h2::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+
+    .summary p { color: var(--muted); }
+
+    .item { margin-bottom: 16px; break-inside: avoid; }
+    .item-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+    .item-head h3 { font-size: 14.5px; font-weight: 700; }
+    .date { font-family: "JetBrains Mono", monospace; font-size: 10.5px; color: var(--faint); white-space: nowrap; }
+    .org { font-size: 12.5px; color: var(--acc); font-weight: 600; margin: 1px 0 6px; }
+    .item ul { padding-left: 16px; color: var(--muted); }
+    .item ul li { margin-bottom: 3px; }
+    .item ul li::marker { color: var(--acc); }
+
+    .skills-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+    .skills-row .label { flex-basis: 100%; font-weight: 600; font-size: 12px; margin-bottom: 2px; }
+    .chip {
+      font-family: "JetBrains Mono", monospace; font-size: 10.5px;
+      padding: 3px 10px; border-radius: 999px;
+      border: 1px solid var(--line); background: #fafaf6; color: var(--muted);
+    }
+
+    .project { margin-bottom: 12px; break-inside: avoid; }
+    .project h3 { font-size: 13.5px; font-weight: 700; }
+    .project h3 span { font-family: "JetBrains Mono", monospace; font-size: 10.5px; color: var(--faint); font-weight: 400; margin-left: 8px; }
+    .project p { color: var(--muted); font-size: 12.5px; }
+
+    .fact { display: flex; gap: 9px; margin-bottom: 9px; color: var(--muted); font-size: 12.5px; }
+    .fact b { color: var(--ink); font-weight: 600; }
+
+    footer { margin-top: auto; padding-top: 14px; border-top: 1px solid var(--line); font-size: 11px; color: var(--faint); display: flex; justify-content: space-between; }
+
+    @media print {
+      body { background: #fff; }
+      .toolbar { display: none; }
+      .page { width: auto; min-height: 0; margin: 0; padding: 12mm 10mm; box-shadow: none; }
+      @page { size: A4; margin: 6mm; }
+    }
+    @media (max-width: 820px) {
+      .page { width: auto; margin: 14px; padding: 8mm 6mm; min-height: 0; }
+      .cols { grid-template-columns: 1fr; gap: 6mm; }
+      header { flex-direction: column; }
+      .contact { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <a class="brand" href="index.html">← messay<span>.dev</span></a>
+    <div class="actions">
+      <button class="tb-btn ghost" onclick="history.length > 1 ? history.back() : location.href='index.html'">Back to site</button>
+      <button class="tb-btn" onclick="window.print()">
+        ⤓ Download PDF
+      </button>
+    </div>
+  </div>
+
+  <div class="page">
+    <header>
+      <div>
+        <h1>Messay Mohammed<span class="dot">.</span></h1>
+        <p class="role">Full Stack Developer</p>
+      </div>
+      <div class="contact">
+        <span>📍 <strong>Addis Ababa, Ethiopia</strong> · Open to remote</span>
+        <span>✉️ <strong>hello@messay.dev</strong></span>
+        <span>🐙 <strong>github.com/moisoi</strong></span>
+      </div>
+    </header>
+
+    <div class="cols">
+      <!-- ============ MAIN COLUMN ============ -->
+      <div>
+        <section class="summary">
+          <h2>Profile</h2>
+          <p>
+            Full stack developer with 3+ years of experience designing, building, and shipping web products
+            end-to-end. Comfortable owning features from database schema to pixel-perfect UI, with a focus on
+            performance, accessibility, and maintainable code. Quick to learn, obsessive about quality, and
+            happiest when shipping software that real people use.
+          </p>
+        </section>
+
+        <section>
+          <h2>Experience</h2>
+
+          <div class="item">
+            <div class="item-head"><h3>Full Stack Developer</h3><span class="date">2024 — Present</span></div>
+            <p class="org">Freelance &amp; Contract</p>
+            <ul>
+              <li>Ship end-to-end web products for startups and local businesses — schema design to deployment.</li>
+              <li>Delivered marketplace, POS, and analytics platforms used by real customers daily.</li>
+              <li>Advise clients on architecture, performance budgets, and accessibility.</li>
+            </ul>
+          </div>
+
+          <div class="item">
+            <div class="item-head"><h3>Frontend Developer</h3><span class="date">2023 — 2024</span></div>
+            <p class="org">Product Studio, Addis Ababa</p>
+            <ul>
+              <li>Built and maintained React applications serving thousands of monthly users.</li>
+              <li>Introduced a component system that cut UI development time by ~40%.</li>
+              <li>Paired with designers to ship pixel-perfect, responsive interfaces.</li>
+            </ul>
+          </div>
+
+          <div class="item">
+            <div class="item-head"><h3>Web Development Intern</h3><span class="date">2022 — 2023</span></div>
+            <p class="org">Tech Startup, Remote</p>
+            <ul>
+              <li>Learned production workflows: code review, Git flow, CI/CD, agile sprints.</li>
+              <li>Shipped first production features and owned bug fixes end-to-end.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section>
+          <h2>Selected Projects</h2>
+
+          <div class="project">
+            <h3>Gebeya Marketplace <span>React · Node.js · PostgreSQL</span></h3>
+            <p>Two-sided marketplace for Ethiopian artisans with escrow payments, seller dashboards, and sub-second page loads.</p>
+          </div>
+          <div class="project">
+            <h3>BunaPOS <span>PWA · IndexedDB · React</span></h3>
+            <p>Offline-first café point-of-sale with background sync — full functionality with zero connectivity.</p>
+          </div>
+          <div class="project">
+            <h3>Selam Chat <span>WebSockets · Redis · MongoDB</span></h3>
+            <p>Real-time messaging with rooms &amp; presence, load-tested to 2k concurrent connections per node.</p>
+          </div>
+          <div class="project">
+            <h3>SnapCV API <span>Python · FastAPI · OCR</span></h3>
+            <p>Resume-parsing API turning messy PDFs into structured JSON with 92% field accuracy.</p>
+          </div>
+        </section>
+      </div>
+
+      <!-- ============ SIDE COLUMN ============ -->
+      <div>
+        <section>
+          <h2>Skills</h2>
+          <div class="skills-row">
+            <span class="label">Frontend</span>
+            <span class="chip">JavaScript / TS</span><span class="chip">React</span><span class="chip">Next.js</span><span class="chip">HTML/CSS</span><span class="chip">Tailwind</span>
+          </div>
+          <div class="skills-row">
+            <span class="label">Backend</span>
+            <span class="chip">Node.js</span><span class="chip">Express</span><span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">PostgreSQL</span><span class="chip">MongoDB</span>
+          </div>
+          <div class="skills-row">
+            <span class="label">Tools</span>
+            <span class="chip">Git</span><span class="chip">Docker</span><span class="chip">Linux</span><span class="chip">CI/CD</span><span class="chip">Vercel</span><span class="chip">Figma</span>
+          </div>
+        </section>
+
+        <section>
+          <h2>Education</h2>
+          <div class="item">
+            <div class="item-head"><h3 style="font-size:13px">BSc, Computer Science</h3></div>
+            <p class="org">Addis Ababa University</p>
+            <span class="date">2019 — 2023</span>
+            <ul style="margin-top:6px">
+              <li>Led the student dev club; organized hackathons.</li>
+              <li>Focus: software engineering, databases, algorithms.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section>
+          <h2>Languages</h2>
+          <div class="fact"><span>🗣️ <b>Amharic</b> — native</span></div>
+          <div class="fact"><span>🗣️ <b>English</b> — professional fluency</span></div>
+        </section>
+
+        <section>
+          <h2>Highlights</h2>
+          <div class="fact"><span>🚀 <b>24+ projects</b> designed &amp; built</span></div>
+          <div class="fact"><span>🤝 <b>12+ clients</b> shipped for</span></div>
+          <div class="fact"><span>🌍 <b>Open to remote</b> worldwide</span></div>
+          <div class="fact"><span>⚡ <b>Fast learner</b> — new stack? Give me a weekend.</span></div>
+        </section>
+      </div>
+    </div>
+
+    <footer>
+      <span>References &amp; full case studies available on request.</span>
+      <span>messay.dev</span>
+    </footer>
+  </div>
+</body>
+</html>
