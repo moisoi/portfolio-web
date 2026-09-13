@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 — Page not found · messay.dev</title>
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23c9f24d'/%3E%3Ctext x='50' y='68' font-family='Arial,sans-serif' font-size='46' font-weight='bold' text-anchor='middle' fill='%230a0a10'%3EMM%3C/text%3E%3C/svg%3E" />
+  <meta http-equiv="refresh" content="8; url=/" />
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; margin: 0; }
+    body {
+      min-height: 100svh; display: grid; place-items: center;
+      background: #0a0a10; color: #eaeaf2;
+      font-family: "Inter", system-ui, sans-serif;
+      padding: 24px; text-align: center;
+    }
+    .wrap { max-width: 480px; }
+    .code {
+      font-family: "Space Grotesk", sans-serif; font-weight: 700;
+      font-size: clamp(5rem, 18vw, 8rem); line-height: 1; letter-spacing: -0.04em;
+      color: transparent; -webkit-text-stroke: 2px #eaeaf2;
+    }
+    .code b { color: #c9f24d; -webkit-text-stroke: 0; }
+    h1 { font-family: "Space Grotesk", sans-serif; font-size: 1.5rem; margin: 18px 0 10px; }
+    p { color: #9c9cae; margin-bottom: 30px; }
+    .mono { font-family: "JetBrains Mono", monospace; font-size: 0.8rem; color: #80809a; display: block; margin-bottom: 26px; }
+    a.btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: #c9f24d; color: #0a0a10;
+      font-weight: 600; padding: 14px 28px; border-radius: 999px;
+      text-decoration: none; transition: transform .25s, box-shadow .25s;
+    }
+    a.btn:hover { transform: translateY(-3px); box-shadow: 0 14px 34px -8px rgba(201,242,77,.5); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="code">4<b>0</b>4</div>
+    <h1>This page shipped without QA. 😅</h1>
+    <p>The page you're looking for doesn't exist (or moved).<br />Redirecting you home in a few seconds…</p>
+    <span class="mono">error: route not found — have you tried turning it off and on again?</span>
+    <a class="btn" href="/">Take me home →</a>
+  </div>
+</body>
+</html>

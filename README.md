@@ -18,7 +18,8 @@ zero dependencies. Designed to make recruiters stop scrolling and start explorin
 | **Experience** | Alternating scroll-revealed timeline (work + education) |
 | **Testimonials** | Auto-playing carousel with dots & arrows |
 | **Contact** | Validated form with success state, one-click email copy, **live Addis Ababa local time** |
-| **Résumé** | Print-ready A4 résumé page (`resume.html`) with one-click "Download PDF" |
+| **Résumé & CV** | Print-ready A4 résumé page (`resume.html`) with one-click "Download PDF", plus a **direct-download CV** (`assets/Messay_Mohammed_CV.pdf`, regenerable via `tools/make_cv.py`) |
+| **📅 Booking** | **Cal.com "Book a call"** CTAs in the nav, hero, contact cards, mobile menu, résumé page, command palette and bot |
 | **🤖 AI Assistant ("Messa")** | Floating chat bot that answers recruiter questions — skills, projects, experience, availability, salary, contact — with quick-reply chips, action buttons (navigate / copy email / open résumé / open case studies), typing indicator, follow-up memory, and graceful fallbacks. 100% client-side: no servers, no API keys, works offline & on GitHub Pages |
 | **Extras** | Dark/light theme (persisted), custom cursor, toast notifications, film grain overlay, scroll-reveal animations, full `prefers-reduced-motion` support |
 | **Easter eggs 🥚** | Konami code (`↑ ↑ ↓ ↓ ← → ← → B A`) fires confetti party mode; a hidden hello in the browser console for curious recruiters |
@@ -31,6 +32,10 @@ css/styles.css  → design system + all component styles
 js/main.js      → SITE content object + every interaction
 js/bot.js       → "Messa" AI assistant (NLU engine + chat UI)
 resume.html     → print-friendly résumé (use browser print → PDF)
+assets/Messay_Mohammed_CV.pdf → downloadable CV (regenerate with tools/make_cv.py)
+tools/make_cv.py→ one-page CV generator (pip install fpdf2)
+404.html        → branded not-found page with auto-redirect
+robots.txt      → search-engine hints
 ```
 
 ## ✏️ Customize content
@@ -46,6 +51,13 @@ Edit it and the page re-renders — no other file changes needed.
 > - Experience/education entries and stats → your true history
 > - Testimonial quotes → real ones once you have them
 > - `BOT_PROFILE` at the top of `js/bot.js` → availability, salary stance, languages (the assistant speaks with this data)
+> - To swap the CV: drop your own PDF at `assets/Messay_Mohammed_CV.pdf`, or edit the `CONTENT` dict in `tools/make_cv.py` and re-run `python3 tools/make_cv.py`
+
+### 📅 Booking & CV links
+
+- Booking: `SITE.cal` in `js/main.js` → https://cal.com/messay-mohammed-w47ggg
+  (hardcoded in `index.html` nav/hero/contact — search & replace if it ever changes)
+- CV download: `SITE.cvFile` → `assets/Messay_Mohammed_CV.pdf`
 
 ### 🤖 About the AI assistant
 

@@ -13,6 +13,8 @@ const SITE = {
   location: "Addis Ababa, Ethiopia",
   email: "hello@messay.dev", // ← set your real email
   github: "https://github.com/moisoi",
+  cal: "https://cal.com/messay-mohammed-w47ggg", // Cal.com booking link
+  cvFile: "assets/Messay_Mohammed_CV.pdf",       // downloadable CV
   timeZone: "Africa/Addis_Ababa",
 
   typedRoles: [
@@ -365,7 +367,12 @@ const Nav = {
       (entries) => {
         entries.forEach((e) => {
           if (e.isIntersecting) {
-            links.forEach((l) => l.classList.toggle("active", l.getAttribute("href") === "#" + e.target.id));
+            links.forEach((l) => {
+              const active = l.getAttribute("href") === "#" + e.target.id;
+              l.classList.toggle("active", active);
+              if (active) l.setAttribute("aria-current", "true");
+              else l.removeAttribute("aria-current");
+            });
           }
         });
       },
@@ -907,6 +914,8 @@ const CmdK = {
     { icon: "💼", label: "Go to Experience", hint: "#experience", run: () => (location.href = "#experience") },
     { icon: "✉️", label: "Go to Contact", hint: "#contact", run: () => (location.href = "#contact") },
     { icon: "◐", label: "Toggle dark / light theme", hint: "theme", run: () => $("#theme-toggle").click() },
+    { icon: "📅", label: "Book a call (Cal.com)", hint: "schedule", run: () => window.open(SITE.cal, "_blank") },
+    { icon: "⤓", label: "Download CV (PDF)", hint: "cv", run: () => { const a = document.createElement("a"); a.href = SITE.cvFile; a.download = ""; a.click(); } },
     { icon: "📄", label: "Open résumé", hint: "resume.html", run: () => window.open("resume.html", "_blank") },
     { icon: "📋", label: "Copy email address", hint: SITE.email, run: () => $("#copy-email").click() },
     { icon: "🐙", label: "Open GitHub profile", hint: "github.com/moisoi", run: () => window.open(SITE.github, "_blank") },

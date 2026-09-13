@@ -54,6 +54,8 @@ const Bot = (() => {
     linkedin: () => window.open("https://www.linkedin.com/", "_blank"),
     confetti: () => EasterEgg.party(),
     openProject: (i) => Projects.openModal(i),
+    bookCall: () => window.open(SITE.cal, "_blank"),
+    downloadCV: () => { const a = document.createElement("a"); a.href = SITE.cvFile; a.download = ""; document.body.appendChild(a); a.click(); a.remove(); },
     emailNow: () => { window.location.href = "mailto:" + SITE.email; },
   };
 
@@ -62,6 +64,8 @@ const Bot = (() => {
     contact: { label: "Go to contact", icon: "✉️", run: () => ACTIONS.scroll("contact") },
     copyEmail: { label: "Copy email", icon: "📋", run: () => ACTIONS.copyEmail() },
     resume: { label: "Open résumé", icon: "📄", run: () => ACTIONS.resume() },
+    downloadCV: { label: "Download CV", icon: "⤓", run: () => ACTIONS.downloadCV() },
+    bookCall: { label: "Book a call", icon: "📅", run: () => ACTIONS.bookCall() },
     github: { label: "GitHub profile", icon: "🐙", run: () => ACTIONS.github() },
     email: { label: "Email him now", icon: "📨", run: () => ACTIONS.emailNow() },
     skills: { label: "See skills", icon: "🧰", run: () => ACTIONS.scroll("skills") },
@@ -102,9 +106,9 @@ const Bot = (() => {
         text:
           "I'm " + BOT_PROFILE.botName + " — I can tell you everything a recruiter needs to know:\n\n" +
           "🧰 Skills & tech stack\n🚀 Projects & case studies\n💼 Experience & education\n" +
-          "📅 Availability & location\n📄 Résumé download\n✉️ Contact details\n\n" +
+          "📅 Availability & location\n📄 Résumé & CV download\n✉️ Contact details — or book a call\n\n" +
           "Or say things like “take me to projects” and I'll navigate for you.",
-        chips: ["What's his stack?", "Show projects", "Is he available?", "Fun fact"],
+        chips: ["What's his stack?", "Show projects", "Book a call", "Fun fact"],
       }),
     },
     {
@@ -116,7 +120,7 @@ const Bot = (() => {
         const part = h < 12 ? "morning" : h < 17 ? "afternoon" : "evening";
         return {
           text: `Good ${part}! 👋 Great to meet you. Ask me about Messay's skills, projects, experience — or how to hire him.`,
-          chips: ["What's his stack?", "Show projects", "Is he available?", "Get his contact"],
+          chips: ["What's his stack?", "Show projects", "Book a call", "Is he available?"],
         };
       },
     },
@@ -244,9 +248,9 @@ const Bot = (() => {
         text:
           "Excellent instincts! 🎯 Here's the pitch:\n\n" +
           "✅ " + BOT_PROFILE.availability + "\n✅ Ships full-stack features end-to-end\n✅ Communicates clearly, estimates honestly\n✅ Starts " + BOT_PROFILE.noticePeriod.toLowerCase() + "\n\n" +
-          "The fastest way is a quick email — he replies within 24 hours.",
-        chips: ["Get his contact", "Open résumé", "His salary expectations"],
-        actions: [ACT.copyEmail, ACT.email, ACT.resume],
+          "The fastest way is a quick email — or grab a slot on his calendar right now.",
+        chips: ["Book a call", "Get his contact", "His salary expectations"],
+        actions: [ACT.bookCall, ACT.copyEmail, ACT.resume],
       }),
     },
     {
@@ -260,8 +264,8 @@ const Bot = (() => {
         if (hasTerm(norm, "notice period") || /start/.test(norm)) text += "\n\n⚡ Notice period: " + BOT_PROFILE.noticePeriod;
         return {
           text,
-          chips: ["Get his contact", "His salary expectations", "Open résumé"],
-          actions: [ACT.contact],
+          chips: ["Book a call", "Get his contact", "His salary expectations"],
+          actions: [ACT.bookCall, ACT.contact],
         };
       },
     },
@@ -275,13 +279,24 @@ const Bot = (() => {
       }),
     },
     {
+      id: "book",
+      kw: ["book a call", 9, "book a meeting", 9, "book", 4, "schedule", 6, "meeting", 5, "calendar", 6, "cal.com", 10, "interview call", 8, "set up a call", 8, "hop on a call", 8, "quick call", 7, "video call", 6, "zoom", 4, "google meet", 5, "time to talk", 6, "slot", 4, "appointment", 5, "reserve", 3],
+      re: [/book (a |an |the )?(call|meeting|chat|time|slot)/, /schedule (a |the )?(call|meeting|chat|interview)/],
+      respond: () => ({
+        text:
+          "📅 Great idea — talking beats emailing!\n\nMessay uses Cal.com: pick any slot that suits you and you'll get an instant confirmation. 15 minutes is plenty for a first chat.",
+        chips: ["Get his contact", "Is he available?", "His salary expectations"],
+        actions: [ACT.bookCall, ACT.downloadCV],
+      }),
+    },
+    {
       id: "contact",
       kw: ["contact", 6, "email", 4, "e-mail", 4, "reach", 4, "get in touch", 7, "phone", 3, "talk to him", 6, "message him", 5, "contact info", 7, "address", 2, "schedule", 3, "call", 3, "meet", 2],
       re: [/how (can|do) i (contact|reach)/],
       respond: () => ({
-        text: `The fastest route to Messay:\n\n✉️ ${SITE.email}\n\nHe replies within 24 hours — usually much faster. Want me to copy it for you?`,
-        chips: ["Copy email", "Email him now", "His availability"],
-        actions: [ACT.copyEmail, ACT.email, ACT.contact],
+        text: `The fastest route to Messay:\n\n✉️ ${SITE.email}\n\nHe replies within 24 hours — usually much faster. Prefer to talk live? Book a slot on his calendar.`,
+        chips: ["Copy email", "Book a call", "His availability"],
+        actions: [ACT.copyEmail, ACT.bookCall, ACT.email],
       }),
     },
     {
@@ -308,8 +323,8 @@ const Bot = (() => {
       kw: ["resume", 6, "résumé", 6, "cv", 6, "curriculum vitae", 7, "download", 2],
       re: [/(resume|résumé|cv)/],
       respond: () => ({
-        text: "📄 Sure! His résumé has the full story — experience, education, skills — formatted for a quick skim (recruiter-friendly, promise).\n\nClick below and use “Download PDF” to save a copy.",
-        actions: [ACT.resume, ACT.contact],
+        text: "📄 Sure! His résumé has the full story — experience, education, skills — formatted for a quick skim (recruiter-friendly, promise).\n\nYou can grab the PDF directly, or open the print-friendly page.",
+        actions: [ACT.downloadCV, ACT.resume, ACT.contact],
       }),
     },
     {
@@ -554,7 +569,7 @@ const Bot = (() => {
     hideTyping();
     addMessage("bot", {
       text: `Hi there! 👋 I'm ${BOT_PROFILE.botName}, Messay's AI assistant.\n\nRecruiters ask me about his skills, projects and availability — or say "hire him" and I'll get you sorted. 😄`,
-      chips: ["What can you do?", "What's his stack?", "Show projects", "Is he available?"],
+      chips: ["What can you do?", "What's his stack?", "Book a call", "Is he available?"],
     });
   }
 

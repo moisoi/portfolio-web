@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+# Recruiters: the good stuff is at /assets/Messay_Mohammed_CV.pdf 😉
