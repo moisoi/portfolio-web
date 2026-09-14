@@ -246,10 +246,11 @@ window.addEventListener('keydown', (event) => {
     commandOverlay.classList.contains('open') ? closeCommand() : openCommand();
   }
   if (!isTyping && event.key.toLowerCase() === 'b') openBrief();
-  if (!isTyping && event.key === '1') document.querySelector('[data-filter="all"]').click();
-  if (!isTyping && event.key === '2') document.querySelector('[data-filter="product"]').click();
-  if (!isTyping && event.key === '3') document.querySelector('[data-filter="system"]').click();
-  if (!isTyping && event.key === '4') document.querySelector('[data-filter="web"]').click();
+  const shortcuts = { '1': '#experience', '2': '#work', '3': '#about', '4': '#contact' };
+  if (!isTyping && shortcuts[event.key]) {
+    event.preventDefault();
+    document.querySelector(shortcuts[event.key]).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 });
 
 // Useful recruiter affordance: a one-click, feedback-confirmed address copy.
