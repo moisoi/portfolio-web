@@ -3,256 +3,163 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Messay Mohammed — systems-minded operator and digital builder focused on thoughtful, high-performing work." />
-    <meta name="theme-color" content="#0b0e13" />
-    <title>Messay Mohammed — Build momentum, with intent.</title>
+    <meta name="description" content="Messay Mohammed — Full Stack & Mobile Developer in Addis Ababa. I build responsive web and mobile products that solve real operational problems." />
+    <meta name="theme-color" content="#080a0f" />
+    <title>Messay Mohammed — Full Stack Developer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
-    <div class="noise" aria-hidden="true"></div>
-    <div class="cursor-glow" aria-hidden="true"></div>
-    <div class="scroll-progress" aria-hidden="true"><span></span></div>
+    <div class="page-noise" aria-hidden="true"></div>
+    <div class="progress" aria-hidden="true"><span></span></div>
 
-    <header class="site-header" id="top">
-      <a class="brand" href="#top" aria-label="Messay Mohammed home">
-        <span class="brand-mark" aria-hidden="true"><i></i><i></i></span>
-        <span>MESSAY<span class="brand-dot">M.</span></span>
-      </a>
-      <nav class="desktop-nav" aria-label="Primary navigation">
-        <a href="#experience">Experience</a>
-        <a href="#work">Work</a>
-        <a href="#about">About</a>
+    <header class="nav-shell" id="top">
+      <a href="#top" class="monogram" aria-label="Messay Mohammed home"><span>M</span><i></i></a>
+      <nav class="primary-nav" aria-label="Primary navigation">
+        <a href="#about"><span>◌</span> About</a>
+        <a href="#work"><span>▣</span> Work</a>
+        <a href="#skills"><span>✳</span> Skills</a>
+        <a href="#experience"><span>◷</span> Experience</a>
+        <a href="#contact"><span>✉</span> Contact</a>
       </nav>
-      <div class="header-actions">
-        <button class="icon-button command-trigger" aria-label="Open quick navigation" title="Quick navigation (K)">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5a6 6 0 1 0 0 12 6 6 0 0 0 0-12Zm0-2a8 8 0 1 1 0 16 8 8 0 0 1 0-16Zm7.4 13.98L22 20.58 20.58 22l-3.6-3.6 1.42-1.42Z"/></svg><span class="key-hint">K</span>
-        </button>
-        <a class="button button-small button-ink" href="#contact"><span>Let’s talk</span><b>↗</b></a>
+      <div class="nav-actions">
+        <button class="nav-command" aria-label="Open site navigation"><span>⌘</span><em>Menu</em></button>
+        <a class="resume-nav" href="resume.html" target="_blank"><span>↓</span> Résumé</a>
       </div>
     </header>
 
     <main id="main">
-      <section class="hero section-shell" aria-labelledby="hero-title">
-        <div class="hero-orbit orbit-a" aria-hidden="true"></div>
-        <div class="hero-orbit orbit-b" aria-hidden="true"></div>
-        <div class="hero-grid" aria-hidden="true"></div>
+      <section class="hero shell" aria-labelledby="hero-title">
+        <div class="grid-field" aria-hidden="true"></div>
+        <div class="hero-haze haze-left" aria-hidden="true"></div><div class="hero-haze haze-right" aria-hidden="true"></div>
         <div class="hero-copy">
-          <div class="eyebrow reveal-up"><span class="live-dot"></span> Systems-minded operator &amp; digital builder</div>
-          <h1 id="hero-title" class="reveal-up delay-1">Build momentum,<br /><em>with intent.</em></h1>
-          <p class="hero-intro reveal-up delay-2">I’m Messay Mohammed — a curious operator with an eye for the digital details that help people, processes, and promising ideas move forward.</p>
-          <div class="hero-buttons reveal-up delay-3">
-            <a class="button button-lime" href="#work"><span>Explore selected work</span><b>↓</b></a>
-            <button class="text-button brief-trigger"><span>Read the recruiter brief</span><i>↗</i></button>
+          <p class="overline reveal"><span>MESSAY MOHAMMED</span><b>/</b> FULL-STACK &amp; MOBILE DEV</p>
+          <h1 id="hero-title" class="reveal delay-1">Ideas in.<br /><span>Products</span><br /><em>out.</em></h1>
+          <p class="hero-description reveal delay-2">Full-stack &amp; mobile developer working in React, React Native, and Supabase — shipping useful products for real people, not just portfolio pieces.</p>
+          <div class="hero-actions reveal delay-3">
+            <a class="button button-outline" href="resume.html" target="_blank"><span>↓</span> View résumé</a>
+            <a class="button button-warm" href="mailto:messaymohammed@gmail.com?subject=Let%27s%20talk%20about%20an%20opportunity"><span>▣</span> Book a call</a>
           </div>
+          <a class="scroll-cue reveal delay-4" href="#about"><i></i> Scroll to explore</a>
         </div>
-        <aside class="availability-card reveal-up delay-3" aria-label="Current availability">
-          <div class="availability-top"><span class="pulse-ring"></span><span>NOW / 2026</span></div>
-          <p>Open to operations, technology, product, and problem-solving conversations.</p>
-          <a href="#contact">Start a conversation <span>↘</span></a>
-        </aside>
-        <div class="hero-footer reveal-up delay-4">
-          <p>Scroll to discover <span class="scroll-arrow">↓</span></p>
-          <p class="hero-location"><span class="location-pin">●</span> Building across time zones</p>
+        <div class="terminal reveal delay-2" aria-label="Developer status terminal">
+          <div class="terminal-bar"><span><i></i><i></i><i></i></span><b>messay — zsh</b><em>⋮</em></div>
+          <div class="terminal-body">
+            <p><strong>➜</strong> <span>~</span> whoami</p><code>full-stack &amp; mobile dev</code>
+            <p><strong>➜</strong> <span>~</span> pwd</p><code>~/addis-ababa/et</code>
+            <p><strong>➜</strong> <span>~</span> cat status.txt</p><code class="status"><i></i> available for the right build</code>
+          </div>
+          <div class="terminal-foot"><span>React</span><span>React Native</span><span>Node.js</span></div>
         </div>
-        <div class="hero-art" aria-hidden="true">
-          <div class="art-caption art-caption-top">01 — HUMAN / SYSTEM</div>
-          <div class="kinetic-word word-one">FORM</div>
-          <div class="kinetic-word word-two">FWD</div>
-          <div class="art-caption art-caption-bottom">Click into the details</div>
-          <svg class="hero-squiggle" viewBox="0 0 450 450" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M367 65C291 4 188 18 122 71 53 126 44 228 91 302c43 67 128 102 204 80 70-20 118-90 102-158-15-66-100-96-154-56-38 28-42 92-14 129 29 37 88 41 119 13" stroke="currentColor" stroke-width="1.5"/><path d="M151 80c57 33 116 49 197 39M74 245c54-37 135-26 186 12M127 348c44-17 110-18 160 14" stroke="currentColor" stroke-width="1" stroke-dasharray="4 7"/></svg>
-          <div class="orb orb-lime"></div><div class="orb orb-white"></div>
-        </div>
+        <div class="hero-stamp reveal delay-4" aria-hidden="true"><span>BUILD</span><b>01</b><span>SHIP</span></div>
       </section>
 
-      <section class="marquee-band" aria-label="Capabilities">
-        <div class="marquee-track">
-          <span>Operational clarity <i>✦</i></span><span>Tech enablement <i>✦</i></span><span>Workflow design <i>✦</i></span><span>Human-centered craft <i>✦</i></span>
-          <span aria-hidden="true">Operational clarity <i>✦</i></span><span aria-hidden="true">Tech enablement <i>✦</i></span><span aria-hidden="true">Workflow design <i>✦</i></span><span aria-hidden="true">Human-centered craft <i>✦</i></span>
-        </div>
-      </section>
-
-      <section class="statement section-shell" id="approach" aria-labelledby="statement-title">
-        <div class="section-kicker reveal"><span>01</span><span>What I bring</span></div>
-        <div class="statement-layout">
-          <h2 id="statement-title" class="reveal">Make work <em>flow.</em><br />Make the system <em>stronger.</em></h2>
-          <div class="statement-note reveal">
-            <span class="note-line"></span>
-            <p>Good operations feel almost invisible: the hand-off is clear, the right tool is ready, and people can spend their energy on the work that matters.</p>
-            <a href="#process" class="underlined-link">How I work <span>↓</span></a>
-          </div>
-        </div>
-      </section>
-
-      <section class="experience-section section-shell" id="experience" aria-labelledby="experience-title">
-        <div class="section-kicker reveal"><span>02</span><span>Experience snapshot</span></div>
-        <div class="experience-head reveal">
-          <div><p class="experience-date">JUN 22 — JUL 23 / 2026</p><h2 id="experience-title">MMCY<br /><em>Operations Intern.</em></h2></div>
-          <p>One focused month helping the company’s daily rhythm run more clearly — especially where people and technology needed to meet.</p>
-        </div>
-        <article class="experience-card reveal">
-          <div class="experience-art" aria-hidden="true">
-            <span class="experience-mark">MMCY</span>
-            <div class="experience-orbit orbit-one"></div><div class="experience-orbit orbit-two"></div><div class="experience-core">01<br /><small>MONTH</small></div>
-            <p>OPERATIONS<br />/ TECH</p>
-          </div>
-          <div class="experience-copy">
-            <p class="experience-overline">The role / in motion</p>
-            <h3>Keeping the engine<br />ready to move.</h3>
-            <p class="experience-summary">At MMCY, I supported operations across the business with a technical centre of gravity. I helped turn everyday requests into visible next steps, supported shared digital tools, and made recurring processes easier for teams to understand and follow.</p>
-            <div class="experience-pillars">
-              <div><span>01</span><p><b>Tech operations</b>Helped triage day-to-day tool, access, and shared-resource needs so small blockers were less likely to interrupt the work.</p></div>
-              <div><span>02</span><p><b>Workflow visibility</b>Maintained practical task tracking and process notes, giving routine hand-offs a clearer home and teams a more reliable reference point.</p></div>
-              <div><span>03</span><p><b>Connected support</b>Worked across company operations, listening for friction, routing requests thoughtfully, and keeping technology useful to the people using it.</p></div>
+      <section class="about shell section" id="about" aria-labelledby="about-title">
+        <div class="section-label"><span>01</span><i></i> About</div>
+        <div class="about-layout">
+          <div class="about-copy reveal">
+            <h2 id="about-title">I don’t just write code.<br /><span>I ship it.</span></h2>
+            <p>I’m a Computer Science graduate and full-stack developer who enjoys moving a project from a clear problem to a working product. My recent work spans a real-time student sports platform and a business-operations Mini App that replaced paper-heavy workflows.</p>
+            <p>I use AI tools thoughtfully across my workflow, without losing the habit of clean, readable code. I care about the UI/UX layer just as much as what happens behind the API.</p>
+            <div class="traits" aria-label="Professional strengths">
+              <span>Communication</span><span>Collaboration &amp; teamwork</span><span>Problem-solving</span><span>Project &amp; time management</span><span>Adaptability &amp; growth</span><span>Leadership &amp; ownership</span>
             </div>
-            <p class="experience-reflection"><span>✦</span> The takeaway: operational care is product care. When the internal experience works, everyone can do better work.</p>
           </div>
-        </article>
-      </section>
-
-      <section class="work-section section-shell" id="work" aria-labelledby="work-title">
-        <div class="section-heading">
-          <div class="section-kicker reveal"><span>03</span><span>Selected signals</span></div>
-          <div class="work-heading-row reveal">
-            <h2 id="work-title">Work with a <em>point of view.</em></h2>
-            <p>Four ways I’ve explored clarity, momentum, and memorable interaction.</p>
+          <div class="stats-grid reveal" aria-label="Career highlights">
+            <article><b>3</b><p>core specialties —<br />web, mobile, backend</p></article>
+            <article><b>2<span>+</span></b><p>contract products<br />shipped</p></article>
+            <article><b>100<span>+</span></b><p>students reached via<br />volunteering</p></article>
+            <article><b>15<span>+</span></b><p>technologies across<br />the stack</p></article>
           </div>
         </div>
-        <div class="filter-bar reveal" role="toolbar" aria-label="Filter projects">
-          <button class="filter active" data-filter="all">All work <span>04</span></button>
-          <button class="filter" data-filter="product">Product</button>
-          <button class="filter" data-filter="system">Systems</button>
-          <button class="filter" data-filter="web">Web</button>
+      </section>
+
+      <section class="work shell section" id="work" aria-labelledby="work-title">
+        <div class="section-heading">
+          <div class="section-label"><span>02</span><i></i> Selected work</div>
+          <div class="heading-row"><h2 id="work-title">Recent builds</h2><p>Two contract products, from first commit to a tool ready for real users.</p></div>
         </div>
         <div class="project-grid">
-          <article class="project-card project-featured reveal" data-category="product web" data-project="atlas" tabindex="0" role="button" aria-label="Open Atlas case study">
-            <div class="project-visual atlas-visual">
-              <div class="project-number">01</div>
-              <div class="atlas-sun"></div><div class="atlas-map map-one"></div><div class="atlas-map map-two"></div>
-              <div class="atlas-panel"><span>ATLAS / 01</span><strong>Find your<br />next move.</strong><i>↗</i></div>
-              <span class="visual-tag tag-north">N 45°</span><span class="visual-tag tag-east">E 09°</span>
-            </div>
-            <div class="project-meta"><div><p>Atlas</p><span>Product direction · Web experience</span></div><span class="round-arrow" aria-hidden="true">↗</span></div>
+          <article class="project-card reveal" data-project="sports" tabindex="0" role="button" aria-label="Open Student Sports Hub case study">
+            <div class="project-topline"><span>P.01</span><b>Mobile / Education</b></div>
+            <div class="project-icon sport-icon" aria-hidden="true"><span>SS</span><i></i></div>
+            <h3>Student Sports Hub</h3>
+            <p>A mobile app for Dewel Marketing and Consultancy, built for grades 1–12 students and parents across Addis Ababa — with live stories, match schedules, team rosters, and sports updates.</p>
+            <div class="impact"><strong>Impact:</strong><span>Designed for multiple schools with real-time updates and a scalable database structure.</span></div>
+            <div class="card-footer"><div class="tech-tags"><span>React Native</span><span>Supabase</span><span>Expo</span></div><span class="card-link" aria-hidden="true">View case study <b>↗</b></span></div>
           </article>
-          <article class="project-card reveal" data-category="system product" data-project="signal" tabindex="0" role="button" aria-label="Open Signal case study">
-            <div class="project-visual signal-visual">
-              <div class="project-number">02</div>
-              <span class="signal-label">SIGNAL / OS</span>
-              <div class="signal-window"><div class="window-nav"><i></i><i></i><i></i><span>Daily signal</span></div><div class="signal-bars"><b style="height: 42%"></b><b style="height: 76%"></b><b style="height: 55%"></b><b style="height: 92%"></b><b style="height: 66%"></b><b style="height: 82%"></b><b style="height: 46%"></b></div><div class="signal-line"></div></div>
-              <div class="signal-sticker">make<br />sense</div>
-            </div>
-            <div class="project-meta"><div><p>Signal OS</p><span>Design system · Product experience</span></div><button class="round-arrow" aria-label="Open Signal OS case study">↗</button></div>
-          </article>
-          <article class="project-card reveal" data-category="web" data-project="archive" tabindex="0" role="button" aria-label="Open Archive case study">
-            <div class="project-visual archive-visual">
-              <div class="project-number">03</div>
-              <div class="archive-word">ARCHIVE</div><div class="archive-loop loop-a"></div><div class="archive-loop loop-b"></div>
-              <div class="archive-card"><span>VOLUME 04</span><b>Stories<br />worth<br />keeping.</b><i>+</i></div>
-            </div>
-            <div class="project-meta"><div><p>Archive No. 4</p><span>Editorial platform · Web design</span></div><button class="round-arrow" aria-label="Open Archive case study">↗</button></div>
-          </article>
-          <article class="project-card reveal" data-category="product system" data-project="pace" tabindex="0" role="button" aria-label="Open Pace case study">
-            <div class="project-visual pace-visual">
-              <div class="project-number">04</div>
-              <div class="pace-dial"><div class="dial-dashes"></div><div class="dial-center"><small>TODAY</small><b>06:42</b><span>in flow</span></div></div>
-              <span class="pace-label">PACE<br />WITH PURPOSE</span>
-              <span class="pace-spark">✳</span>
-            </div>
-            <div class="project-meta"><div><p>Pace</p><span>Mobile product · Interaction design</span></div><span class="round-arrow" aria-hidden="true">↗</span></div>
+          <article class="project-card reveal delay-1" data-project="forms" tabindex="0" role="button" aria-label="Open Business Forms Mini App case study">
+            <div class="project-topline"><span>P.02</span><b>Web / Operations</b></div>
+            <div class="project-icon form-icon" aria-hidden="true"><span>{ }</span><i></i></div>
+            <h3>Business Forms Mini App</h3>
+            <p>A Telegram Mini App for Meteku Teshome General Work PLC that brings petty cash requests, purchase orders, and employee attendance into one digital business workflow.</p>
+            <div class="impact"><strong>Impact:</strong><span>Replaced manual paperwork across three workflows with an exportable digital process.</span></div>
+            <div class="card-footer"><div class="tech-tags"><span>React + Vite</span><span>Node.js</span><span>NestJS</span></div><span class="card-link" aria-hidden="true">View case study <b>↗</b></span></div>
           </article>
         </div>
-        <p class="work-footnote reveal"><span>✳</span> Looking for a particular skill or story? <button class="brief-trigger">Open the recruiter brief.</button></p>
+        <div class="work-cta reveal"><span>Have an operational headache worth solving?</span><a href="#contact">Let’s talk about it <b>↘</b></a></div>
       </section>
 
-      <section class="principles section-shell" id="process" aria-labelledby="principles-title">
-        <div class="section-kicker reveal"><span>03</span><span>The working model</span></div>
-        <div class="principles-intro reveal"><h2 id="principles-title">A little less<br /><em>“ta-da.”</em> A lot more <em>why.</em></h2><p>Good outcomes are not a mystery. They’re the result of asking sharper questions early, making the work visible often, and treating the details as part of the strategy.</p></div>
-        <div class="principle-list">
-          <article class="principle reveal"><span class="principle-index">A / 01</span><h3>Start with the signal.</h3><p>Find the real problem underneath the request. Align people around the decision that matters most.</p><span class="principle-icon">⌁</span></article>
-          <article class="principle reveal"><span class="principle-index">A / 02</span><h3>Build the useful thing.</h3><p>Shape systems, flows, and prototypes that give a team something concrete to react to.</p><span class="principle-icon">⊹</span></article>
-          <article class="principle reveal"><span class="principle-index">A / 03</span><h3>Make room for delight.</h3><p>Bring character to the moments people remember — without getting in the way of the task.</p><span class="principle-icon">✣</span></article>
+      <section class="skills shell section" id="skills" aria-labelledby="skills-title">
+        <div class="section-heading">
+          <div class="section-label"><span>03</span><i></i> Capabilities</div>
+          <div class="heading-row"><h2 id="skills-title">Stack &amp; tools</h2><p>What I reach for by default, and how the pieces fit together.</p></div>
+        </div>
+        <div class="skill-toolbar reveal" role="toolbar" aria-label="Filter skills"><button class="skill-filter active" data-skill-filter="all">Everything</button><button class="skill-filter" data-skill-filter="build">Build</button><button class="skill-filter" data-skill-filter="data">Data</button><button class="skill-filter" data-skill-filter="ops">Ship &amp; secure</button></div>
+        <div class="skill-matrix">
+          <article class="skill-group reveal" data-skill-group="build"><h3>Frontend <span>01</span></h3><ul><li>React.js / Next.js <b data-level="5"></b></li><li>TypeScript <b data-level="4"></b></li><li>Tailwind CSS <b data-level="4"></b></li><li>HTML5 / CSS3 <b data-level="5"></b></li></ul></article>
+          <article class="skill-group reveal" data-skill-group="build"><h3>Mobile <span>02</span></h3><ul><li>React Native <b data-level="4"></b></li><li>Expo <b data-level="4"></b></li><li>Telegram Mini Apps <b data-level="3"></b></li></ul></article>
+          <article class="skill-group reveal" data-skill-group="build"><h3>Backend <span>03</span></h3><ul><li>Node.js / NestJS <b data-level="4"></b></li><li>Express.js <b data-level="3"></b></li><li>FastAPI <b data-level="3"></b></li><li>RESTful API design <b data-level="4"></b></li></ul></article>
+          <article class="skill-group reveal" data-skill-group="data"><h3>Databases <span>04</span></h3><ul><li>PostgreSQL / MySQL <b data-level="4"></b></li><li>Supabase / Firebase <b data-level="4"></b></li><li>Redis <b data-level="2"></b></li></ul></article>
+          <article class="skill-group reveal" data-skill-group="ops"><h3>Security &amp; ops <span>05</span></h3><ul><li>JWT / OAuth 2.0 <b data-level="3"></b></li><li>RBAC <b data-level="3"></b></li><li>Docker <b data-level="3"></b></li><li>Git / GitHub / GitLab CI <b data-level="4"></b></li><li>WebSockets <b data-level="3"></b></li></ul></article>
+          <article class="skill-group reveal" data-skill-group="build"><h3>Design &amp; AI <span>06</span></h3><ul><li>UI/UX design awareness <b data-level="4"></b></li><li>Claude Code / AI workflows <b data-level="4"></b></li><li>Design motion principles <b data-level="3"></b></li><li>shadcn/ui <b data-level="3"></b></li></ul></article>
         </div>
       </section>
 
-      <section class="profile section-shell" id="about" aria-labelledby="about-title">
-        <div class="profile-card">
-          <div class="profile-art" aria-hidden="true">
-            <div class="profile-stripes"></div><div class="profile-disc"></div><div class="profile-stamp">MESSAY<br />M.</div>
-            <svg viewBox="0 0 400 450"><path d="M80 313c6-67 34-130 100-150 56-17 124 6 152 58 22 42 13 104-20 137-43 43-116 46-159 12-23-18-38-44-47-73-7-24-16-57-26-70" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="200" cy="130" r="52" fill="none" stroke="currentColor" stroke-width="2"/></svg>
-          </div>
-          <div class="profile-copy">
-            <div class="section-kicker"><span>04</span><span>Beyond the interface</span></div>
-            <h2 id="about-title">Equal parts<br /><em>curious &amp; considered.</em></h2>
-            <p>I’m Messay — interested in the practical details that make work better: clear systems, helpful technology, and the human rhythm behind every process.</p>
-            <p>I’m drawn to teams with real ambition, generous collaboration, and room to turn a good idea into a better way of working.</p>
-            <div class="profile-links"><a class="underlined-link" href="#contact">Get in touch <span>↘</span></a><button class="underlined-link command-trigger">Browse this site <span>⌘K</span></button></div>
-          </div>
+      <section class="experience shell section" id="experience" aria-labelledby="experience-title">
+        <div class="section-heading">
+          <div class="section-label"><span>04</span><i></i> Experience</div>
+          <div class="heading-row"><h2 id="experience-title">Where I’ve made things move</h2><p>Building products, strengthening operations, and showing up for the people around me.</p></div>
+        </div>
+        <div class="timeline">
+          <article class="timeline-item spotlight reveal"><div class="timeline-date">Jun 22 — Jul 23, 2026</div><div class="timeline-node"></div><div class="timeline-content"><div class="timeline-title"><h3>Operations Intern</h3><span>NEW</span></div><p class="company">MMCY <b>— Addis Ababa</b></p><p>Worked across company operations with a technology-first lens: helped keep day-to-day digital work moving, supported shared tools and access needs, maintained clearer operational follow-through, and surfaced the small process gaps that can slow a team down.</p><div class="role-notes"><span>Tech operations support</span><span>Workflow tracking</span><span>Process documentation</span></div></div></article>
+          <article class="timeline-item reveal"><div class="timeline-date">Feb 2026</div><div class="timeline-node"></div><div class="timeline-content"><h3>Full Stack Developer <span>(Contract)</span></h3><p class="company">Meteku Teshome General Work PLC <b>— Addis Ababa</b></p><p>Developed a Business Forms Telegram Mini App using React + Vite on the frontend and Node.js + NestJS on the backend. Automated petty cash requests, purchase orders, employee attendance, and report exports for client management.</p></div></article>
+          <article class="timeline-item reveal"><div class="timeline-date">Sep 2025 — Dec 2025</div><div class="timeline-node"></div><div class="timeline-content"><h3>Full Stack Mobile Developer <span>(Contract)</span></h3><p class="company">Dewel Marketing and Consultancy <b>— Addis Ababa</b></p><p>Built Student Sports Hub with React Native + Supabase for students and parents in grades 1–12, including real-time stories, match schedules, team rosters, and sports updates for multiple schools.</p></div></article>
+        </div>
+        <div class="experience-extras reveal">
+          <article><span>Education</span><h3>Bachelor of Computer Science</h3><p>HILCOE School of Computer Science and Technology<br />Sep 2020 — Jul 2025 · Addis Ababa</p></article>
+          <article><span>Leadership</span><h3>YWCA Lead Unit Coordinator &amp; Teacher</h3><p>Led teachers, supported student learning, and coordinated a fundraising initiative for 100+ students.</p></article>
+          <article><span>Community</span><h3>Red Cross Ethiopia</h3><p>Organized and facilitated a high school blood donation initiative.</p></article>
         </div>
       </section>
 
-      <section class="signal-section section-shell" aria-labelledby="signal-title">
-        <div class="signal-intro reveal"><span class="signal-star">✦</span><p class="eyebrow">The signal, not the noise</p><h2 id="signal-title">A portfolio should<br />answer the right questions.</h2></div>
-        <div class="signal-cards">
-          <button class="signal-card reveal" data-modal="impact"><span>01 / Impact</span><b>What changes when I’m on the team?</b><i>↗</i></button>
-          <button class="signal-card reveal" data-modal="craft"><span>02 / Craft</span><b>How do I think through the details?</b><i>↗</i></button>
-          <button class="signal-card reveal" data-modal="fit"><span>03 / Fit</span><b>What kind of work brings out my best?</b><i>↗</i></button>
-        </div>
-      </section>
-
-      <section class="contact section-shell" id="contact" aria-labelledby="contact-title">
-        <div class="contact-top"><div class="section-kicker reveal"><span>05</span><span>Make contact</span></div><p class="reveal">Have a role, project, or thorny product question?<br />I’m all ears.</p></div>
-        <div class="contact-main reveal">
-          <span class="contact-spark">✳</span>
-          <h2 id="contact-title">Let’s make<br /><em>something move.</em></h2>
-          <!-- Replace hello@moisoi.dev with your preferred public contact address. -->
-          <a class="email-link" href="mailto:hello@moisoi.dev">hello@moisoi.dev <span>↗</span></a>
-        </div>
-        <div class="contact-bottom"><p>© <span id="year"></span> MESSAY MOHAMMED. Built with intent.</p><div><a href="#top">Back to top ↑</a><button class="copy-email" data-email="hello@moisoi.dev">Copy email</button></div></div>
+      <section class="contact shell section" id="contact" aria-labelledby="contact-title">
+        <div class="contact-haze" aria-hidden="true"></div>
+        <div class="contact-heading reveal"><p class="section-label"><span>05</span><i></i> Contact</p><h2 id="contact-title">Let’s build something that <span>holds up.</span></h2><p>Open to full-time roles and freelance contracts. I read and answer everything myself.</p></div>
+        <a class="contact-email reveal" href="mailto:messaymohammed@gmail.com">messaymohammed@gmail.com <b>↗</b></a>
+        <div class="contact-actions reveal"><a class="button button-outline" href="resume.html" target="_blank"><span>↓</span> View résumé</a><a class="button button-warm" href="mailto:messaymohammed@gmail.com?subject=Let%27s%20book%20a%20call"><span>▣</span> Book a call</a></div>
+        <div class="contact-links reveal"><a href="tel:+251900651948">⌕ &nbsp; 0900 651 948</a><a href="https://github.com/moisoi" target="_blank" rel="noreferrer">GitHub ↗</a><a href="https://linkedin.com/in/messay-seid-398000252" target="_blank" rel="noreferrer">LinkedIn ↗</a></div>
+        <footer><span>© <span id="year"></span> Messay Mohammed</span><span>Built in Addis Ababa, ET</span><button class="copy-email" data-email="messaymohammed@gmail.com">Copy email</button></footer>
       </section>
     </main>
 
+    <button class="portfolio-chat-launcher" aria-expanded="false" aria-controls="portfolio-chat"><span class="chat-ping"></span><small>Ask my portfolio</small><b>▢</b><strong>Chat with Messay’s portfolio</strong></button>
+    <aside class="portfolio-chat" id="portfolio-chat" aria-label="Portfolio guide" aria-hidden="true">
+      <div class="chat-header"><div><span class="chat-status"></span><p>Portfolio guide<small>Answers from Messay’s résumé</small></p></div><button class="chat-close" aria-label="Close portfolio guide">×</button></div>
+      <div class="chat-log" aria-live="polite"><div class="chat-message bot">Hi — I can help you quickly understand Messay’s experience, stack, project work, or availability.</div></div>
+      <div class="chat-prompts"><button data-question="What did Messay do at MMCY?">MMCY role</button><button data-question="Tell me about the Sports Hub">Sports Hub</button><button data-question="What is his stack?">Tech stack</button></div>
+      <form class="chat-form"><input aria-label="Ask about Messay's work" autocomplete="off" placeholder="Ask about his work…" /><button aria-label="Send question">↑</button></form>
+    </aside>
+
+    <dialog class="case-modal" id="case-modal" aria-labelledby="case-title">
+      <div class="case-panel"><button class="modal-close" aria-label="Close case study">×</button><div class="case-copy"><p class="case-kicker" id="case-kicker"></p><h2 id="case-title"></h2><p class="case-lede" id="case-lede"></p><div class="case-grid"><div><span>The problem</span><p id="case-problem"></p></div><div><span>The build</span><p id="case-build"></p></div><div><span>Stack</span><p id="case-stack"></p></div></div><div class="case-line" id="case-line"></div><a href="#contact" class="case-contact">Have a similar build? Let’s talk <b>↘</b></a></div><div class="case-art" id="case-art"><span>CASE<br />STUDY</span></div></div>
+    </dialog>
+
+    <div class="command-overlay" aria-hidden="true"><section class="command-menu" role="dialog" aria-modal="true" aria-label="Quick navigation"><div class="command-search"><span>⌕</span><input autocomplete="off" placeholder="Jump to a section…" /><kbd>ESC</kbd></div><div class="command-options"><a href="#about"><i>01</i> About Messay <kbd>A</kbd></a><a href="#work"><i>02</i> Selected work <kbd>W</kbd></a><a href="#skills"><i>03</i> Stack &amp; tools <kbd>S</kbd></a><a href="#experience"><i>04</i> Experience <kbd>E</kbd></a><a href="#contact"><i>05</i> Contact <kbd>C</kbd></a><a href="resume.html" target="_blank"><i>↓</i> Open résumé <kbd>R</kbd></a></div><p class="command-foot">Use <kbd>⌘</kbd> or <kbd>K</kbd> any time</p></section></div>
     <div class="toast" role="status" aria-live="polite"><span>✓</span><p></p></div>
-
-    <dialog class="modal" id="project-modal" aria-labelledby="modal-title">
-      <div class="modal-panel project-modal-panel">
-        <button class="modal-close" aria-label="Close dialog">×</button>
-        <div class="modal-content"><p class="modal-overline" id="modal-type"></p><h2 id="modal-title"></h2><p class="modal-lede" id="modal-summary"></p><div class="case-details"><div><span>Focus</span><p id="modal-focus"></p></div><div><span>Good question</span><p id="modal-question"></p></div><div><span>My contribution</span><p id="modal-role"></p></div></div><div class="case-quote" id="modal-quote"></div><button class="button button-ink modal-close"><span>Back to work</span><b>←</b></button></div>
-        <div class="modal-art" id="modal-art"><span>CASE<br />STUDY</span></div>
-      </div>
-    </dialog>
-
-    <dialog class="modal" id="brief-modal" aria-labelledby="brief-title">
-      <div class="modal-panel brief-panel">
-        <button class="modal-close" aria-label="Close recruiter brief">×</button>
-        <div class="brief-header"><span class="live-dot"></span><p>Recruiter brief / 60 seconds</p></div>
-        <h2 id="brief-title">The fast version.</h2>
-        <div class="brief-grid">
-          <div><span>Recent experience</span><p>Operations Intern at MMCY, June 22–July 23, 2026 — supporting company-wide operations with a hands-on technology focus.</p></div>
-          <div><span>Strengths at the table</span><p>Operational follow-through, practical technical support, workflow visibility, thoughtful documentation, and calm cross-functional collaboration.</p></div>
-          <div><span>What to expect</span><p>Clear thinking, genuine curiosity, reliable detail work, and a willingness to turn fuzzy requests into a useful next step.</p></div>
-          <div><span>Conversation starter</span><p>Tell me where your team’s tools, processes, or customer experience could become clearer, faster, or more human.</p></div>
-        </div>
-        <div class="brief-actions"><a class="button button-lime" href="mailto:hello@moisoi.dev"><span>Start a conversation</span><b>↗</b></a><button class="text-button print-brief"><span>Save this brief as PDF</span><i>↓</i></button></div>
-      </div>
-    </dialog>
-
-    <dialog class="modal" id="signal-modal" aria-labelledby="signal-modal-title">
-      <div class="modal-panel signal-modal-panel">
-        <button class="modal-close" aria-label="Close dialog">×</button><span class="signal-star">✦</span><p class="modal-overline" id="signal-modal-overline"></p><h2 id="signal-modal-title"></h2><p class="modal-lede" id="signal-modal-copy"></p><a class="underlined-link" href="#contact" data-close-on-click>Bring me into the conversation <span>↘</span></a>
-      </div>
-    </dialog>
-
-    <div class="command-overlay" aria-hidden="true">
-      <section class="command-menu" role="dialog" aria-modal="true" aria-labelledby="command-title">
-        <div class="command-search"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5a6 6 0 1 0 0 12 6 6 0 0 0 0-12Zm0-2a8 8 0 1 1 0 16 8 8 0 0 1 0-16Zm7.4 13.98L22 20.58 20.58 22l-3.6-3.6 1.42-1.42Z"/></svg><input id="command-input" autocomplete="off" placeholder="What are you looking for?" /><kbd>ESC</kbd></div>
-        <div class="command-results"><p id="command-title">Navigate</p><a href="#experience" data-command><span class="command-icon">↗</span>MMCY experience <kbd>1</kbd></a><a href="#work" data-command><span class="command-icon">⌁</span>Selected work <kbd>2</kbd></a><a href="#about" data-command><span class="command-icon">○</span>About Messay <kbd>3</kbd></a><a href="#contact" data-command><span class="command-icon">✳</span>Start a conversation <kbd>4</kbd></a><button class="brief-trigger" data-command><span class="command-icon">▣</span>Open recruiter brief <kbd>B</kbd></button></div>
-        <div class="command-footer"><span><kbd>↑↓</kbd> Navigate</span><span><kbd>↵</kbd> Select</span><span>Built for the curious</span></div>
-      </section>
-    </div>
-
     <script src="script.js"></script>
   </body>
 </html>

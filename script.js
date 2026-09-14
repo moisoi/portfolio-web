@@ -1,267 +1,217 @@
-const projects = {
-  atlas: {
-    title: "Atlas",
-    type: "Product direction · Web experience",
-    summary: "A navigational concept for turning a broad decision into a confident next step — equal parts utility, atmosphere, and forward motion.",
-    focus: "Information hierarchy, product story, responsive interaction",
-    question: "How can a complex choice feel more like orientation than overwhelm?",
-    role: "Experience direction, interface design, motion concepts, prototype",
-    quote: "A strong first impression should make the next action feel obvious.",
-    art: "ATLAS\n/ 01",
-    color: "#a294ff"
+const caseStudies = {
+  sports: {
+    kicker: 'P.01 / Mobile · Education',
+    title: 'Student Sports Hub',
+    lede: 'A real-time mobile home for student sport — designed for grades 1–12 students and parents across Addis Ababa.',
+    problem: 'Sports updates were scattered. Students, parents, and schools needed one responsive place to find stories, fixtures, rosters, and the latest activity.',
+    build: 'Built a clear mobile experience that brings real-time stories, match schedules, team rosters, and sports updates into a single accessible app.',
+    stack: 'React Native · Supabase · Expo',
+    line: 'Designed with a database architecture ready to support multiple schools at once.',
+    color: '#70ddd9',
+    art: 'SPORTS<br />HUB'
   },
-  signal: {
-    title: "Signal OS",
-    type: "Design system · Product experience",
-    summary: "A flexible UI language designed to help a product team make the everyday information feel calm, legible, and ready to grow.",
-    focus: "Component thinking, interaction states, product language",
-    question: "What if consistency made the work feel more expressive — not less?",
-    role: "System principles, UI patterns, prototyping, documentation direction",
-    quote: "The best systems reduce the cost of making the next good decision.",
-    art: "SIGNAL\n/ OS",
-    color: "#d7ff4f"
-  },
-  archive: {
-    title: "Archive No. 4",
-    type: "Editorial platform · Web design",
-    summary: "An editorial playground shaped around pace, texture, and an unhurried way to encounter stories that deserve a second look.",
-    focus: "Editorial rhythm, art direction, accessible reading patterns",
-    question: "How can a digital archive invite discovery rather than demand attention?",
-    role: "Creative direction, web design, interaction choreography",
-    quote: "The interface can set the tempo before the first word is read.",
-    art: "ARCHIVE\n/ 04",
-    color: "#ff7c48"
-  },
-  pace: {
-    title: "Pace",
-    type: "Mobile product · Interaction design",
-    summary: "A deliberately human dashboard for noticing progress without turning every moment into another metric to optimise.",
-    focus: "Mobile flow, visual feedback, moments of reflection",
-    question: "Can a progress tool create momentum without adding pressure?",
-    role: "Product framing, flow design, interface craft, interactive prototype",
-    quote: "A useful measure should leave people feeling more capable, not more watched.",
-    art: "PACE\n/ 01",
-    color: "#b4a6ff"
+  forms: {
+    kicker: 'P.02 / Web · Operations',
+    title: 'Business Forms Mini App',
+    lede: 'A Telegram Mini App that turns important internal paperwork into a practical digital workflow.',
+    problem: 'Manual forms for petty cash, purchase orders, and attendance slowed routine operations and made reporting harder to manage.',
+    build: 'Created an operations-focused Mini App for Meteku Teshome General Work PLC, with forms, workflow support, and report exports for client management.',
+    stack: 'React + Vite · Node.js · NestJS',
+    line: 'Replaced manual paperwork across three workflows with an exportable digital process.',
+    color: '#ffab5a',
+    art: 'BUSINESS<br />FORMS'
   }
 };
 
-const signals = {
-  impact: {
-    eyebrow: "01 / Impact",
-    title: "Clarity compounds.",
-    copy: "I look for the leverage point: the decision, journey, or system that makes all the work after it move more smoothly. The goal is not surface novelty — it is a change people can feel and teams can build on."
+const chatAnswers = [
+  {
+    matches: ['mmcy', 'operations', 'intern'],
+    answer: 'At MMCY, Messay worked as an Operations Intern from June 22 to July 23, 2026. He supported company-wide operations with a technology-first mindset: helping teams with shared digital tools, tracking follow-through, documenting recurring processes, and noticing small workflow blockers before they slowed the day down.'
   },
-  craft: {
-    eyebrow: "02 / Craft",
-    title: "Details are a form of care.",
-    copy: "The microcopy, the loading state, the space around a hard choice — none of it is too small to shape the experience. I care about the logic beneath the polish and the personality inside the system."
+  {
+    matches: ['sports', 'dewel', 'student'],
+    answer: 'For Dewel Marketing and Consultancy, Messay built Student Sports Hub: a React Native + Supabase mobile app for grades 1–12 students and parents. It includes real-time stories, match schedules, team rosters, and sports updates, with an architecture intended to support multiple schools.'
   },
-  fit: {
-    eyebrow: "03 / Fit",
-    title: "Ambition loves a good collaborator.",
-    copy: "My best work happens with curious, candid people who value a strong point of view, an open working process, and the discipline to keep returning to the human on the other side of the screen."
+  {
+    matches: ['forms', 'meteku', 'telegram', 'mini app'],
+    answer: 'For Meteku Teshome General Work PLC, Messay built a Business Forms Telegram Mini App. React + Vite powers the frontend and Node.js + NestJS the backend. It digitises petty cash requests, purchase orders, employee attendance, and exportable business reports.'
+  },
+  {
+    matches: ['stack', 'skill', 'technology', 'tech'],
+    answer: 'Messay’s core stack includes React, Next.js, TypeScript, React Native, Expo, Node.js, NestJS, Express, FastAPI, PostgreSQL, MySQL, Supabase, Firebase, Redis, Docker, Git, REST APIs, WebSockets, JWT, OAuth 2.0, and RBAC.'
+  },
+  {
+    matches: ['contact', 'call', 'email', 'available', 'hire'],
+    answer: 'The fastest way to reach Messay is messaymohammed@gmail.com or +251 900 651 948. He is open to full-time roles and freelance contracts.'
+  },
+  {
+    matches: ['education', 'graduate', 'university', 'school'],
+    answer: 'Messay holds a Bachelor of Computer Science from HILCOE School of Computer Science and Technology, completed between September 2020 and July 2025 in Addis Ababa.'
   }
-};
+];
 
 const body = document.body;
 const toast = document.querySelector('.toast');
 let toastTimer;
-let activeCommandIndex = 0;
 
-function showToast(message) {
+function toastMessage(message) {
   toast.querySelector('p').textContent = message;
   toast.classList.add('show');
   window.clearTimeout(toastTimer);
-  toastTimer = window.setTimeout(() => toast.classList.remove('show'), 3000);
+  toastTimer = window.setTimeout(() => toast.classList.remove('show'), 2800);
 }
 
-function openDialog(dialog) {
-  if (!dialog.open) {
-    dialog.showModal();
-    body.classList.add('modal-open');
-  }
-}
-
-function closeDialog(dialog) {
-  if (dialog?.open) dialog.close();
-  if (!document.querySelector('dialog[open]')) body.classList.remove('modal-open');
-}
-
-// Reveal elements only after they enter the viewport, keeping first paint calm and intentional.
-const revealObserver = new IntersectionObserver((entries) => {
+// Animated entrance is intentionally restrained and respects the CSS reduced-motion setting.
+const observer = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (entry.isIntersecting) {
       entry.target.classList.add('visible');
-      revealObserver.unobserve(entry.target);
+      observer.unobserve(entry.target);
     }
   });
 }, { threshold: 0.12 });
-document.querySelectorAll('.reveal, .reveal-up').forEach((item) => revealObserver.observe(item));
+document.querySelectorAll('.reveal').forEach((element) => observer.observe(element));
 
-// Reading progress + a soft ambient cursor light. Motion is disabled by the stylesheet for reduced-motion users.
-const progress = document.querySelector('.scroll-progress span');
-const cursorGlow = document.querySelector('.cursor-glow');
+const progress = document.querySelector('.progress span');
+const navLinks = [...document.querySelectorAll('.primary-nav a')];
+const navSections = [...document.querySelectorAll('main section[id]')];
 window.addEventListener('scroll', () => {
-  const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-  progress.style.width = `${maxScroll ? (window.scrollY / maxScroll) * 100 : 0}%`;
-}, { passive: true });
-window.addEventListener('pointermove', (event) => {
-  cursorGlow.style.left = `${event.clientX}px`;
-  cursorGlow.style.top = `${event.clientY}px`;
-}, { passive: true });
-
-// Project filters
-const filters = [...document.querySelectorAll('.filter')];
-const cards = [...document.querySelectorAll('.project-card')];
-filters.forEach((filter) => {
-  filter.addEventListener('click', () => {
-    const category = filter.dataset.filter;
-    filters.forEach((button) => button.classList.toggle('active', button === filter));
-    cards.forEach((card) => {
-      const shouldShow = category === 'all' || card.dataset.category.split(' ').includes(category);
-      card.classList.toggle('is-filtered', !shouldShow);
-    });
-    showToast(category === 'all' ? 'Showing all selected work.' : `Showing ${filter.textContent.trim()} work.`);
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  progress.style.width = `${max > 0 ? (window.scrollY / max) * 100 : 0}%`;
+  let current = '';
+  navSections.forEach((section) => {
+    if (window.scrollY >= section.offsetTop - window.innerHeight * 0.42) current = section.id;
   });
-});
+  navLinks.forEach((link) => link.classList.toggle('active', link.getAttribute('href') === `#${current}`));
+}, { passive: true });
 
-// Project case-study dialog
-const projectModal = document.querySelector('#project-modal');
-function openProject(key) {
-  const project = projects[key];
-  if (!project) return;
-  document.querySelector('#modal-type').textContent = project.type;
-  document.querySelector('#modal-title').textContent = project.title;
-  document.querySelector('#modal-summary').textContent = project.summary;
-  document.querySelector('#modal-focus').textContent = project.focus;
-  document.querySelector('#modal-question').textContent = project.question;
-  document.querySelector('#modal-role').textContent = project.role;
-  document.querySelector('#modal-quote').textContent = project.quote;
-  const art = document.querySelector('#modal-art');
-  art.style.background = project.color;
-  art.querySelector('span').innerHTML = project.art.replace('\n', '<br>');
-  openDialog(projectModal);
+// Project case studies
+const caseModal = document.querySelector('#case-modal');
+function openCaseStudy(id) {
+  const study = caseStudies[id];
+  if (!study) return;
+  document.querySelector('#case-kicker').textContent = study.kicker;
+  document.querySelector('#case-title').textContent = study.title;
+  document.querySelector('#case-lede').textContent = study.lede;
+  document.querySelector('#case-problem').textContent = study.problem;
+  document.querySelector('#case-build').textContent = study.build;
+  document.querySelector('#case-stack').textContent = study.stack;
+  document.querySelector('#case-line').textContent = study.line;
+  const art = document.querySelector('#case-art');
+  art.style.background = study.color;
+  art.querySelector('span').innerHTML = study.art;
+  caseModal.showModal();
+  body.classList.add('modal-open');
 }
-cards.forEach((card) => {
-  card.addEventListener('click', (event) => {
-    if (!event.target.closest('button') || event.target.closest('.round-arrow')) openProject(card.dataset.project);
-  });
+document.querySelectorAll('.project-card').forEach((card) => {
+  card.addEventListener('click', () => openCaseStudy(card.dataset.project));
   card.addEventListener('keydown', (event) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
-      openProject(card.dataset.project);
+      openCaseStudy(card.dataset.project);
     }
   });
 });
-
-// Recruiter brief and signal cards
-const briefModal = document.querySelector('#brief-modal');
-function openBrief() {
-  closeCommand();
-  window.setTimeout(() => openDialog(briefModal), 80);
+function closeCaseStudy() {
+  if (caseModal.open) caseModal.close();
+  body.classList.remove('modal-open');
 }
-document.querySelectorAll('.brief-trigger').forEach((trigger) => trigger.addEventListener('click', openBrief));
-document.querySelector('.print-brief').addEventListener('click', () => {
-  window.print();
-});
+caseModal.querySelector('.modal-close').addEventListener('click', closeCaseStudy);
+caseModal.addEventListener('click', (event) => { if (event.target === caseModal) closeCaseStudy(); });
+caseModal.querySelector('.case-contact').addEventListener('click', closeCaseStudy);
+caseModal.addEventListener('close', () => body.classList.remove('modal-open'));
 
-const signalModal = document.querySelector('#signal-modal');
-document.querySelectorAll('.signal-card').forEach((card) => {
-  card.addEventListener('click', () => {
-    const signal = signals[card.dataset.modal];
-    document.querySelector('#signal-modal-overline').textContent = signal.eyebrow;
-    document.querySelector('#signal-modal-title').textContent = signal.title;
-    document.querySelector('#signal-modal-copy').textContent = signal.copy;
-    openDialog(signalModal);
-  });
-});
-
-// Modal closers; clicking the dark dialog gutter also closes the panel.
-document.querySelectorAll('.modal').forEach((dialog) => {
-  dialog.addEventListener('click', (event) => {
-    if (event.target === dialog) closeDialog(dialog);
-  });
-  dialog.addEventListener('close', () => {
-    if (!document.querySelector('dialog[open]')) body.classList.remove('modal-open');
-  });
-  dialog.querySelectorAll('.modal-close, [data-close-on-click]').forEach((button) => {
-    button.addEventListener('click', () => closeDialog(dialog));
+// Skills use a filter rather than static proficiency claims; it helps recruiters scan the stack by context.
+const skillFilters = [...document.querySelectorAll('.skill-filter')];
+const skillGroups = [...document.querySelectorAll('.skill-group')];
+document.querySelectorAll('[data-level]').forEach((bar) => bar.style.setProperty('--level', bar.dataset.level));
+skillFilters.forEach((filter) => {
+  filter.addEventListener('click', () => {
+    const selected = filter.dataset.skillFilter;
+    skillFilters.forEach((item) => item.classList.toggle('active', item === filter));
+    skillGroups.forEach((group) => group.classList.toggle('hidden', selected !== 'all' && group.dataset.skillGroup !== selected));
+    toastMessage(selected === 'all' ? 'Showing the complete toolkit.' : `Showing ${filter.textContent.trim()} skills.`);
   });
 });
 
-// Quick-navigation palette
+// Lightweight, transparent portfolio guide — answers are curated from the résumé, never generated or sent anywhere.
+const chatLauncher = document.querySelector('.portfolio-chat-launcher');
+const chatPanel = document.querySelector('.portfolio-chat');
+const chatClose = document.querySelector('.chat-close');
+const chatLog = document.querySelector('.chat-log');
+const chatForm = document.querySelector('.chat-form');
+const chatInput = chatForm.querySelector('input');
+function setChat(open) {
+  chatPanel.classList.toggle('open', open);
+  chatPanel.setAttribute('aria-hidden', String(!open));
+  chatLauncher.setAttribute('aria-expanded', String(open));
+  body.classList.toggle('chat-open', open);
+  if (open) window.setTimeout(() => chatInput.focus(), 170);
+}
+function addChatMessage(text, type) {
+  const message = document.createElement('div');
+  message.className = `chat-message ${type}`;
+  message.textContent = text;
+  chatLog.append(message);
+  chatLog.scrollTop = chatLog.scrollHeight;
+}
+function answerQuestion(question) {
+  const phrase = question.toLowerCase();
+  const response = chatAnswers.find((entry) => entry.matches.some((match) => phrase.includes(match)));
+  return response?.answer || 'Messay is a Computer Science graduate and full-stack/mobile developer based in Addis Ababa. Try asking about MMCY, Student Sports Hub, the Business Forms Mini App, his stack, education, or how to get in touch.';
+}
+function submitQuestion(question) {
+  const clean = question.trim();
+  if (!clean) return;
+  addChatMessage(clean, 'user');
+  chatInput.value = '';
+  window.setTimeout(() => addChatMessage(answerQuestion(clean), 'bot'), 250);
+}
+chatLauncher.addEventListener('click', () => setChat(!chatPanel.classList.contains('open')));
+chatClose.addEventListener('click', () => setChat(false));
+document.querySelectorAll('[data-question]').forEach((button) => button.addEventListener('click', () => submitQuestion(button.dataset.question)));
+chatForm.addEventListener('submit', (event) => { event.preventDefault(); submitQuestion(chatInput.value); });
+
+// Quick navigation palette
 const commandOverlay = document.querySelector('.command-overlay');
-const commandInput = document.querySelector('#command-input');
-const commandItems = [...document.querySelectorAll('[data-command]')];
-function openCommand() {
-  commandOverlay.classList.add('open');
-  commandOverlay.setAttribute('aria-hidden', 'false');
-  body.classList.add('menu-open');
-  commandInput.value = '';
-  activeCommandIndex = 0;
-  window.setTimeout(() => commandInput.focus(), 100);
+const commandInput = commandOverlay.querySelector('input');
+function setCommand(open) {
+  commandOverlay.classList.toggle('open', open);
+  commandOverlay.setAttribute('aria-hidden', String(!open));
+  body.classList.toggle('menu-open', open);
+  if (open) window.setTimeout(() => commandInput.focus(), 120);
 }
-function closeCommand() {
-  commandOverlay.classList.remove('open');
-  commandOverlay.setAttribute('aria-hidden', 'true');
-  body.classList.remove('menu-open');
-}
-function getVisibleCommands() {
-  return commandItems.filter((item) => item.style.display !== 'none');
-}
-function highlightCommand() {
-  getVisibleCommands().forEach((item, index) => item.style.outline = index === activeCommandIndex ? '2px solid #6e59e6' : 'none');
-}
-document.querySelectorAll('.command-trigger').forEach((trigger) => trigger.addEventListener('click', openCommand));
-commandOverlay.addEventListener('click', (event) => { if (event.target === commandOverlay) closeCommand(); });
-commandItems.forEach((item) => item.addEventListener('click', () => {
-  if (!item.classList.contains('brief-trigger')) closeCommand();
-}));
+document.querySelector('.nav-command').addEventListener('click', () => setCommand(true));
+commandOverlay.addEventListener('click', (event) => { if (event.target === commandOverlay) setCommand(false); });
+commandOverlay.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => setCommand(false)));
 commandInput.addEventListener('input', () => {
   const term = commandInput.value.toLowerCase().trim();
-  commandItems.forEach((item) => {
+  commandOverlay.querySelectorAll('.command-options a').forEach((item) => {
     item.style.display = item.textContent.toLowerCase().includes(term) ? '' : 'none';
   });
-  activeCommandIndex = 0;
-  highlightCommand();
-});
-commandInput.addEventListener('keydown', (event) => {
-  const available = getVisibleCommands();
-  if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
-    event.preventDefault();
-    activeCommandIndex = (activeCommandIndex + (event.key === 'ArrowDown' ? 1 : -1) + available.length) % available.length;
-    highlightCommand();
-  }
-  if (event.key === 'Enter' && available[activeCommandIndex]) available[activeCommandIndex].click();
 });
 
-window.addEventListener('keydown', (event) => {
-  const isTyping = ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName);
-  if (event.key === 'Escape') {
-    closeCommand();
-    document.querySelectorAll('.modal[open]').forEach(closeDialog);
-  }
-  if (!isTyping && event.key.toLowerCase() === 'k') {
-    event.preventDefault();
-    commandOverlay.classList.contains('open') ? closeCommand() : openCommand();
-  }
-  if (!isTyping && event.key.toLowerCase() === 'b') openBrief();
-  const shortcuts = { '1': '#experience', '2': '#work', '3': '#about', '4': '#contact' };
-  if (!isTyping && shortcuts[event.key]) {
-    event.preventDefault();
-    document.querySelector(shortcuts[event.key]).scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-});
-
-// Useful recruiter affordance: a one-click, feedback-confirmed address copy.
-document.querySelector('.copy-email').addEventListener('click', async () => {
-  const email = document.querySelector('.copy-email').dataset.email;
+// Contact affordance
+const copyEmail = document.querySelector('.copy-email');
+copyEmail.addEventListener('click', async () => {
   try {
-    await navigator.clipboard.writeText(email);
-    showToast('Email copied — speak soon.');
+    await navigator.clipboard.writeText(copyEmail.dataset.email);
+    toastMessage('Email copied — speak soon.');
   } catch {
-    showToast(`Email: ${email}`);
+    toastMessage('messaymohammed@gmail.com');
   }
 });
 
 document.querySelector('#year').textContent = new Date().getFullYear();
+window.addEventListener('keydown', (event) => {
+  const isTyping = ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName);
+  if (event.key === 'Escape') {
+    setCommand(false);
+    setChat(false);
+    closeCaseStudy();
+  }
+  if (!isTyping && (event.key.toLowerCase() === 'k' || (event.metaKey && event.key.toLowerCase() === 'k'))) {
+    event.preventDefault();
+    setCommand(!commandOverlay.classList.contains('open'));
+  }
+});
