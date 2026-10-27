@@ -26,27 +26,31 @@ const caseStudies = {
 const chatAnswers = [
   {
     matches: ['mmcy', 'operations', 'intern'],
-    answer: 'At MMCY, Messay worked as an Operations Intern from June 22 to July 23, 2026. He supported company-wide operations with a technology-first mindset: helping teams with shared digital tools, tracking follow-through, documenting recurring processes, and noticing small workflow blockers before they slowed the day down.'
+    answer: 'At MMCY, I was the Operations Intern from June 22 to July 23, 2026. I was the person who enjoyed turning tiny “why is this taking so long?” moments into clearer next steps — supporting shared tools, tracking follow-through, documenting repeatable processes, and helping teams get back to their real work.'
   },
   {
     matches: ['sports', 'dewel', 'student'],
-    answer: 'For Dewel Marketing and Consultancy, Messay built Student Sports Hub: a React Native + Supabase mobile app for grades 1–12 students and parents. It includes real-time stories, match schedules, team rosters, and sports updates, with an architecture intended to support multiple schools.'
+    answer: 'Student Sports Hub was my answer to scattered sports updates. For Dewel, I built a React Native + Supabase app for grades 1–12 students and parents: stories, fixtures, rosters, and updates in one place. I also designed the data structure with multiple schools in mind, because one good school app should not be a dead end.'
   },
   {
     matches: ['forms', 'meteku', 'telegram', 'mini app'],
-    answer: 'For Meteku Teshome General Work PLC, Messay built a Business Forms Telegram Mini App. React + Vite powers the frontend and Node.js + NestJS the backend. It digitises petty cash requests, purchase orders, employee attendance, and exportable business reports.'
+    answer: 'For Meteku Teshome General Work PLC, I built a Business Forms Telegram Mini App. React + Vite handles the frontend; Node.js + NestJS handles the backend. The practical win: petty cash, purchase orders, attendance, and report exports stopped living as manual paperwork.'
   },
   {
     matches: ['stack', 'skill', 'technology', 'tech'],
-    answer: 'Messay’s core stack includes React, Next.js, TypeScript, React Native, Expo, Node.js, NestJS, Express, FastAPI, PostgreSQL, MySQL, Supabase, Firebase, Redis, Docker, Git, REST APIs, WebSockets, JWT, OAuth 2.0, and RBAC.'
+    answer: 'My usual building kit is React, Next.js, TypeScript, React Native, Expo, Node.js, NestJS, Express, FastAPI, PostgreSQL, MySQL, Supabase, Firebase, Redis, Docker, Git, REST APIs, WebSockets, JWT, OAuth 2.0, and RBAC. More importantly, I choose the smallest sensible stack that will hold up after launch.'
   },
   {
     matches: ['contact', 'call', 'email', 'available', 'hire'],
-    answer: 'The fastest way to reach Messay is messaymohammed@gmail.com or +251 900 651 948. He is open to full-time roles and freelance contracts.'
+    answer: 'I’m open to full-time roles and freelance work. The fastest route is messaymohammed@gmail.com or +251 900 651 948. Send the rough problem — I’m happy to start with the messy version.'
   },
   {
     matches: ['education', 'graduate', 'university', 'school'],
-    answer: 'Messay holds a Bachelor of Computer Science from HILCOE School of Computer Science and Technology, completed between September 2020 and July 2025 in Addis Ababa.'
+    answer: 'I earned my Bachelor of Computer Science from HILCOE School of Computer Science and Technology in Addis Ababa, from September 2020 to July 2025. The useful part is that I left wanting to build things people can actually use, not just pass exams about.'
+  },
+  {
+    matches: ['work', 'approach', 'how'],
+    answer: 'I start by getting specific about the friction: who is slowed down, what is being repeated, and what “better” looks like. Then I build the clearest path through it, keep the code readable, and make sure the experience feels deliberate — not merely functional.'
   }
 ];
 
@@ -72,12 +76,38 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.12 });
 document.querySelectorAll('.reveal').forEach((element) => observer.observe(element));
 
+// The terminal is a tiny bit of theatre, but it stays readable when reduced motion is requested.
+const terminalLines = [...document.querySelectorAll('.terminal-type')];
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const pause = (milliseconds) => new Promise((resolve) => window.setTimeout(resolve, milliseconds));
+async function runTerminal() {
+  for (const line of terminalLines) {
+    const fullText = line.dataset.text || '';
+    const indicator = line.querySelector('i');
+    [...line.childNodes].filter((node) => node.nodeType === Node.TEXT_NODE).forEach((node) => node.remove());
+    if (prefersReducedMotion) {
+      line.append(document.createTextNode(fullText));
+      continue;
+    }
+    line.classList.add('typing');
+    for (const character of fullText) {
+      line.append(document.createTextNode(character));
+      await pause(character === ' ' ? 18 : 30);
+    }
+    line.classList.remove('typing');
+    await pause(indicator ? 220 : 340);
+  }
+}
+window.setTimeout(runTerminal, prefersReducedMotion ? 0 : 600);
+
 const progress = document.querySelector('.progress span');
+const navShell = document.querySelector('.nav-shell');
 const navLinks = [...document.querySelectorAll('.primary-nav a')];
 const navSections = [...document.querySelectorAll('main section[id]')];
 window.addEventListener('scroll', () => {
   const max = document.documentElement.scrollHeight - window.innerHeight;
   progress.style.width = `${max > 0 ? (window.scrollY / max) * 100 : 0}%`;
+  navShell.classList.toggle('is-scrolled', window.scrollY > 12);
   let current = '';
   navSections.forEach((section) => {
     if (window.scrollY >= section.offsetTop - window.innerHeight * 0.42) current = section.id;
@@ -158,7 +188,7 @@ function addChatMessage(text, type) {
 function answerQuestion(question) {
   const phrase = question.toLowerCase();
   const response = chatAnswers.find((entry) => entry.matches.some((match) => phrase.includes(match)));
-  return response?.answer || 'Messay is a Computer Science graduate and full-stack/mobile developer based in Addis Ababa. Try asking about MMCY, Student Sports Hub, the Business Forms Mini App, his stack, education, or how to get in touch.';
+  return response?.answer || 'That is a good one. I’m a Computer Science graduate and full-stack/mobile developer based in Addis Ababa. Ask me about MMCY, Student Sports Hub, Business Forms, my stack, how I work, education, or the fastest way to get in touch.';
 }
 function submitQuestion(question) {
   const clean = question.trim();

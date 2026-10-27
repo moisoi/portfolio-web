@@ -17,7 +17,7 @@
     <div class="progress" aria-hidden="true"><span></span></div>
 
     <header class="nav-shell" id="top">
-      <a href="#top" class="monogram" aria-label="Messay Mohammed home"><span>M</span><i></i></a>
+      <a href="#top" class="monogram" aria-label="Messay Mohammed home"><span class="logo-rings" aria-hidden="true"></span><span class="logo-letter">M</span><i aria-hidden="true"></i></a>
       <nav class="primary-nav" aria-label="Primary navigation">
         <a href="#about"><span>◌</span> About</a>
         <a href="#work"><span>▣</span> Work</a>
@@ -38,7 +38,7 @@
         <div class="hero-copy">
           <p class="overline reveal"><span>MESSAY MOHAMMED</span><b>/</b> FULL-STACK &amp; MOBILE DEV</p>
           <h1 id="hero-title" class="reveal delay-1">Ideas in.<br /><span>Products</span><br /><em>out.</em></h1>
-          <p class="hero-description reveal delay-2">Full-stack &amp; mobile developer working in React, React Native, and Supabase — shipping useful products for real people, not just portfolio pieces.</p>
+          <p class="hero-description reveal delay-2">I turn “this could be easier” into software people actually enjoy using — equal parts problem-solver, builder, and professional tab-closer.</p>
           <div class="hero-actions reveal delay-3">
             <a class="button button-outline" href="resume.html" target="_blank"><span>↓</span> View résumé</a>
             <a class="button button-warm" href="mailto:messaymohammed@gmail.com?subject=Let%27s%20talk%20about%20an%20opportunity"><span>▣</span> Book a call</a>
@@ -47,10 +47,10 @@
         </div>
         <div class="terminal reveal delay-2" aria-label="Developer status terminal">
           <div class="terminal-bar"><span><i></i><i></i><i></i></span><b>messay — zsh</b><em>⋮</em></div>
-          <div class="terminal-body">
-            <p><strong>➜</strong> <span>~</span> whoami</p><code>full-stack &amp; mobile dev</code>
-            <p><strong>➜</strong> <span>~</span> pwd</p><code>~/addis-ababa/et</code>
-            <p><strong>➜</strong> <span>~</span> cat status.txt</p><code class="status"><i></i> available for the right build</code>
+          <div class="terminal-body" aria-label="Live developer status terminal">
+            <p><strong>➜</strong> <span>~</span> <code class="terminal-type command" data-text="whoami"></code></p><code class="terminal-type output" data-text="full-stack developer &amp; problem solver"></code>
+            <p><strong>➜</strong> <span>~</span> <code class="terminal-type command" data-text="pwd"></code></p><code class="terminal-type output" data-text="~/addis-ababa/et"></code>
+            <p><strong>➜</strong> <span>~</span> <code class="terminal-type command" data-text="cat status.txt"></code></p><code class="terminal-type output status" data-text="available for the right build"><i></i></code>
           </div>
           <div class="terminal-foot"><span>React</span><span>React Native</span><span>Node.js</span></div>
         </div>
@@ -71,7 +71,7 @@
           <div class="stats-grid reveal" aria-label="Career highlights">
             <article><b>3</b><p>core specialties —<br />web, mobile, backend</p></article>
             <article><b>2<span>+</span></b><p>contract products<br />shipped</p></article>
-            <article><b>100<span>+</span></b><p>students reached via<br />volunteering</p></article>
+            <article><b>999<span>+</span></b><p>cups of coffee<br />in the name of shipping</p></article>
             <article><b>15<span>+</span></b><p>technologies across<br />the stack</p></article>
           </div>
         </div>
@@ -146,11 +146,11 @@
       </section>
     </main>
 
-    <button class="portfolio-chat-launcher" aria-expanded="false" aria-controls="portfolio-chat"><span class="chat-ping"></span><small>Ask my portfolio</small><b>▢</b><strong>Chat with Messay’s portfolio</strong></button>
-    <aside class="portfolio-chat" id="portfolio-chat" aria-label="Portfolio guide" aria-hidden="true">
-      <div class="chat-header"><div><span class="chat-status"></span><p>Portfolio guide<small>Answers from Messay’s résumé</small></p></div><button class="chat-close" aria-label="Close portfolio guide">×</button></div>
-      <div class="chat-log" aria-live="polite"><div class="chat-message bot">Hi — I can help you quickly understand Messay’s experience, stack, project work, or availability.</div></div>
-      <div class="chat-prompts"><button data-question="What did Messay do at MMCY?">MMCY role</button><button data-question="Tell me about the Sports Hub">Sports Hub</button><button data-question="What is his stack?">Tech stack</button></div>
+    <button class="portfolio-chat-launcher" aria-expanded="false" aria-controls="portfolio-chat"><span class="chat-ping"></span><small>Ask Messay, minus the calendar chase</small><b>▢</b><strong>Chat with Messay’s portfolio</strong></button>
+    <aside class="portfolio-chat" id="portfolio-chat" aria-label="Ask Messay" aria-hidden="true">
+      <div class="chat-header"><div><span class="chat-status"></span><p>Messay, in browser form<small>My portfolio knows the highlights</small></p></div><button class="chat-close" aria-label="Close portfolio guide">×</button></div>
+      <div class="chat-log" aria-live="polite"><div class="chat-message bot">Hey, I’m Messay — or at least the version of me that never misses a follow-up. Ask about what I’ve built, how I work, or whether we should talk.</div></div>
+      <div class="chat-prompts"><button data-question="What did you do at MMCY?">MMCY role</button><button data-question="Tell me about your Sports Hub">Sports Hub</button><button data-question="What is your stack?">Tech stack</button></div>
       <form class="chat-form"><input aria-label="Ask about Messay's work" autocomplete="off" placeholder="Ask about his work…" /><button aria-label="Send question">↑</button></form>
     </aside>
 
