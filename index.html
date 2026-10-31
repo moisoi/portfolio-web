@@ -3376,6 +3376,7 @@
             <ul class="s-rows">
               <li class="srow"><span class="s-name">JWT / OAuth 2.0</span><span class="s-bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></li>
               <li class="srow"><span class="s-name">RBAC</span><span class="s-bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></li>
+              <li class="srow"><span class="s-name">Pen-testing basics</span><span class="s-bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span></li>
               <li class="srow"><span class="s-name">Docker</span><span class="s-bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></li>
               <li class="srow"><span class="s-name">Git / GitHub / GitLab CI</span><span class="s-bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></li>
               <li class="srow"><span class="s-name">WebSockets</span><span class="s-bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></li>
@@ -4321,6 +4322,7 @@
     { name: 'Redis', cat: 'data', role: 'Caching and queues at memory speed', projects: [] },
     { name: 'JWT / OAuth 2.0', cat: 'data', role: 'Tokens and third-party sign-in, done properly', projects: [] },
     { name: 'RBAC', cat: 'data', role: 'Roles and permissions instead of if-chains', projects: ['sports'] },
+    { name: 'Pen-testing basics', cat: 'data', role: 'Thinking like an attacker to defend the app', projects: [], learn: true },
     { name: 'Docker', cat: 'tools', role: 'Same container on my machine and in production', projects: [] },
     { name: 'Git / GitHub', cat: 'tools', role: 'Versioned work with reviewable history', projects: [] },
     { name: 'AI engineering', cat: 'tools', role: 'Assistants, prompting, agentic workflows', projects: [], learn: true }
@@ -4673,7 +4675,7 @@
         println('P.01  Student Sports Hub — React Native + Supabase · shipped (Sep–Dec 2025)\nP.02  Business Forms Mini App — Telegram mini app + NestJS · delivered (Feb 2026)\nP.03  HerCycle — period tracking & wellness · in development (live preview at hercycle.pages.dev)\ntip: the Work section above has the full case studies.', 'out');
       },
       stack(){
-        println('interface        React · Next.js · TypeScript · Tailwind · React Native · Expo · Framer Motion · MUI\napps & apis      Node.js · NestJS · Express · FastAPI · REST design · WebSockets\ndata & auth      PostgreSQL · MySQL · Supabase · Firebase · Redis · JWT/OAuth · RBAC\ntools            Docker · Git/GitHub · AI-assisted workflows (learning)\n"inspect <name>" zooms into one, e.g. inspect supabase', 'out');
+        println('interface        React · Next.js · TypeScript · Tailwind · React Native · Expo · Framer Motion · MUI\napps & apis      Node.js · NestJS · Express · FastAPI · REST design · WebSockets\ndata & auth      PostgreSQL · MySQL · Supabase · Firebase · Redis · JWT/OAuth · RBAC · pen-testing (basics)\ntools            Docker · Git/GitHub · AI-assisted workflows (learning)\n"inspect <name>" zooms into one, e.g. inspect supabase', 'out');
       },
       process(){
         println('1. listen — what does this actually need to do?\n2. sketch the flow before the pixels\n3. build vertical slices: screen → api → data, end to end\n4. watch a real person use it, fix what confuses them\n5. ship, then iterate from reality', 'out');
@@ -4843,7 +4845,7 @@
   (function initPortfolioChat(){
     const KB = [
       { keys: ['skill','tech','stack','know','technolog','framework','language','tool'],
-        reply: "Interface: React, Next.js, TypeScript, Tailwind, React Native, Expo, Framer Motion, MUI. Backend: Node.js, NestJS, Express, FastAPI. Data & auth: PostgreSQL, MySQL, Supabase, Firebase, Redis, JWT/OAuth, RBAC. Tools: Docker, Git, plus AI-assisted workflows. The Stackfall field above lists all of it." },
+        reply: "Interface: React, Next.js, TypeScript, Tailwind, React Native, Expo, Framer Motion, MUI. Backend: Node.js, NestJS, Express, FastAPI. Data & auth: PostgreSQL, MySQL, Supabase, Firebase, Redis, JWT/OAuth, RBAC — plus pen-testing basics. Tools: Docker, Git, AI-assisted workflows. The Stackfall field above lists all of it." },
       { keys: ['project','portfolio','built','build','app ','apps','sports hub','business forms'],
         reply: "Three right now: Student Sports Hub (React Native + Supabase, multi-school sports app, Sep–Dec 2025), Business Forms Mini App (Telegram mini app with a NestJS API, Feb 2026), and HerCycle (period tracking & wellness web app, in active development). Full write-ups are in the Work section." },
       { keys: ['hercycle','period','wellness','cycle','luna','garden'],
