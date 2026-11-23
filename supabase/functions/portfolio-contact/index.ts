@@ -1,13 +1,17 @@
 // portfolio-contact — secure intake for the portfolio's "Connection Studio" composer.
 // Server-side validation, honeypot, dual-window rate limiting, duplicate detection.
 // Messages land in public.portfolio_contact_messages (RLS enabled, service-role only).
-// Nothing here claims delivery to a human — the client says "accepted for delivery".
+// Resend accepts mail for delivery; this does not guarantee inbox placement or that it was read.
+// Requires RESEND_API_KEY and RESEND_FROM_EMAIL (a verified sender) in Supabase secrets.
 //
 // Deployed to the `portfolio-web` Supabase project (ref bvamvnimijwjihjyffas).
 // Redeploy after edits:  supabase functions deploy portfolio-contact --project-ref bvamvnimijwjihjyffas
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL') || '';
 const SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '';
+const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY') || '';
+const RESEND_FROM_EMAIL = Deno.env.get('RESEND_FROM_EMAIL') || '';
+const CONTACT_INBOX = 'messaymohammed@gmail.com';
 
 const BURST_LIMIT = 2, BURST_WINDOW_MIN = 10;   // max 2 messages / 10 min
 const DAY_LIMIT = 6, DAY_WINDOW_MIN = 60 * 24;  // max 6 messages / day
@@ -53,7 +57,7 @@ async function rest(path: string, init: RequestInit = {}): Promise<Response> {
 async function countWhere(table: string, query: string): Promise<number> {
   const r = await rest(`${table}?${query}&select=id`, { headers: { Prefer: 'count=exact' } });
   const cr = r.headers.get('content-range');
-  if (!r.ok || !cr) return 0;
+  if (!r.ok || !cr) throw new Error('rate_check_failed');
   return parseInt((cr.split('/')[1] || '0'), 10) || 0;
 }
 
@@ -91,11 +95,15 @@ Deno.serve(async (req: Request) => {
   if (message.length < 10 || message.length > 4000) fields.message = 'Message should be 10–4000 characters.';
   if (Object.keys(fields).length) return json(422, { error: 'validation', fields });
 
+  // Never claim success or store a message that cannot be emailed.
+  if (!RESEND_API_KEY || !RESEND_FROM_EMAIL) return json(503, { error: 'delivery_not_configured' });
+
   // --- rate limiting (hashed IP) ---
   const ip = (req.headers.get('x-forwarded-for') || 'unknown').split(',')[0].trim();
   const key = await sha256(`contact|${ip}|portfolio-v1`);
   const burstSince = new Date(Date.now() - BURST_WINDOW_MIN * 60_000).toISOString();
   const daySince = new Date(Date.now() - DAY_WINDOW_MIN * 60_000).toISOString();
+  try {
   const burst = await countWhere('portfolio_rate_events',
     `kind=eq.contact&key=eq.${encodeURIComponent(key)}&created_at=gte.${encodeURIComponent(burstSince)}`);
   if (burst >= BURST_LIMIT) return json(429, { error: 'rate_limited', hint: 'Too many messages in a short window. Please wait a few minutes and retry.' });
@@ -128,8 +136,40 @@ Deno.serve(async (req: Request) => {
   const rows = await insert.json().catch(() => [] as any[]);
   const id = Array.isArray(rows) && rows[0]?.id ? rows[0].id : null;
 
-  await rest('portfolio_rate_events', { method: 'POST', body: JSON.stringify({ kind: 'contact', key }) })
-    .catch(() => undefined);
+  if (!id) return json(500, { error: 'store_failed' });
+  const logged = await rest('portfolio_rate_events', { method: 'POST', body: JSON.stringify({ kind: 'contact', key }) }).catch(() => null);
+  if (!logged || !logged.ok) {
+    await rest(`portfolio_contact_messages?id=eq.${encodeURIComponent(id)}`, { method: 'DELETE' }).catch(() => undefined);
+    return json(503, { error: 'contact_service_unavailable' });
+  }
 
-  return json(201, { ok: true, id });
+  // Plain text avoids HTML injection; the visitor's email is reply-to, never the sender.
+  const text = [
+    `From: ${name} <${email}>`, `Topic: ${topic}`,
+    ...(topic === 'project' ? [`Scope: ${scope || 'not provided'}`, `Timeline: ${timeline || 'not provided'}`] : []),
+    ...(links ? [`Links: ${links}`] : []), '', message,
+  ].join('\n');
+  let delivery: Response;
+  try {
+    delivery = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${RESEND_API_KEY}`, 'Content-Type': 'application/json', 'Idempotency-Key': `portfolio-contact/${id}` },
+      body: JSON.stringify({ from: RESEND_FROM_EMAIL, to: [CONTACT_INBOX], reply_to: email, subject: `Portfolio message: ${topic}`, text }),
+      signal: AbortSignal.timeout(15_000),
+    });
+  } catch (_) {
+    // A timeout could occur after the provider accepted the message. Keep the record
+    // so a retry doesn't silently send a second copy, and report the uncertainty.
+    return json(504, { error: 'delivery_unconfirmed' });
+  }
+  if (delivery.status >= 500) return json(504, { error: 'delivery_unconfirmed' });
+  if (!delivery.ok) {
+    // Provider rejection: remove the reservation so a corrected retry is possible.
+    await rest(`portfolio_contact_messages?id=eq.${encodeURIComponent(id)}`, { method: 'DELETE' }).catch(() => undefined);
+    return json(502, { error: 'delivery_rejected' });
+  }
+  return json(201, { ok: true, delivery: 'accepted' });
+  } catch (_) {
+    return json(503, { error: 'contact_service_unavailable' });
+  }
 });

@@ -1,0 +1,1 @@
+Technology icons are from [Simple Icons](https://simpleicons.org/) and its [GitHub repository](https://github.com/simple-icons/simple-icons), distributed under CC0 1.0. Brand names and logos may be subject to their respective owners' trademark rights.

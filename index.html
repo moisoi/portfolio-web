@@ -49,7 +49,7 @@
 
   *{ margin:0; padding:0; box-sizing:border-box; }
 
-  html{ scroll-behavior:smooth; scroll-padding-top: 88px; }
+  html{ scroll-behavior:smooth; scroll-padding-top: 88px; scrollbar-gutter: stable; }
 
   body{
     background: var(--bg);
@@ -79,9 +79,7 @@
     outline-offset: 3px;
   }
 
-  @media (prefers-reduced-motion: reduce){
-    *{ animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
-  }
+
 
   .skip-link{
     position: fixed;
@@ -101,10 +99,11 @@
     position: fixed;
     top: 0; left: 0;
     height: 2px;
-    width: 0%;
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: left;
     background: linear-gradient(90deg, var(--amber), var(--cyan));
     z-index: 60;
-    transition: width 0.08s linear;
   }
 
   /* ---------- background grid + glow ---------- */
@@ -164,6 +163,9 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
+  /* Keep the existing glow palette, but avoid moving large blurred layers on small screens. */
+  @media (max-width: 820px){ .orb{ animation: none; } }
+
   /* ---------- HUD frame ---------- */
   .frame-corner{
     position: fixed;
@@ -179,13 +181,13 @@
 
   /* ---------- layout helpers ---------- */
   .wrap{
+    /* No stacking context: opaque section backgrounds paint below the rain. */
     position: relative;
-    z-index: 1;
     max-width: 1120px;
     margin: 0 auto;
     padding: 0 44px;
   }
-  section{ padding: 128px 0; border-bottom: 1px solid var(--line); scroll-margin-top: 88px; }
+  section{ padding: 128px 0; border-bottom: 1px solid var(--line); }
   section:last-of-type{ border-bottom: none; }
   .prose{ max-width: 640px; }
 
@@ -243,29 +245,14 @@
     align-items: center;
     z-index: 2;
   }
-  .logo-mark{ position: relative; display: inline-flex; }
-  .logo-mark svg{ display: block; }
-  .logo-pulse{
-    position: absolute;
-    bottom: -2px; right: -2px;
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: #6fe3a4;
-    border: 2px solid var(--bg);
+  .logo-mark{ position: relative; display: inline-flex; align-items:center; justify-content:center; isolation:isolate; }
+  .logo-mark::before{
+    content:""; position:absolute; width:66px; height:66px; border-radius:50%; pointer-events:none;
+    background:radial-gradient(circle, rgba(103,214,234,.32) 0%, rgba(242,166,90,.12) 36%, transparent 72%);
+    animation:logo-glow 3.2s ease-in-out infinite;
   }
-  .logo-pulse::after{
-    content: "";
-    position: absolute;
-    inset: -4px;
-    border-radius: 50%;
-    border: 1.5px solid #6fe3a4;
-    opacity: 0.7;
-    animation: pulse-ring 2.4s ease-out infinite;
-  }
-  @keyframes pulse-ring{
-    0%{ transform: scale(0.6); opacity: 0.8; }
-    100%{ transform: scale(2); opacity: 0; }
-  }
+  .logo-mark svg{ display:block; position:relative; }
+  @keyframes logo-glow{ 0%,100%{ opacity:.48; transform:scale(.76); } 50%{ opacity:1; transform:scale(1.14); } }
   .nav-icon{ width: 15px; height: 15px; flex-shrink: 0; }
   .btn-icon{ width: 14px; height: 14px; flex-shrink: 0; }
   .nav-cluster{ display: flex; align-items: center; gap: 30px; }
@@ -377,6 +364,8 @@
     border-bottom: 1px solid var(--line);
   }
   .hero-grid{
+    position: relative;
+    z-index: 2;
     display: grid;
     grid-template-columns: 1.04fr 0.96fr;
     gap: 60px;
@@ -384,11 +373,12 @@
   }
   .hero-grid > *{ min-width: 0; }
   .hero h1{
-    font-size: clamp(48px, 6.4vw, 92px);
+    font-size: clamp(36px, 4.6vw, 66px);
     font-weight: 700;
     line-height: 0.98;
     margin: 18px 0 22px;
   }
+  .hero h1 .grad-text{ display: inline-block; white-space: nowrap; font-size: inherit; }
   .hero-role{
     font-size: 19px;
     color: var(--text-dim);
@@ -554,10 +544,10 @@
   .stage[data-view="hood"] .device.phone{ transform: translateX(6px) scale(0.975); }
 
   /* entrance — content stays visible, layers arrive around it */
-  @media (prefers-reduced-motion: no-preference){
+
     .device.browser{ animation: layer-in 0.7s var(--re-ease) 0.15s backwards; }
     .device.phone{ animation: layer-in 0.7s var(--re-ease) 0.3s backwards; }
-  }
+
   @keyframes layer-in{ from{ opacity: 0; transform: translateY(14px); } to{ opacity: 1; transform: none; } }
 
   .browser-bar{
@@ -791,6 +781,7 @@
 
   @media (max-width: 1100px){
     .hero-grid{ grid-template-columns: 1fr; gap: 44px; align-items: stretch; }
+    .hero h1{ font-size:clamp(36px, 7.5vw, 66px); }
     .stage{ height: 430px; }
   }
   @media (max-width: 640px){
@@ -806,187 +797,20 @@
     .spec-node{ font-size: 8.5px; max-width: 52%; }
   }
 
-  /* ---------- console + stackfall ---------- */
-  .console-section{
-    position: relative;
-    border-bottom: 1px solid var(--line);
-    overflow: hidden;
-    background: #070910;
-  }
-  .console-inner{
-    position: relative;
-    z-index: 2;
-    max-width: 1120px;
-    margin: 0 auto;
-    padding: clamp(3.5rem, 7vw, 6rem) 44px;
-  }
-  .console-head{
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    gap: 1.5rem 2.5rem;
-    flex-wrap: wrap;
-    margin-bottom: 2.2rem;
-  }
-  .console-head h2{
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    font-size: clamp(1.8rem, 3vw, 2.4rem);
-    margin-top: 0.85rem;
-    color: var(--text);
-  }
-  .console-head .re-desc{ padding-bottom: 0.2rem; }
-  .console-grid{
-    display: grid;
-    grid-template-columns: 1.12fr 0.88fr;
-    gap: 2.2rem;
-    align-items: start;
-  }
-
-  /* the shell window */
-  .csl{
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    background:
-      linear-gradient(165deg, rgba(148,163,225,0.06), transparent 40%),
-      rgba(7,9,15,0.86);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    box-shadow: 0 30px 70px -30px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.045);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-  }
-  .csl-bar{
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    padding: 11px 14px;
-    border-bottom: 1px solid var(--line);
-    background: rgba(255,255,255,0.02);
-  }
-  .csl-dot{ width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; opacity: 0.9; }
-  .csl-dot.d1{ background: var(--re-warm); }
-  .csl-dot.d2{ background: var(--re-coral); }
-  .csl-dot.d3{ background: var(--re-cyan); }
-  .csl-title{
-    flex: 1;
-    margin-left: 8px;
-    font-family: 'DM Mono', monospace;
-    font-size: 11.5px;
-    color: var(--text-dim);
-    letter-spacing: 0.04em;
-  }
-  .csl-title b{ color: var(--re-warm); font-weight: 500; }
-  .csl-log{
-    padding: 18px 18px 14px;
-    font-family: 'DM Mono', monospace;
-    font-size: 12.5px;
-    line-height: 1.65;
-    color: #d9dcea;
-    min-height: 300px;
-    max-height: 380px;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: var(--border-strong) transparent;
-  }
-  .csl-log::-webkit-scrollbar{ width: 6px; }
-  .csl-log::-webkit-scrollbar-thumb{ background: var(--border-strong); border-radius: 3px; }
-  .csl-row{ margin-bottom: 10px; white-space: pre-wrap; word-break: break-word; }
-  .csl-row .ps1{ color: var(--re-cyan); }
-  .csl-row.cmd-echo{ color: #f2f4fb; }
-  .csl-row.out{ color: #98a0b5; }
-  .csl-row.out b, .csl-row.out strong{ color: var(--re-warm); font-weight: 500; }
-  .csl-row .accent{ color: var(--re-cyan); }
-  .csl-row .warm{ color: var(--re-warm); }
-  .csl-row .dim{ color: #565d76; }
-  .csl-row.banner{ color: #e8eaf3; font-weight: 500; }
-  .csl-flow{
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 6px;
-    margin: 4px 0 10px;
-  }
-  .csl-flow .step{
-    font-size: 10.5px;
-    color: #d9dcea;
-    border: 1px solid var(--border);
-    background: rgba(148,163,225,0.06);
-    border-radius: 7px;
-    padding: 4px 9px;
-  }
-  .csl-flow .arrow{ color: var(--re-warm); font-size: 11px; }
-  .csl-note{ font-size: 10px; color: #565d76; display: block; margin-bottom: 10px; }
-  .csl-chips{
-    display: flex;
-    flex-wrap: wrap;
-    gap: 7px;
-    padding: 12px 18px;
-    border-top: 1px solid var(--line);
-    background: rgba(255,255,255,0.015);
-  }
-  .csl-chip{
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    color: var(--re-cyan);
-    background: rgba(112,221,217,0.06);
-    border: 1px solid rgba(112,221,217,0.24);
-    border-radius: 999px;
-    padding: 5px 12px;
-    cursor: pointer;
-    transition: background 0.2s, color 0.2s, transform 0.15s, border-color 0.2s;
-  }
-  .csl-chip:hover{ background: rgba(112,221,217,0.14); transform: translateY(-1px); }
-  .csl-chip:active{ transform: translateY(0); }
-  .csl-chip.warn{
-    color: var(--re-warm);
-    background: rgba(255,171,90,0.07);
-    border-color: rgba(255,171,90,0.26);
-  }
-  .csl-chip.warn:hover{ background: rgba(255,171,90,0.15); }
-  .csl-input-row{
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 18px;
-    border-top: 1px solid var(--line);
-  }
-  .csl-ps1{
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    color: var(--re-cyan);
-    white-space: nowrap;
-  }
-  .csl-ps1 b{ color: var(--re-warm); font-weight: 500; }
-  .csl-input-row input{
-    flex: 1;
-    min-width: 0;
-    background: transparent;
-    border: none;
-    outline: none;
-    color: #f2f4fb;
-    font-family: 'DM Mono', monospace;
-    font-size: 12.5px;
-    caret-color: var(--re-warm);
-  }
-  .csl-input-row input::placeholder{ color: #565d76; }
-  .csl-input-row:focus-within{ box-shadow: inset 0 -1px 0 var(--re-warm); }
-  .csl-noscript{ padding: 18px; font-family: 'DM Mono', monospace; font-size: 12px; color: #98a0b5; }
-
-  /* stackfall rain field */
+  /* Transparent global technology rain. */
   /* ---------- technology matrix rain — additive site-wide atmosphere layer ----------
      Documented stacking contract (root context):
-       body canvas bg  <  in-flow section backgrounds  <
-       .tech-rain (fixed, z 0 — joins .field/.orb atmosphere tier)  <
-       main.wrap (z 1 — ALL sections, cards, text)  <
-       .grain (z 45)  <  nav (z 50)  <  progress (z 60)  <  chat (z 70)  <  dialogs (top layer)
+       body canvas and original section backgrounds  <
+       .tech-rain (fixed, z 1, transparent and pointer-inert)  <
+       positioned content containers (z 2)  <  grain (z 45)  <
+       nav (z 50)  <  progress (z 60)  <  chat (z 70)  <  dialogs (top layer).
+     main.wrap and sections intentionally do not create stacking contexts, so
+     their existing opaque backgrounds stay unchanged beneath the rain.
      The layer is transparent (no fill of its own), pointer-events none, aria-hidden. */
   .tech-rain{
     position: fixed;
     inset: 0;
-    z-index: 0;
+    z-index: 1;
     overflow: hidden;
     pointer-events: none;
     contain: strict;
@@ -1002,7 +826,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    will-change: transform;
   }
   .rt-glyph{
     display: block;
@@ -1023,231 +846,38 @@
     letter-spacing: 0.06em;
     white-space: nowrap;
   }
-  .tech-rain.inspecting .rt-chip:not(.lit){ opacity: 0.025 !important; }
-  .tech-rain .rt-chip.lit{ opacity: 0.4 !important; color: var(--re-warm); }
-  .tech-rain.static .rt-chip{ will-change: auto; }
-  @media (prefers-reduced-motion: reduce){
-    .tech-rain .rt-chip{ will-change: auto; }
-  }
 
-  /* background-motion toggle (footer settings location) */
-  .bg-toggle{
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--text-dim);
-    background: transparent;
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    padding: 7px 15px;
-    cursor: pointer;
-    transition: border-color 0.2s, color 0.2s, background 0.2s;
-    white-space: nowrap;
-  }
-  .bg-toggle:hover{ border-color: var(--border-strong); color: var(--text); }
-  .bg-toggle:focus-visible{ outline: 2px solid var(--amber); outline-offset: 2px; }
-  .bg-toggle b{ color: var(--amber); font-weight: 600; }
-  .bg-toggle[aria-pressed="true"] b{ color: var(--text-faint); }
-  @media (max-width: 640px){
-    footer{ flex-wrap: wrap; gap: 14px; justify-content: center; }
-    .bg-toggle{ order: 3; }
-  }
 
-  .sf-group{ flex: 0 0 100%; margin-bottom: 0.5rem; }
-  .sf-group:last-child{ margin-bottom: 0; }
-  .sf-group-label{
-    font-family: 'DM Mono', monospace;
-    font-size: 9.5px;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--text-faint);
-    margin: 0 0 6px;
-  }
-  .sf-row{ display: flex; flex-wrap: wrap; gap: 6px; }
-  .sf-none{ font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-faint); }
-  /* stackfall control panel */
-  .stackfall{
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    background: rgba(8,10,17,0.82);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    padding: 1.35rem 1.4rem 1.2rem;
-    box-shadow: 0 24px 60px -30px rgba(0,0,0,0.75);
-  }
-  .sf-head{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    flex-wrap: wrap;
-    margin-bottom: 0.6rem;
-  }
-  .sf-label{
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text-faint);
-  }
-  .sf-pause{
-    font-family: 'DM Mono', monospace;
-    font-size: 10.5px;
-    color: var(--text-dim);
-    background: rgba(148,163,225,0.07);
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    padding: 5px 12px;
-    cursor: pointer;
-    transition: color 0.2s, border-color 0.2s;
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-  }
-  .sf-pause::before{
-    content: "";
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: var(--re-cyan);
-    box-shadow: 0 0 8px rgba(112,221,217,0.7);
-  }
-  .sf-pause[aria-pressed="true"]{ color: var(--re-warm); border-color: rgba(255,171,90,0.4); }
-  .sf-pause[aria-pressed="true"]::before{ background: var(--re-warm); box-shadow: 0 0 8px rgba(255,171,90,0.7); }
-  .sf-pause:hover{ color: var(--text); }
-  .sf-note{
-    font-size: 0.82rem;
-    color: #9aa0b5;
-    line-height: 1.55;
-    margin-bottom: 1rem;
-  }
-  .sf-filters{
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-bottom: 1rem;
-  }
-  .sf-filter{
-    font-family: 'DM Mono', monospace;
-    font-size: 10.5px;
-    color: var(--text-dim);
-    background: #0e111a;
-    border: 1px solid var(--border-soft, rgba(173,166,224,0.11));
-    border-radius: 0.65rem;
-    padding: 5px 11px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .sf-filter:hover{ color: var(--text); border-color: var(--border); }
-  .sf-filter.active{
-    background: var(--re-warm);
-    border-color: var(--re-warm);
-    color: #17110a;
-    font-weight: 500;
-  }
-  .sf-list{
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    max-height: 210px;
-    overflow-y: auto;
-    padding-right: 4px;
-    scrollbar-width: thin;
-  }
-  .sf-list::-webkit-scrollbar{ width: 6px; }
-  .sf-list::-webkit-scrollbar-thumb{ background: var(--border-strong); border-radius: 3px; }
-  .sf-tech{
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-family: 'DM Mono', monospace;
-    font-size: 10.5px;
-    color: #c3c8da;
-    background: rgba(148,163,225,0.05);
-    border: 1px solid var(--border-soft, rgba(173,166,224,0.11));
-    border-radius: 8px;
-    padding: 5px 10px;
-    cursor: pointer;
-    transition: border-color 0.2s, color 0.2s, transform 0.15s;
-  }
-  .sf-tech:hover{ color: #fff; border-color: var(--border-strong); transform: translateY(-1px); }
-  .sf-tech:focus-visible{ outline: 2px solid var(--re-warm); outline-offset: 2px; }
-  .sf-tech[aria-pressed="true"]{
-    color: #17110a;
-    background: var(--re-cyan);
-    border-color: var(--re-cyan);
-  }
-  .sf-tech .cdot{ width: 6px; height: 6px; border-radius: 50%; background: var(--catc, #9a9caf); }
-  .sf-tech[aria-pressed="true"] .cdot{ background: #17110a; }
-  .sf-tech .learn{
-    font-size: 8px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--re-coral);
-  }
-  .sf-tech[aria-pressed="true"] .learn{ color: #4a1f16; }
-  .sf-detail{
-    margin-top: 1rem;
-    border: 1px solid rgba(112,221,217,0.3);
-    border-radius: 0.8rem;
-    background: linear-gradient(160deg, rgba(112,221,217,0.07), rgba(10,12,19,0.7));
-    padding: 0.95rem 1.05rem;
-    animation: sf-detail-in 0.28s var(--re-ease);
-  }
-  @keyframes sf-detail-in{ from{ opacity: 0; transform: translateY(6px); } to{ opacity: 1; transform: none; } }
-  .sf-detail-head{ display: flex; justify-content: space-between; align-items: center; gap: 0.8rem; margin-bottom: 0.3rem; }
-  .sf-detail h3{
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--text);
-  }
-  .sf-close{
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    color: var(--text-dim);
-    background: none;
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    padding: 3px 10px;
-    cursor: pointer;
-  }
-  .sf-close:hover{ color: var(--text); border-color: var(--border-strong); }
-  .sf-role{ font-size: 0.8rem; color: #9aa0b5; line-height: 1.55; margin-bottom: 0.7rem; }
-  .sf-usedin{
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    align-items: center;
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    color: var(--text-faint);
-  }
-  .sf-proj{
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    color: var(--re-warm);
-    background: rgba(255,171,90,0.07);
-    border: 1px solid rgba(255,171,90,0.28);
-    border-radius: 999px;
-    padding: 3px 10px;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-  .sf-proj:hover{ background: rgba(255,171,90,0.16); }
-  .sf-caption{
-    margin-top: 1rem;
-    font-family: 'DM Mono', monospace;
-    font-size: 9.5px;
-    color: #565d76;
-    line-height: 1.6;
-  }
-
-  @media (max-width: 1100px){
-    .console-grid{ grid-template-columns: 1fr; }
-  }
-  @media (max-width: 640px){
-    .console-inner{ padding: 3rem 22px; }
-    .csl-log{ min-height: 260px; max-height: 320px; font-size: 11.5px; }
-  }
+  /* Hero architecture: a static, hand-built diagram keeps the card fast,
+     readable and independent of a diagram runtime. It is illustrative. */
+  .scene-hint{ font: 500 9px 'DM Mono', monospace; letter-spacing: .1em; color: var(--cyan); }
+  .scene-hint span{ color: var(--amber); }
+  .spec-layer{ display: flex; flex-direction: column; padding: 19px 20px 14px; background: linear-gradient(150deg, rgba(12,18,28,.985), rgba(9,10,18,.99)); }
+  .stage[data-view="hood"] .spec-layer{ pointer-events: none; }
+  .stage[data-view="hood"] .device{ opacity: 0; transform: scale(.96); }
+  .arch-head{ display:flex; justify-content:space-between; align-items:center; gap:.6rem; font:500 9px 'DM Mono',monospace; letter-spacing:.13em; color:var(--re-cyan); }
+  .arch-head span:last-child{ color:var(--text-faint); letter-spacing:.07em; }
+  .arch-board{ position:relative; display:grid; grid-template-columns:1fr 1fr; grid-template-rows:repeat(3, 1fr); gap:12px 18px; flex:1; min-height:0; padding:16px 12px 9px; }
+  .arch-wires{ position:absolute; inset:14px 12px 9px; width:calc(100% - 24px); height:calc(100% - 23px); color:var(--cyan); opacity:.5; pointer-events:none; }
+  .arch-wires path{ stroke:currentColor; stroke-width:1.5; stroke-dasharray:4 5; }
+  .arch-node{ position:relative; z-index:1; display:flex; flex-direction:column; justify-content:center; min-width:0; padding:8px 11px; border:1px solid rgba(112,221,217,.25); border-radius:10px; background:rgba(13,19,30,.96); box-shadow:0 10px 24px -18px #000; opacity:0; transform:translateY(8px); transition:opacity .35s ease,transform .45s var(--re-ease),border-color .3s; }
+  .stage[data-view="hood"] .arch-node{ opacity:1; transform:none; }.stage[data-view="hood"] .arch-ui{ transition-delay:.07s; }.stage[data-view="hood"] .arch-i18n{ transition-delay:.12s; }.stage[data-view="hood"] .arch-data{ transition-delay:.17s; }
+  .arch-client,.arch-data{ grid-column:1/-1; width:72%; justify-self:center; }.arch-data{ border-color:rgba(242,166,90,.38); }
+  .arch-index{ font:500 8px 'DM Mono',monospace; letter-spacing:.09em; color:var(--re-warm); }
+  .arch-node strong{ margin-top:3px; font:600 12px 'Space Grotesk',sans-serif; color:var(--text); }
+  .arch-node small{ margin-top:2px; font:400 9px 'DM Mono',monospace; color:var(--text-dim); }
+  .arch-note{ display:flex; gap:6px; align-items:center; color:var(--text-faint); font:9px 'DM Mono',monospace; }.arch-led{ width:5px; height:5px; border-radius:50%; background:var(--re-cyan); }
+  .hero-scene:focus-visible{ outline:2px solid var(--amber); outline-offset:4px; }
+  .hc-ring{ animation: hero-breathe 5s ease-in-out infinite; }
+  .hc-cards span:nth-child(2){ animation: hero-card 4.5s ease-in-out infinite; }
+  @keyframes hero-breathe{ 50%{ transform:scale(1.045); } }
+  @keyframes hero-card{ 50%{ transform:translateY(-3px); } }
+  .gauge-buna{ grid-column:1/-1; }
+  .proj-card[data-case]{ cursor:pointer; }
+  .buildlog-label small{ display:block; margin-top:1rem; font:400 .72rem/1.55 'DM Mono',monospace; color:var(--re-mute); letter-spacing:0; }
+  .buildlog-lines{ min-height:12rem; }.buildlog-lines b{ min-width: 2.1em; }.terminal-output{ color:var(--re-mute); }.terminal-success{ color:var(--re-cyan); }
+  .buildlog-top .buildlog-badge{ color:var(--re-mute); }
+  @media (max-width:640px){ .scene-hint{ font-size:8px; }.scene-hint{ visibility:hidden; }.scene-hint::after{ content:'AUTOMATIC / 1.2 SEC'; visibility:visible; display:block; }.spec-layer{ padding:15px; }.arch-board{ gap:8px 12px; padding:12px 4px 6px; }.arch-node{ padding:6px 8px; }.arch-node strong{ font-size:11px; }.arch-node small{ font-size:8px; }.buildlog-lines{ min-height:11rem; } }
 
   /* ---------- soft skill pills ---------- */
   .pill-row{ display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
@@ -1263,6 +893,8 @@
 
   /* ---------- about / status ---------- */
   .about-grid{
+    position: relative;
+    z-index: 2;
     display: grid;
     grid-template-columns: 1.05fr 0.95fr;
     gap: 70px;
@@ -1336,7 +968,7 @@
   }
   .re-shell{
     position: relative;
-    z-index: 1;
+    z-index: 2;
     max-width: 72rem;
     margin-inline: auto;
     padding: clamp(5rem, 10vw, 10rem) clamp(1.25rem, 5vw, 5rem);
@@ -1384,17 +1016,12 @@
   }
   .hidden{ display: none !important; }
 
-  /* Reveal on scroll — IntersectionObserver adds .visible */
-  .reveal{
-    opacity: 0;
-    transform: translateY(1.5rem);
-    transition: opacity 0.7s var(--re-ease), transform 0.7s var(--re-ease);
-    transition-delay: var(--reveal-delay, 0s);
-  }
-  .reveal.visible{ opacity: 1; transform: none; }
-  @media (prefers-reduced-motion: reduce){
-    .reveal{ opacity: 1 !important; transform: none !important; }
-  }
+  /* Content is visible by default, even if JavaScript fails. The observer
+     adds a brief one-shot animation only when content enters the viewport. */
+
+    .reveal.visible{ animation: reveal-in 0.42s var(--re-ease) backwards; animation-delay: var(--reveal-delay, 0s); }
+    @keyframes reveal-in{ from{ opacity: 0.35; transform: translateY(10px); } to{ opacity: 1; transform: none; } }
+
 
   /* ---------- selected work (redesigned) ---------- */
   .work-grid{
@@ -1414,8 +1041,7 @@
     -webkit-backdrop-filter: blur(12px);
             backdrop-filter: blur(12px);
     border-radius: 1rem;
-    padding: 1.7rem 1.7rem 6.5rem;
-    cursor: pointer;
+    padding: 1.7rem;
     transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   }
   .proj-card:hover{
@@ -1539,11 +1165,13 @@
     margin-bottom: 0.2rem;
   }
   .proj-foot{
-    position: absolute;
-    left: 1.7rem; right: 1.7rem; bottom: 1.5rem;
+    position: static;
+    margin-top: auto;
+    padding-top: 1.5rem;
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
+    flex-wrap: wrap;
     gap: 0.9rem;
   }
   .proj-tags{ display: flex; flex-wrap: wrap; gap: 0.45rem; }
@@ -1666,10 +1294,7 @@
     .pp-ring{ width: 4.8rem; height: 4.8rem; }
     .proj-links{ width: 100%; }
   }
-  @media (prefers-reduced-motion: reduce){
-    .pp-frame, .pp-phases img{ transition: none; }
-    .proj-wide:hover .pp-frame, .pp-phases img:hover{ transform: none; }
-  }
+
 
   /* ---------- capabilities (redesigned) ---------- */
   .skill-filters{
@@ -1741,14 +1366,6 @@
     padding: 0.6rem 0;
   }
   .s-name{ font-size: 0.88rem; color: var(--re-mute); }
-  .s-bar{ display: inline-flex; gap: 4px; flex-shrink: 0; }
-  .s-bar i{
-    width: 13px; height: 5px;
-    border-radius: 2px;
-    background: rgba(173,166,224,0.14);
-    display: inline-block;
-  }
-  .s-bar i.on{ background: linear-gradient(90deg, var(--re-warm), var(--re-coral)); }
   .skill-note{
     margin-top: 1.35rem;
     font-family: 'DM Mono', monospace;
@@ -1783,6 +1400,50 @@
   @media (max-width: 560px){
     .skill-matrix{ grid-template-columns: 1fr; }
   }
+
+  /* Work-section build story: decorative, illustrative, and readable without JS. */
+  .buildlog{ margin: 0 0 1.5rem; border: 1px solid var(--re-border); border-radius: 1rem; overflow: hidden; background: linear-gradient(145deg, rgba(20,25,39,.96), rgba(8,10,17,.97)); box-shadow: 0 24px 55px -35px #000; }
+  .buildlog-top{ display: flex; align-items: center; gap: .75rem; padding: .8rem 1.15rem; border-bottom: 1px solid var(--re-border-soft); font: 500 .72rem 'DM Mono', monospace; color: var(--re-warm); }
+  .buildlog-top em{ color: var(--re-mute); font-style: normal; }
+  .buildlog-dots{ display: inline-flex; gap: 5px; }
+  .buildlog-dots i{ width: 7px; height: 7px; border-radius: 50%; background: var(--re-warm); }
+  .buildlog-dots i:nth-child(2){ background: var(--re-coral); }.buildlog-dots i:nth-child(3){ background: var(--re-cyan); }
+  .buildlog-badge{ margin-left: auto; font-size: .61rem; letter-spacing: .08em; color: var(--re-dim); }
+  .buildlog-body{ display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; padding: 1.45rem 1.3rem; }
+  .buildlog-label{ font: 500 .7rem 'DM Mono', monospace; color: var(--re-cyan); letter-spacing: .11em; }
+  .buildlog-label span{ color: var(--re-warm); }
+  .buildlog-lines{ min-height: 8.6rem; font: .78rem/1.9 'DM Mono', monospace; color: var(--re-text); }
+  .buildlog-lines > div{ display: flex; gap: .85rem; min-height: 1.5em; }
+  .buildlog-lines [data-build-line]{ white-space: pre-wrap; overflow-wrap: anywhere; }
+  .buildlog-lines b{ font-weight: 400; color: var(--re-warm); }
+  .buildlog-cursor{ color: var(--re-cyan); animation: cursor-blink 1s steps(2, start) infinite; }
+  @keyframes cursor-blink{ 50%{ opacity: 0; } }
+  @media (max-width: 640px){ .buildlog-body{ grid-template-columns: 1fr; }.buildlog-badge{ font-size: .52rem; }.buildlog-lines{ font-size: .68rem; } }
+  .srow{ justify-content: flex-start; gap: .75rem; }
+  .sgroup.filter-enter{ animation: skill-enter .32s var(--re-ease) both; }
+  @keyframes skill-enter{ from{ opacity: .35; transform: translateY(8px); } to{ opacity: 1; transform: none; } }
+  .skill-icons{ display: inline-flex; gap: .25rem; align-items: center; flex-shrink: 0; min-width: 20px; }
+  .skill-icons img, .landscape-tile img{ object-fit: contain; filter: brightness(0) invert(.82); }
+  .skill-monogram{ display: grid; place-items: center; min-width: 22px; height: 22px; border: 1px solid var(--re-border); border-radius: 5px; font: 500 .54rem 'DM Mono', monospace; color: var(--re-cyan); }
+  .ways, .landscape{ margin-top: 2rem; padding: 1.5rem; border: 1px solid var(--re-border-soft); border-radius: 1rem; background: var(--re-panel); }
+  .ways-list{ display:flex; flex-wrap:wrap; gap:.55rem; margin-top:1.1rem; }
+  .ways-list span{ border: 1px solid var(--re-border-soft); border-radius: 999px; padding: .45rem .8rem; font-size: .8rem; color: var(--re-mute); }
+  .landscape-head{ display: flex; justify-content: space-between; align-items: end; gap: 1rem; flex-wrap: wrap; }
+  .landscape-head h3{ font-size: 1.4rem; margin-top: .6rem; }.landscape-head p:not(.kicker){ max-width: 29rem; font-size: .8rem; color: var(--re-mute); }
+  .landscape-grid{ display:grid; gap:.55rem; margin-top:1.3rem; min-width:0; }
+  .landscape-readable{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+  .landscape-lane{ min-width:0; overflow:hidden; -webkit-mask-image:linear-gradient(to right, transparent, #000 5%, #000 95%, transparent); mask-image:linear-gradient(to right, transparent, #000 5%, #000 95%, transparent); }
+  .landscape-track{ display:flex; width:max-content; animation:landscape-flow var(--lane-duration, 80s) linear infinite; }
+  .landscape-lane.reverse .landscape-track{ animation-direction:reverse; }
+  .landscape-sequence{ display:flex; flex-shrink:0; align-items:stretch; gap:.55rem; padding-right:.55rem; }
+  @keyframes landscape-flow{ to{ transform:translateX(-50%); } }
+  .landscape-tile{ display: inline-flex; align-items: center; flex-shrink:0; white-space:nowrap; gap: .5rem; padding: .5rem .7rem; border: 1px solid var(--re-border-soft); background: rgba(9,11,17,.65); border-radius: .65rem; font: .71rem 'DM Mono', monospace; color: var(--re-mute); transition: border-color .25s, transform .25s, color .25s; }
+  .landscape-tile:hover{ transform: translateY(-2px); border-color: var(--re-border); color: var(--re-text); }
+  .landscape-tile img{ width: 18px; height: 18px; }
+  /* Feedback remains brief and native navigation/scroll remain interruptible. */
+  .btn:active, .proj-link-btn:active, .skill-filter:active, .dchan:active, .cd-action:active{ transform: scale(.97); }
+  #case-modal.closing{ animation: case-out .2s ease-in forwards; }
+  @keyframes case-out{ to{ opacity: 0; transform: translateY(.6rem) scale(.985); } }
 
   /* ---------- experience (redesigned) ---------- */
   .xp-timeline{ position: relative; }
@@ -1933,7 +1594,7 @@
     .xp-date{ flex-direction: row; align-items: center; gap: 0.7rem; padding-top: 0; }
   }
 
-  /* in-development timeline node / chip (HerCycle berry accent) */
+  /* HerCycle timeline node / chip (berry accent) */
   .xp-item.is-dev .xp-node{
     background: #a86f96;
     border-color: #a86f96;
@@ -1980,10 +1641,6 @@
     .xp-item:nth-child(odd) .xp-grid{ grid-template-columns: minmax(0, 1fr) 9.5rem; }
     .xp-item:nth-child(odd) .xp-date{ order: 2; align-items: flex-end; text-align: right; }
     .xp-item:nth-child(even) .xp-grid{ grid-template-columns: 9.5rem minmax(0, 1fr); }
-    /* side-aware entrances, still transform/opacity only */
-    .xp-item.reveal{ transform: translate(1.4rem, 1.5rem); }
-    .xp-item:nth-child(odd).reveal{ transform: translate(-1.4rem, 1.5rem); }
-    .xp-item.reveal.visible{ transform: none; }
   }
 
   /* ---------- case-study dialog ---------- */
@@ -2161,7 +1818,7 @@
   .case-contact:hover{ color: var(--re-coral); border-color: rgba(255,116,116,0.5); }
   .case-contact svg{ width: 0.85rem; height: 0.85rem; }
 
-  /* case study: working-now vs in-development status */
+  /* case-study status styling */
   .case-status{
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -2572,7 +2229,7 @@
     border-radius: 0.8rem;
     padding: 0.95rem 1rem 1rem;
   }
-  .cmp-project[hidden]{ display: none; }
+  .cmp-project[hidden], .cd-handle-row[hidden]{ display: none; }
   .cmp-project > .cmp-note{
     grid-column: 1 / -1;
     font-family: 'DM Mono', monospace;
@@ -2671,14 +2328,11 @@
     .composer{ padding: 1.3rem 1.1rem 1.3rem; }
     .cdetail{ padding: 1.2rem 1.1rem; }
   }
-  @media (prefers-reduced-motion: reduce){
-    .cdetail{ transition: opacity 0.2s ease; }
-    .cdetail.morph{ transform: none; }
-    .dchan:hover{ transform: none; }
-    .cd-action:hover{ transform: none; }
-  }
+
 
   footer{
+    position: relative;
+    z-index: 2;
     padding: 34px 0 60px;
     display: flex;
     justify-content: space-between;
@@ -2686,6 +2340,94 @@
     font-family: 'JetBrains Mono', monospace;
     font-size: 12px;
   }
+
+  /* A richer but explicitly illustrative terminal session. */
+  .buildlog{ position:relative; border-color:rgba(148,163,225,.22); }
+  .buildlog::before{ content:""; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,var(--amber),var(--cyan),transparent); opacity:.7; }
+  .buildlog-body{ grid-template-columns:minmax(175px,.78fr) minmax(0,2fr); gap:0; padding:0; }
+  .buildlog-label{ padding:1.45rem; border-right:1px solid var(--re-border-soft); background:rgba(148,163,225,.025); }
+  .terminal-path{ display:flex; justify-content:space-between; font:500 .65rem 'DM Mono',monospace; letter-spacing:.08em; color:var(--re-cyan); }
+  .terminal-path i{ font-style:normal; color:var(--amber); animation:terminal-indicator 2.8s ease-in-out infinite; }
+  @keyframes terminal-indicator{ 50%{ opacity:.4; } }
+  .buildlog-label strong{ display:block; margin-top:1.35rem; font:600 clamp(1.25rem,2vw,1.65rem)/1.15 'Space Grotesk',sans-serif; letter-spacing:-.025em; color:var(--re-text); }
+  .buildlog-label strong span{ color:var(--re-warm); }
+  .buildlog-label small{ margin-top:.7rem; font-size:.65rem; max-width:15rem; }
+  .terminal-map{ display:grid; gap:.38rem; margin-top:1.2rem; font:400 .61rem 'DM Mono',monospace; letter-spacing:0; color:var(--re-mute); }
+  .terminal-map span{ color:var(--re-mute); }.terminal-map i{ font-style:normal; color:var(--re-warm); margin-right:.35rem; }
+  .buildlog-lines{ min-height:14.5rem; padding:1.45rem; background:radial-gradient(ellipse at 90% 0%,rgba(103,214,234,.035),transparent 55%); }
+  .buildlog-footer{ display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; padding:.65rem 1.4rem; border-top:1px solid var(--re-border-soft); color:var(--re-dim); font:500 .59rem 'DM Mono',monospace; letter-spacing:.09em; }
+  .buildlog-footer i{ display:inline-block; width:5px; height:5px; border-radius:50%; background:var(--re-cyan); margin-right:.45rem; }.buildlog-footer b{ color:var(--re-warm); }
+  .terminal-meter{ display:inline-flex; align-items:center; gap:.5rem; }.terminal-meter-track{ width:4.2rem; height:2px; background:var(--re-border); overflow:hidden; }.terminal-meter-track span{ display:block; width:100%; height:100%; transform:scaleX(var(--build-progress, 1)); transform-origin:left; transition:transform .4s ease; background:linear-gradient(90deg,var(--amber),var(--cyan)); }
+  .connect-next{ display:flex; align-items:center; justify-content:space-between; gap:1.5rem; margin-top:2rem; padding:1.4rem 1.6rem; border:1px solid var(--re-border-soft); border-radius:1rem; background:linear-gradient(120deg,rgba(148,163,225,.055),rgba(255,171,90,.025)); }
+  .connect-next h3{ margin-top:.45rem; font-size:1.15rem; color:var(--re-text); }.connect-next p:not(.kicker){ max-width:34rem; color:var(--re-mute); font-size:.84rem; line-height:1.65; }.connect-next-mark{ font-size:1.5rem; color:var(--re-warm); }
+  @media(max-width:640px){ .buildlog-body{ grid-template-columns:1fr; }.buildlog-label{ border-right:0; border-bottom:1px solid var(--re-border-soft); padding:1.1rem; }.buildlog-label strong{ margin-top:.7rem; }.buildlog-label strong br{ display:none; }.terminal-map{ display:flex; flex-wrap:wrap; gap:.6rem; margin-top:.8rem; }.buildlog-lines{ padding:1.1rem; min-height:13rem; }.connect-next{ align-items:flex-start; flex-direction:column; gap:.7rem; }.connect-next-mark{ display:none; } }
+
+
+  /* Hero: product layers assemble into a living, illustrative system map. */
+  .hero-scene{ isolation:isolate; border-color:rgba(146,164,202,.24); box-shadow:0 32px 85px -35px #000,0 0 45px -30px rgba(103,214,234,.35),inset 0 1px rgba(255,255,255,.06); }
+  .hero-scene::before{ content:""; position:absolute; inset:0; pointer-events:none; z-index:0; background:radial-gradient(circle at 75% 25%,rgba(103,214,234,.10),transparent 45%),radial-gradient(circle at 20% 80%,rgba(242,166,90,.08),transparent 40%); opacity:.65; animation:scene-ambient 7s ease-in-out infinite alternate; }
+  .scene-head,.stage,.scene-foot{ position:relative; }
+  @keyframes scene-ambient{ to{ opacity:1; transform:scale(1.08); } }
+  .device.browser{ animation:layer-in .8s var(--re-ease) .15s backwards,scene-float 6s ease-in-out 1s infinite; }
+  .device.phone{ animation:layer-in .8s var(--re-ease) .3s backwards,scene-float-phone 5.3s ease-in-out 1.2s infinite; }
+  @keyframes scene-float{ 50%{ translate:0 -5px; } }
+  @keyframes scene-float-phone{ 50%{ translate:0 5px; } }
+  .spec-layer{ overflow:hidden; background:radial-gradient(ellipse at 50% 48%,rgba(44,81,94,.20),transparent 58%),linear-gradient(155deg,rgba(9,16,26,.99),rgba(8,10,17,.99)); }
+  .spec-layer::before{ content:""; position:absolute; inset:0; opacity:.32; pointer-events:none; background-image:linear-gradient(rgba(112,221,217,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(112,221,217,.08) 1px,transparent 1px); background-size:32px 32px; mask-image:radial-gradient(ellipse at center,#000,transparent 78%); }
+  .arch-head,.arch-board,.arch-note{ position:relative; z-index:1; }
+  .arch-head{ padding-bottom:9px; border-bottom:1px solid rgba(112,221,217,.1); }
+  .arch-live{ display:inline-block; width:6px; height:6px; background:var(--cyan); border-radius:50%; box-shadow:0 0 12px var(--cyan); margin-right:5px; animation:terminal-indicator 2s infinite; }
+  .arch-wires{ opacity:.65; filter:drop-shadow(0 0 5px rgba(103,214,234,.5)); }
+  .arch-wires path{ stroke-dasharray:3 7; animation:wire-flow 3s linear infinite; }
+  @keyframes wire-flow{ to{ stroke-dashoffset:-40; } }
+  .arch-node{ overflow:hidden; border-color:rgba(112,221,217,.32); background:linear-gradient(135deg,rgba(24,38,50,.98),rgba(10,15,25,.98)); box-shadow:0 15px 30px -20px #000,inset 0 1px rgba(255,255,255,.06); transform:translateY(16px) scale(.93); transition:opacity .4s ease,transform .65s cubic-bezier(.2,1.4,.35,1),border-color .3s,box-shadow .3s; }
+  .arch-node::before{ content:""; position:absolute; inset:0 auto 0 0; width:2px; background:linear-gradient(var(--cyan),transparent); }
+  .stage[data-view="hood"] .arch-node{ transform:translateY(0) scale(1); box-shadow:0 18px 32px -22px #000,0 0 22px -16px rgba(103,214,234,.7),inset 0 1px rgba(255,255,255,.07); }
+  .arch-index{ display:flex; justify-content:space-between; align-items:center; }
+  .arch-index i{ font-style:normal; color:var(--cyan); font-size:12px; }
+  .arch-chip{ position:absolute; right:10px; bottom:8px; border:1px solid rgba(103,214,234,.18); color:var(--cyan); border-radius:4px; padding:2px 4px; font:8px 'DM Mono',monospace; letter-spacing:.04em; }
+  .arch-data .arch-chip{ color:var(--amber); border-color:rgba(242,166,90,.24); }
+  .arch-orbit{ position:absolute; z-index:2; color:var(--cyan); padding:4px 6px; background:#101d27; border:1px solid rgba(103,214,234,.28); border-radius:5px; font:8px 'DM Mono',monospace; box-shadow:0 8px 20px #0008; opacity:0; transform:scale(.75); transition:opacity .45s .3s,transform .6s cubic-bezier(.2,1.5,.3,1) .3s; }
+  .orbit-one{ top:25%; right:1%; }.orbit-two{ bottom:14%; left:1%; color:var(--amber); border-color:rgba(242,166,90,.3); }
+  .stage[data-view="hood"] .arch-orbit{ opacity:1; transform:scale(1); }
+  .arch-note{ padding-top:4px; }
+  /* Terminal: an actual keyboard-operable local simulation, never a remote shell. */
+  .buildlog{ background:#0b1013; border-color:rgba(112,221,217,.22); }
+  .buildlog-top{ background:#161b22; color:#c1c8d2; padding:.8rem 1.15rem; }
+  .buildlog-top em{ color:#828d9e; }.buildlog-badge{ color:#9a9caf!important; }
+  .shell-screen{ min-height:20rem; padding:1.45rem 1.6rem 1.7rem; font:400 .78rem/1.85 'DM Mono',monospace; color:#d3dbe1; background:radial-gradient(ellipse at 100% 0%,rgba(103,214,234,.07),transparent 42%),#0b1013; }
+  .shell-welcome{ display:flex; align-items:center; gap:.8rem; font-weight:500; letter-spacing:.12em; color:var(--re-cyan); }
+  .shell-mark{ display:grid; place-items:center; width:2rem; height:2rem; color:#0b1013; background:var(--re-cyan); border-radius:6px; font-weight:700; letter-spacing:0; }
+  .shell-muted,.shell-intro,.shell-nojs{ color:#8793a0; }.shell-intro{ margin:.65rem 0 1rem; font-size:.71rem; }
+  .shell-line,.shell-result{ overflow-wrap:anywhere; white-space:pre-wrap; }.shell-line{ display:flex; flex-wrap:wrap; gap:0 .6em; }
+  .shell-prompt{ color:#91d8a6; white-space:nowrap; font-weight:500; }.shell-prompt span{ color:#b5c1ca; }.shell-prompt i{ font-style:normal; color:#8bbff2; }
+  .shell-boot .terminal-output{ white-space:pre-wrap; color:#b8c6d2; padding:0 0 .35rem; }.shell-boot .terminal-success{ color:var(--re-warm); margin:.3rem 0; }
+  .shell-result.command{ color:#9bdab0; margin-top:.35rem; }.shell-result.output{ color:#d2dbe3; }.shell-result.error{ color:#ff9995; }
+  .shell-form{ display:flex; align-items:baseline; gap:.6em; margin-top:.35rem; }.shell-form[hidden],.shell-boot[hidden]{ display:none; }
+  .shell-form input{ flex:1; min-width:0; color:#f3f5f7; background:transparent; border:0; outline:none; font:inherit; caret-color:var(--cyan); }
+  .shell-form input::placeholder{ color:#667480; }.shell-form:focus-within{ border-bottom:1px solid rgba(112,221,217,.45); }
+  .shell-form button{ border:0; background:transparent; color:var(--cyan); cursor:pointer; font:inherit; padding:.2rem .4rem; }
+  .shell-form button:focus-visible{ outline:2px solid var(--cyan); }
+  @media(max-width:640px){ .shell-screen{ min-height:19rem; padding:1.15rem; font-size:.68rem; }.shell-intro{ font-size:.65rem; }.arch-chip{ font-size:7px; }.arch-orbit{ font-size:7px; } }
+  @media(max-width:370px){ .arch-chip{ display:none; }.arch-orbit{ display:none; }.shell-form{ flex-wrap:wrap; }.shell-form input{ flex-basis:8rem; } }
+
+
+  /* Floating product callouts give the experience its own motion before the map unfolds. */
+  .scene-pop{ position:absolute; z-index:2; display:grid; gap:2px; max-width:42%; padding:9px 11px; border:1px solid rgba(112,221,217,.3); border-radius:9px; background:linear-gradient(135deg,rgba(29,44,51,.96),rgba(12,18,27,.96)); box-shadow:0 14px 26px -12px #000,0 0 24px -16px rgba(103,214,234,.7); pointer-events:none; transition:opacity .35s,transform .5s var(--re-ease); animation:scene-popup 5s ease-in-out infinite; }
+  .scene-pop span{ color:var(--cyan); letter-spacing:.08em; font:500 8px 'DM Mono',monospace; }.scene-pop strong{ font:600 11px 'Space Grotesk',sans-serif; color:var(--text); }.scene-pop small{ font:9px 'DM Mono',monospace; color:var(--text-dim); }
+  .scene-pop-design{ top:5%; right:4%; animation-delay:-1.2s; }.scene-pop-build{ bottom:4%; left:4%; border-color:rgba(242,166,90,.3); animation-delay:-3.4s; }.scene-pop-build span{ color:var(--amber); }
+  .stage[data-view="hood"] .scene-pop{ opacity:0; transform:scale(.9) translateY(8px); }
+  @keyframes scene-popup{ 0%,100%{ translate:0 0; } 50%{ translate:0 -6px; } }
+  .stage[data-view="hood"] .arch-orbit{ animation:orbit-drift 3.6s ease-in-out infinite; }
+  .stage[data-view="hood"] .orbit-two{ animation-delay:-1.8s; }
+  @keyframes orbit-drift{ 0%,100%{ translate:0 0; } 50%{ translate:0 -4px; } }
+  .arch-wires circle{ filter:drop-shadow(0 0 4px currentColor); }
+  .shell-shortcuts{ display:inline-flex; align-items:center; flex-wrap:wrap; gap:.4rem; }
+  .shell-shortcuts[hidden]{ display:none; }
+  .shell-shortcuts button{ border:1px solid rgba(112,221,217,.22); border-radius:4px; padding:.15rem .4rem; background:rgba(112,221,217,.06); color:var(--re-cyan); font:inherit; cursor:pointer; }
+  .shell-shortcuts button:hover,.shell-shortcuts button:focus-visible{ background:rgba(112,221,217,.16); outline:1px solid var(--cyan); }
+  @media(max-width:640px){ .scene-pop{ padding:7px 8px; }.scene-pop strong{ font-size:10px; }.scene-pop small{ font-size:8px; } }
+  @media(max-width:370px){ .scene-pop{ max-width:45%; }.scene-pop small{ display:none; } }
 
   /* ---------- AI assistant widget ---------- */
   .chat-widget{
@@ -3001,9 +2743,8 @@
     <a class="brand" href="#top" aria-label="Messay Mohammed — home">
       <span class="logo-mark">
         <svg width="30" height="30" viewBox="0 0 32 32" fill="none">
-          <rect x="1" y="1" width="30" height="30" rx="9" stroke="url(#logoGrad)" stroke-width="1.4"/>
-          <path d="M9 21.5V10.5L16 17L23 10.5V21.5" stroke="url(#logoGrad)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-          <circle cx="16" cy="17" r="1.5" fill="#f2a65a"/>
+          <path d="M5 24V8l11 11L27 8v16" stroke="url(#logoGrad)" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M5 27h5M22 27h5" stroke="url(#logoGrad)" stroke-width="1.2" stroke-linecap="round"/>
           <defs>
             <linearGradient id="logoGrad" x1="1" y1="1" x2="31" y2="31" gradientUnits="userSpaceOnUse">
               <stop stop-color="#f2a65a"/>
@@ -3011,7 +2752,6 @@
             </linearGradient>
           </defs>
         </svg>
-        <span class="logo-pulse" title="Available for work"></span>
       </span>
     </a>
     <div class="nav-cluster">
@@ -3034,14 +2774,13 @@
     </div>
   </nav>
 
-  <main class="wrap" id="top-content">
+  <main class="wrap" id="top-content" tabindex="-1">
 
-    <section class="hero" id="top">
+    <section class="hero" id="top" tabindex="-1">
       <div class="hero-grid">
         <div>
-          <p class="kicker">MESSAY MOHAMMED <span>/ ADDIS ABABA, ET</span></p>
-          <p class="hero-sublabel">Full-stack &amp; mobile developer · expanding into AI engineering</p>
-          <h1>I turn ambitious ideas into <span class="grad-text">products that work beautifully.</span></h1>
+          <p class="kicker">MESSAY MOHAMMED <span>/ FULL-STACK &amp; MOBILE DEV</span></p>
+          <h1>Ideas in.<br><span class="grad-text">Products out.</span></h1>
           <p class="hero-role">From responsive interfaces and mobile experiences to the APIs and data behind them, I connect the whole product — not just the screens.</p>
           <div class="cta-row">
             <a class="btn btn-primary" href="#work">
@@ -3050,25 +2789,15 @@
             </a>
             <a class="btn btn-ghost" href="#contact">Start a conversation</a>
           </div>
-          <p class="hero-note">Currently building <a href="#work">HerCycle</a> · AI-assisted workflows in <a href="#skills">Capabilities</a></p>
           <div class="scroll-cue"><span class="bar"></span>Scroll to explore</div>
         </div>
 
-        <div class="hero-scene" role="figure" aria-label="HerCycle — one idea connected across web, mobile web, and an API/data layer">
+        <div class="hero-scene" tabindex="0" role="group" aria-label="HerCycle product illustration. Focus or hover to reveal the illustrative architecture: React and TypeScript, Material UI, i18next, and Supabase.">
           <div class="scene-head">
             <span class="scene-label">One idea, across screens &amp; systems</span>
-            <div class="scene-toggle" role="tablist" aria-label="Scene view">
-              <button type="button" class="st-btn active" role="tab" aria-selected="true" data-view="experience">Experience</button>
-              <button type="button" class="st-btn" role="tab" aria-selected="false" data-view="hood">Under the hood</button>
-            </div>
+            <span class="scene-hint">HOVER TO EXPLORE <span aria-hidden="true">↗</span></span>
           </div>
           <div class="stage" id="heroStage" data-view="experience">
-            <svg class="stage-wires" viewBox="0 0 640 400" fill="none" preserveAspectRatio="none" aria-hidden="true">
-              <path d="M70 60 C 190 60, 220 130, 300 185"/>
-              <path d="M620 130 C 470 130, 420 170, 345 195"/>
-              <path d="M85 350 C 200 350, 230 250, 300 210"/>
-              <path d="M615 320 C 470 320, 430 250, 345 212"/>
-            </svg>
             <div class="device browser" aria-hidden="true">
               <div class="browser-bar">
                 <span class="bb-dot d1"></span><span class="bb-dot d2"></span><span class="bb-dot d3"></span>
@@ -3096,12 +2825,19 @@
                 <span class="ps-chip">Follicular</span>
               </div>
             </div>
+            <div class="scene-pop scene-pop-design" aria-hidden="true"><span>✦ &nbsp; PRODUCT LAYER</span><strong>Designed to feel human.</strong><small>Thoughtful on every screen</small></div>
+            <div class="scene-pop scene-pop-build" aria-hidden="true"><span>◈ &nbsp; SYSTEM LAYER</span><strong>Built to connect.</strong><small>Interface → logic → data</small></div>
             <div class="spec-layer" aria-hidden="true">
-              <span class="spec-node n-client">Client · React + TypeScript</span>
-              <span class="spec-node n-ui">UI · Material UI + Framer Motion</span>
-              <span class="spec-node n-lang">i18n · Amharic / English</span>
-              <span class="spec-node n-auth">Supabase · auth + Postgres <em>in development</em></span>
-              <span class="spec-caption">Illustrated architecture — not a live trace.</span>
+              <div class="arch-head"><span><i class="arch-live"></i> UNDER THE HOOD</span><span>HERCYCLE / SYSTEM MAP</span></div>
+              <div class="arch-board">
+                <span class="arch-orbit orbit-one">UI / 01</span><span class="arch-orbit orbit-two">DATA / 04</span>
+                <svg class="arch-wires" viewBox="0 0 400 245" preserveAspectRatio="none" fill="none"><path d="M200 40V66 M100 66H300 M100 66V83 M300 66V83 M100 153V174H300V153 M200 174V198"/><circle r="3" fill="currentColor"><animateMotion dur="3.2s" repeatCount="indefinite" path="M200 40V66 H100 V83"/></circle><circle r="3" fill="currentColor"><animateMotion dur="3.8s" begin=".5s" repeatCount="indefinite" path="M200 40V66 H300 V83"/></circle><circle r="3" fill="currentColor"><animateMotion dur="3.4s" begin="1s" repeatCount="indefinite" path="M100 153V174 H200 V198"/></circle></svg>
+                <div class="arch-node arch-client"><span class="arch-index">01 / CLIENT <i>↗</i></span><strong>React + TypeScript</strong><small>Responsive web experience</small><span class="arch-chip">COMPONENTS</span></div>
+                <div class="arch-node arch-ui"><span class="arch-index">02 / INTERFACE <i>◇</i></span><strong>Material UI</strong><small>Motion + components</small></div>
+                <div class="arch-node arch-i18n"><span class="arch-index">03 / LANGUAGE <i>文</i></span><strong>i18next</strong><small>Amharic + English</small></div>
+                <div class="arch-node arch-data"><span class="arch-index">04 / DATA LAYER <i>◈</i></span><strong>Supabase</strong><small>Auth + PostgreSQL</small><span class="arch-chip">DATA + AUTH</span></div>
+              </div>
+              <div class="arch-note"><span class="arch-led"></span>Illustrated architecture · not a live trace</div>
             </div>
           </div>
           <div class="scene-foot">
@@ -3115,54 +2851,7 @@
       </div>
     </section>
 
-    <section id="console" class="console-section" aria-label="Interactive developer console and technology field">
-      <div class="console-inner">
-        <div class="console-head">
-          <div>
-            <p class="re-kicker"><span class="k-idx">~/</span> messay.sh</p>
-            <h2>Talk to the build.</h2>
-          </div>
-          <p class="re-desc">A small visitor shell — ask it who I am, what I've shipped, or how a request travels through a system.</p>
-        </div>
-
-        <div class="console-grid">
-          <div class="csl reveal" id="consolePanel">
-            <div class="csl-bar">
-              <span class="csl-dot d1"></span><span class="csl-dot d2"></span><span class="csl-dot d3"></span>
-              <span class="csl-title"><b>messay.sh</b> — visitor session</span>
-            </div>
-            <div class="csl-log" id="consoleLog" aria-live="polite" aria-label="Console output"></div>
-            <div class="csl-chips" id="consoleChips" role="group" aria-label="Command shortcuts"></div>
-            <form class="csl-input-row" id="consoleForm">
-              <span class="csl-ps1"><b>guest</b>@messay.sh ❯</span>
-              <input id="consoleInput" aria-label="Type a command — try help" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="type a command — try help">
-            </form>
-            <noscript><p class="csl-noscript">Messay Mohammed — full-stack &amp; mobile developer, Addis Ababa. Projects: Student Sports Hub, Business Forms Mini App, HerCycle. Reach me at messaymohammed@gmail.com.</p></noscript>
-          </div>
-
-          <div class="stackfall reveal" id="stackfallPanel">
-            <div class="sf-head">
-              <span class="sf-label">Stackfall · verified stack field</span>
-              <button type="button" class="sf-pause" id="sfPause" aria-pressed="false">Pause motion</button>
-            </div>
-            <p class="sf-note">The slow rain behind the whole site is this same verified inventory, drifting. Filter or inspect here — this list itself never moves.</p>
-            <div class="sf-filters" id="sfFilters" role="group" aria-label="Filter by category"></div>
-            <div class="sf-list" id="sfList" role="group" aria-label="Technology list"></div>
-            <div class="sf-detail" id="sfDetail" hidden>
-              <div class="sf-detail-head">
-                <h3 id="sfDetailName"></h3>
-                <button type="button" class="sf-close" id="sfDetailClose">close</button>
-              </div>
-              <p class="sf-role" id="sfDetailRole"></p>
-              <div class="sf-usedin" id="sfDetailUsed"></div>
-            </div>
-            <p class="sf-caption">Decorative field — not a telemetry feed. Reduced-motion settings show the static list only. Every technology listed corresponds to a verified skill; learning areas are marked.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="about">
+    <section id="about" tabindex="-1">
       <div class="about-grid">
         <div class="reveal">
           <p class="kicker">01 <span>/ ABOUT</span></p>
@@ -3183,24 +2872,51 @@
           <div class="gauge"><div class="val"><span class="grad-text">3</span></div><div class="label">core specialties — web, mobile, backend</div></div>
           <div class="gauge"><div class="val"><span class="grad-text">2</span><span class="unit">+</span></div><div class="label">contract products shipped</div></div>
           <div class="gauge"><div class="val"><span class="grad-text">100</span><span class="unit">+</span></div><div class="label">students reached via volunteering</div></div>
-          <div class="gauge"><div class="val"><span class="grad-text">15</span><span class="unit">+</span></div><div class="label">technologies across the stack</div></div>
+          <div class="gauge"><div class="val"><span class="grad-text">20</span><span class="unit">+</span></div><div class="label">technologies in my toolkit</div></div>
+          <div class="gauge gauge-buna"><div class="val"><span class="grad-text">999</span><span class="unit">+</span></div><div class="label">buna consumed · and counting</div></div>
         </div>
       </div>
     </section>
 
-    <section id="work" class="re-section">
+    <section id="work" class="re-section" tabindex="-1">
       <div class="re-shell">
         <header class="re-head reveal">
           <div>
-            <p class="re-kicker"><span class="k-idx">02</span> / Selected work</p>
+            <p class="kicker">02 <span>/ SELECTED WORK</span></p>
             <h2>Recent builds</h2>
           </div>
           <p class="re-desc">Two client products and one personal build — from first commit to tools ready for real users.</p>
         </header>
         <div class="re-divider" aria-hidden="true"></div>
 
+        <div class="buildlog reveal" id="buildLog" aria-label="Interactive simulated Linux-style portfolio terminal">
+          <div class="buildlog-top"><span class="buildlog-dots" aria-hidden="true"><i></i><i></i><i></i></span><span>guest@portfolio <em>— bash — ~/work</em></span><span class="buildlog-badge">SIMULATED · READ ONLY</span></div>
+          <div class="shell-screen">
+            <div class="shell-welcome"><span class="shell-mark">❯_</span><span>MESSAY.DEV <span class="shell-muted">/ PORTFOLIO SHELL</span></span></div>
+            <p class="shell-intro">An interactive, simulated shell — no commands run on a server.</p>
+            <div class="shell-boot" aria-hidden="true">
+              <div class="shell-line"><span class="shell-prompt">guest@portfolio<span>:</span><i>~/work</i>$</span> <span data-build-line>ls -1</span></div>
+              <div class="terminal-output" data-build-line>sports-hub/
+business-forms/
+hercycle/</div>
+              <div class="shell-line"><span class="shell-prompt">guest@portfolio<span>:</span><i>~/work</i>$</span> <span data-build-line>cat hercycle/README.md</span></div>
+              <div class="terminal-output" data-build-line>HerCycle — launched period tracking &amp; wellness app
+React + TypeScript · Supabase · bilingual experience</div>
+              <div class="terminal-success" data-build-line>Tip: type help to explore this simulated shell.</div>
+            </div>
+            <div class="shell-history" id="shellHistory" role="log" aria-live="polite" aria-relevant="additions"></div>
+            <form class="shell-form" id="shellForm" hidden autocomplete="off">
+              <label class="shell-prompt" for="shellInput">guest@portfolio<span>:</span><i id="shellPath">~/work</i>$</label>
+              <input id="shellInput" type="text" spellcheck="false" maxlength="200" aria-label="Terminal command" placeholder="type help and press enter" autocapitalize="off" autocomplete="off">
+              <button type="submit" aria-label="Run terminal command">↵</button>
+            </form>
+            <noscript><p class="shell-nojs">Interactive commands require JavaScript. Project details are available in the cards below.</p></noscript>
+          </div>
+          <div class="buildlog-footer"><span><i></i> PORTFOLIO SHELL / SIMULATED</span><span class="shell-shortcuts" id="shellShortcuts" hidden><span>TRY:</span> <button type="button" data-shell-command="help">help ↵</button><button type="button" data-shell-command="ls">ls ↵</button><button type="button" data-shell-command="clear">clear ↵</button></span><span>SCROLL TO EXPLORE THE WORK <b>↓</b></span></div>
+        </div>
+
         <div class="work-grid">
-          <article class="proj-card reveal" data-case="sports" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open case study: Student Sports Hub">
+          <article class="proj-card reveal" data-case="sports" aria-label="Student Sports Hub">
             <span class="proj-ring" aria-hidden="true"></span>
             <div class="proj-top">
               <div class="proj-meta">
@@ -3220,11 +2936,11 @@
                 <span class="proj-tag">Supabase</span>
                 <span class="proj-tag">Expo</span>
               </div>
-              <span class="proj-cta">View case study <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12 12.5 3.5M12.5 3.5H7M12.5 3.5V9"/></svg></span>
+              <button type="button" class="proj-link-btn" data-open-case="sports">View case study <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12 12.5 3.5M12.5 3.5H7M12.5 3.5V9"/></svg></button>
             </div>
           </article>
 
-          <article class="proj-card reveal" data-case="forms" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open case study: Business Forms Mini App">
+          <article class="proj-card reveal" data-case="forms" aria-label="Business Forms Mini App">
             <span class="proj-ring" aria-hidden="true"></span>
             <div class="proj-top">
               <div class="proj-meta">
@@ -3242,7 +2958,10 @@
                 <span class="proj-tag">Node.js</span>
                 <span class="proj-tag">NestJS</span>
               </div>
-              <span class="proj-cta">View case study <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12 12.5 3.5M12.5 3.5H7M12.5 3.5V9"/></svg></span>
+              <div class="proj-links">
+                <button type="button" class="proj-link-btn" data-open-case="forms">View case study <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12 12.5 3.5M12.5 3.5H7M12.5 3.5V9"/></svg></button>
+                <a class="proj-link-btn" href="https://meteku-teshome-general-forms.vercel.app/" target="_blank" rel="noopener noreferrer">Open app <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12 12.5 3.5M12.5 3.5H7M12.5 3.5V9"/></svg></a>
+              </div>
             </div>
           </article>
 
@@ -3261,7 +2980,7 @@
                 </div>
                 <h3>HerCycle — Period Tracking &amp; Wellness Web App</h3>
                 <p class="proj-desc">A premium period-tracking web app combining cycle insights, wellbeing tools, and an interactive garden in a warm, responsive experience.</p>
-                <p class="proj-impact"><b>Status</b>In active development — authentication, data storage, and cycle predictions are still being built.</p>
+                <p class="proj-impact"><b>Status</b>Launched — explore the live HerCycle experience.</p>
                 <div class="proj-foot proj-foot-wide">
                   <div class="proj-tags">
                     <span class="proj-tag">React</span>
@@ -3313,11 +3032,11 @@
       </div>
     </section>
 
-    <section id="skills" class="re-section">
+    <section id="skills" class="re-section" tabindex="-1">
       <div class="re-shell">
         <header class="re-head reveal">
           <div>
-            <p class="re-kicker"><span class="k-idx">03</span> / Capabilities</p>
+            <p class="kicker">03 <span>/ CAPABILITIES</span></p>
             <h2>Stack &amp; tools</h2>
           </div>
           <p class="re-desc">What I reach for by default, and how the pieces fit together.</p>
@@ -3336,10 +3055,10 @@
             <header class="shead"><h3>Frontend</h3><span class="s-idx">01</span></header>
             <div class="s-div" aria-hidden="true"></div>
             <ul class="s-rows">
-              <li class="srow"><span class="s-name">React.js / Next.js</span><span class="s-bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></li>
-              <li class="srow"><span class="s-name">TypeScript</span><span class="s-bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></li>
-              <li class="srow"><span class="s-name">Tailwind CSS</span><span class="s-bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></li>
-              <li class="srow"><span class="s-name">HTML5 / CSS3</span><span class="s-bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></li>
+              <li class="srow"><span class="skill-icons" aria-hidden="true"><img src="assets/icons/tech/react.svg" alt="" loading="lazy" width="20" height="20" onerror="this.hidden=true"><img src="assets/icons/tech/nextdotjs.svg" alt="" loading="lazy" width="20" height="20" onerror="this.hidden=true"></span><span class="s-name">React.js / Next.js</span></li>
+              <li class="srow"><span class="skill-icons" aria-hidden="true"><img src="assets/icons/tech/typescript.svg" alt="" loading="lazy" width="20" height="20" onerror="this.hidden=true"></span><span class="s-name">TypeScript</span></li>
+              <li class="srow"><span class="skill-icons" aria-hidden="true"><img src="assets/icons/tech/tailwindcss.svg" alt="" loading="lazy" width="20" height="20" onerror="this.hidden=true"></span><span class="s-name">Tailwind CSS</span></li>
+              <li class="srow"><span class="skill-icons" aria-hidden="true"><img src="assets/icons/tech/html5.svg" alt="" loading="lazy" width="20" height="20" onerror="this.hidden=true"><img src="assets/icons/tech/css.svg" alt="" loading="lazy" width="20" height="20" onerror="this.hidden=true"></span><span class="s-name">HTML5 / CSS3</span></li>
             </ul>
           </div>
 
@@ -3347,9 +3066,9 @@
             <header class="shead"><h3>Mobile</h3><span class="s-idx">02</span></header>
             <div class="s-div" aria-hidden="true"></div>
             <ul class="s-rows">
-              <li class="srow"><span class="s-name">React Native</span><span class="s-bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></li>
-              <li class="srow"><span class="s-name">Expo</span><span class="s-bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></li>
-              <li class="srow"><span class="s-name">Telegram Mini Apps</span><span class="s-bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></li>
+              <li class="srow"><span class="skill-icons" aria-hidden="true"><img src="assets/icons/tech/react.svg" alt="" loading="lazy" width="20" height="20" onerror="this.hidden=true"></span><span class="s-name">React Native</span></li>
+              <li class="srow"><span class="skill-icons" aria-hidden="true"><img src="assets/icons/tech/expo.svg" alt="" loading="lazy" width="20" height="20" onerror="this.hidden=true"></span><span class="s-name">Expo</span></li>
+              <li class="srow"><span class="skill-icons" aria-hidden="true"><img src="assets/icons/tech/telegram.svg" alt="" loading="lazy" width="20" height="20" onerror="this.hidden=true"></span><span class="s-name">Telegram Mini Apps</span></li>
             </ul>
           </div>
 
@@ -3357,10 +3076,10 @@
             <header class="shead"><h3>Backend</h3><span class="s-idx">03</span></header>
             <div class="s-div" aria-hidden="true"></div>
             <ul class="s-rows">
-              <li class="srow"><span class="s-name">Node.js / NestJS</span><span class="s-bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></li>
-              <li class="srow"><span class="s-name">Express.js</span><span class="s-bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></li>
-              <li class="srow"><span class="s-name">FastAPI</span><span class="s-bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span></li>
-              <li class="srow"><span class="s-name">RESTful API design</span><span class="s-bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></li>
+              <li class="srow"><span class="skill-icons" aria-hidden="true"><img src="assets/icons/tech/nodedotjs.svg" alt="" loading="lazy" width="20" height="20" onerror="this.hidden=true"><img src="assets/icons/tech/nestjs.svg" alt="" loading="lazy" width="20" height="20" onerror="this.hidden=true"></span><span class="s-name">Node.js / NestJS</span></li>
+              <li class="srow"><span class="skill-icons" aria-hidden="true"><img src="assets/icons/tech/express.svg" alt="" loading="lazy" width="20" height="20" onerror="this.hidden=true"></span><span class="s-name">Express.js</span></li>
+              <li class="srow"><span class="skill-icons" aria-hidden="true"><img src="assets/icons/tech/fastapi.svg" alt="" loading="lazy" width="20" height="20" onerror="this.hidden=true"></span><span class="s-name">FastAPI</span></li>
+              <li class="srow"><span class="skill-icons" aria-hidden="true"><span class="skill-monogram" aria-hidden="true">RAD</span></span><span class="s-name">RESTful API design</span></li>
             </ul>
           </div>
 
@@ -3368,9 +3087,9 @@
             <header class="shead"><h3>Databases</h3><span class="s-idx">04</span></header>
             <div class="s-div" aria-hidden="true"></div>
             <ul class="s-rows">
-              <li class="srow"><span class="s-name">PostgreSQL / MySQL</span><span class="s-bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></li>
-              <li class="srow"><span class="s-name">Supabase / Firebase</span><span class="s-bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></li>
-              <li class="srow"><span class="s-name">Redis</span><span class="s-bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span></li>
+              <li class="srow"><span class="skill-icons" aria-hidden="true"><img src="assets/icons/tech/postgresql.svg" alt="" loading="lazy" width="20" height="20" onerror="this.hidden=true"><img src="assets/icons/tech/mysql.svg" alt="" loading="lazy" width="20" height="20" onerror="this.hidden=true"></span><span class="s-name">PostgreSQL / MySQL</span></li>
+              <li class="srow"><span class="skill-icons" aria-hidden="true"><img src="assets/icons/tech/supabase.svg" alt="" loading="lazy" width="20" height="20" onerror="this.hidden=true"><img src="assets/icons/tech/firebase.svg" alt="" loading="lazy" width="20" height="20" onerror="this.hidden=true"></span><span class="s-name">Supabase / Firebase</span></li>
+              <li class="srow"><span class="skill-icons" aria-hidden="true"><img src="assets/icons/tech/redis.svg" alt="" loading="lazy" width="20" height="20" onerror="this.hidden=true"></span><span class="s-name">Redis</span></li>
             </ul>
           </div>
 
@@ -3378,12 +3097,12 @@
             <header class="shead"><h3>Security &amp; ops</h3><span class="s-idx">05</span></header>
             <div class="s-div" aria-hidden="true"></div>
             <ul class="s-rows">
-              <li class="srow"><span class="s-name">JWT / OAuth 2.0</span><span class="s-bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></li>
-              <li class="srow"><span class="s-name">RBAC</span><span class="s-bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></li>
-              <li class="srow"><span class="s-name">Pen-testing basics</span><span class="s-bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span></li>
-              <li class="srow"><span class="s-name">Docker</span><span class="s-bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></li>
-              <li class="srow"><span class="s-name">Git / GitHub / GitLab CI</span><span class="s-bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></li>
-              <li class="srow"><span class="s-name">WebSockets</span><span class="s-bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></li>
+              <li class="srow"><span class="skill-icons" aria-hidden="true"><img src="assets/icons/tech/jsonwebtokens.svg" alt="" loading="lazy" width="20" height="20" onerror="this.hidden=true"></span><span class="s-name">JWT / OAuth 2.0</span></li>
+              <li class="srow"><span class="skill-icons" aria-hidden="true"><span class="skill-monogram" aria-hidden="true">R</span></span><span class="s-name">RBAC</span></li>
+              <li class="srow"><span class="skill-icons" aria-hidden="true"><span class="skill-monogram" aria-hidden="true">PB</span></span><span class="s-name">Pen-testing basics</span></li>
+              <li class="srow"><span class="skill-icons" aria-hidden="true"><img src="assets/icons/tech/docker.svg" alt="" loading="lazy" width="20" height="20" onerror="this.hidden=true"></span><span class="s-name">Docker</span></li>
+              <li class="srow"><span class="skill-icons" aria-hidden="true"><img src="assets/icons/tech/git.svg" alt="" loading="lazy" width="20" height="20" onerror="this.hidden=true"><img src="assets/icons/tech/github.svg" alt="" loading="lazy" width="20" height="20" onerror="this.hidden=true"><img src="assets/icons/tech/gitlab.svg" alt="" loading="lazy" width="20" height="20" onerror="this.hidden=true"></span><span class="s-name">Git / GitHub / GitLab CI</span></li>
+              <li class="srow"><span class="skill-icons" aria-hidden="true"><span class="skill-monogram" aria-hidden="true">W</span></span><span class="s-name">WebSockets</span></li>
             </ul>
           </div>
 
@@ -3391,24 +3110,27 @@
             <header class="shead"><h3>Design &amp; AI</h3><span class="s-idx">06</span></header>
             <div class="s-div" aria-hidden="true"></div>
             <ul class="s-rows">
-              <li class="srow"><span class="s-name">UI/UX design awareness</span><span class="s-bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></li>
-              <li class="srow"><span class="s-name">Claude Code / AI workflows</span><span class="s-bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></li>
-              <li class="srow"><span class="s-name">Design motion principles</span><span class="s-bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></li>
-              <li class="srow"><span class="s-name">shadcn/ui</span><span class="s-bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></li>
+              <li class="srow"><span class="skill-icons" aria-hidden="true"><span class="skill-monogram" aria-hidden="true">UDA</span></span><span class="s-name">UI/UX design awareness</span></li>
+              <li class="srow"><span class="skill-icons" aria-hidden="true"><span class="skill-monogram" aria-hidden="true">CCA</span></span><span class="s-name">Claude Code / AI workflows</span></li>
+              <li class="srow"><span class="skill-icons" aria-hidden="true"><span class="skill-monogram" aria-hidden="true">DMP</span></span><span class="s-name">Design motion principles</span></li>
+              <li class="srow"><span class="skill-icons" aria-hidden="true"><img src="assets/icons/tech/shadcnui.svg" alt="" loading="lazy" width="20" height="20" onerror="this.hidden=true"></span><span class="s-name">shadcn/ui</span></li>
+              <li class="srow"><span class="skill-icons" aria-hidden="true"><img src="assets/icons/tech/mermaid.svg" alt="" loading="lazy" width="20" height="20" onerror="this.hidden=true"></span><span class="s-name">Mermaid.js</span></li>
             </ul>
           </div>
         </div>
 
-        <p class="skill-note reveal">// A familiarity map — what I reach for most, most often. Not years, not grades.</p>
+        <div class="ways reveal"><p class="kicker"><span>WAYS OF WORKING</span></p><div class="ways-list"><span>Communication</span><span>Collaboration &amp; teamwork</span><span>Problem-solving</span><span>Project &amp; time management</span><span>Adaptability &amp; growth</span><span>Leadership &amp; ownership</span></div></div>
+        <div class="landscape reveal"><div class="landscape-head"><div><p class="kicker"><span>THE WIDER TOOLKIT</span></p><h3>A full-stack ecosystem</h3></div><p>Tools and technologies in the wider ecosystem, also featured in the background. This is an exploration of the landscape—not a claim of experience with every tool.</p></div><div class="landscape-grid" id="techLandscape" aria-label="Technology ecosystem"></div><noscript><p class="skill-note">Technology ecosystem: React, Next.js, TypeScript, Tailwind CSS, React Native, Expo, Framer Motion, Material UI, Node.js, NestJS, Express.js, FastAPI, REST API design, WebSockets, PostgreSQL, Supabase, MySQL, Firebase, Redis, JWT / OAuth 2.0, RBAC, Pen-testing basics, Docker, Git / GitHub, AI engineering, JavaScript, HTML, CSS, Vue.js, Angular, Svelte, Python, Django, Flask, Go, Rust, PHP, Laravel, MongoDB, SQLite, GraphQL, NGINX, Kubernetes, Google Cloud, Vercel, Vite, Mermaid.js, diagrams.net, Chart.js, Storybook, Swagger, Jira, Linear, Confluence, Obsidian, Miro, GitLab, Figma, Postman, GitHub, shadcn/ui, Telegram, Notion, Trello, Jest, Vitest, Cypress, ESLint, Prettier.</p></noscript></div>
+        <p class="skill-note reveal">// The wider toolkit is illustrative, not a proficiency rating.</p>
         <div class="skill-toast" id="skillToast" role="status" aria-live="polite"></div>
       </div>
     </section>
 
-    <section id="experience" class="re-section">
+    <section id="experience" class="re-section" tabindex="-1">
       <div class="re-shell">
         <header class="re-head reveal">
           <div>
-            <p class="re-kicker"><span class="k-idx">04</span> / Experience</p>
+            <p class="kicker">04 <span>/ EXPERIENCE</span></p>
             <h2>Where I&rsquo;ve made things move</h2>
           </div>
           <p class="re-desc">Building products, strengthening operations, and showing up for the people around me.</p>
@@ -3419,11 +3141,11 @@
           <article class="xp-item is-dev reveal">
             <span class="xp-node" aria-hidden="true"></span>
             <div class="xp-grid">
-              <div class="xp-date"><span>Sep 2026 &mdash; Ongoing</span><span class="xp-new xp-dev">In development</span></div>
+              <div class="xp-date"><span>Sep 2026 &mdash; launched</span><span class="xp-new xp-dev">Live</span></div>
               <div>
                 <h3>Web App Developer (Personal Project)</h3>
                 <div class="xp-co">HerCycle &mdash; period tracking &amp; wellness <span>· <a href="https://hercycle.pages.dev" target="_blank" rel="noopener">hercycle.pages.dev</a></span></div>
-                <p class="xp-copy">Designing and building a phase-aware period tracking and wellness web app with React, TypeScript, and Supabase — four phase-shifted themes, the Luna companion, an interactive Sanctuary Garden, quests with cycle coins, and bilingual Amharic/English support. The experience layer is live; authentication, cloud storage, and cycle predictions are still in development.</p>
+                <p class="xp-copy">Designed and launched a phase-aware period tracking and wellness web app with React, TypeScript, and Supabase — four phase-shifted themes, the Luna companion, an interactive Sanctuary Garden, quests with cycle coins, and bilingual Amharic/English support.</p>
                 <div class="xp-tags">
                   <span class="xp-tag">React</span>
                   <span class="xp-tag">TypeScript</span>
@@ -3477,15 +3199,15 @@
         </div>
 
         <div class="xp-extras">
-          <div class="xextra reveal">
-            <p class="x-label">Education</p>
+          <div class="xextra reveal" id="education">
+            <p class="kicker"><span>EDUCATION</span></p>
             <h4>Bachelor of Computer Science</h4>
             <p>HILCOE School of Computer Science and Technology &middot; Sep 2020 &mdash; Jul 2025 &middot; Addis Ababa</p>
           </div>
-          <div class="xextra reveal">
-            <p class="x-label">Leadership</p>
+          <div class="xextra reveal" id="volunteer">
+            <p class="kicker"><span>VOLUNTEERING</span></p>
             <h4>YWCA Lead Unit Coordinator &amp; Teacher</h4>
-            <p>Led teachers, supported student learning, and coordinated fundraising for 100+ students.</p>
+            <p>Led teachers, supported students, and coordinated fundraising for 100+ students.</p>
           </div>
           <div class="xextra reveal">
             <p class="x-label">Community</p>
@@ -3496,13 +3218,13 @@
       </div>
     </section>
 
-    <section id="contact">
+    <section id="contact" tabindex="-1">
       <div class="contact-glow"></div>
       <div class="re-shell">
         <header class="re-head reveal">
           <div>
-            <p class="re-kicker"><span class="k-idx">05</span> / Contact</p>
-            <h2>Let&rsquo;s make something worth putting into the world.</h2>
+            <p class="kicker">05 <span>/ CONTACT</span></p>
+            <h2>Let&rsquo;s make something worth putting into <span class="grad-text">the world.</span></h2>
           </div>
           <p class="re-desc">A project, an opportunity, or an interesting idea — choose how you&rsquo;d like to connect.</p>
         </header>
@@ -3529,7 +3251,6 @@
               </span>
             </button>
             <button type="button" class="dchan" role="tab" aria-selected="false" tabindex="-1" data-channel="telegram" style="--chan: #7cc0ff">
-              <span class="dchan-pill">Soon</span>
               <span class="dchan-illo" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 4.5 3.8 10.9c-.9.34-.84 1.6.09 1.87l4.05 1.18 1.56 4.85c.28.87 1.37 1.03 1.85.28l2.2-3.45 3.98 2.92c.74.55 1.8.13 1.96-.78l2.02-11.9c.14-.93-.65-1.63-1.51-1.36Z"/><path d="m7.9 13.95 7-6.6"/></svg>
               </span>
@@ -3571,7 +3292,7 @@
 
             <form class="composer" id="composerForm" novalidate>
               <h3 class="cmp-title">Send a message here</h3>
-              <p class="cmp-sub">A short letter through this site — it lands straight in my inbox via a small server-side function.</p>
+              <p class="cmp-sub">Send a note through this site. If the message service is unavailable, email or Telegram works too. Messages are stored securely and sent through an email provider.</p>
               <div class="cmp-grid">
                 <div class="cmp-field">
                   <label for="cmpName">Your name <span class="req" aria-hidden="true">*</span></label>
@@ -3639,14 +3360,18 @@
           </div>
         </div>
 
-        <p class="desk-alt reveal">Prefer talking? <a href="tel:+251900651948">Call +251 900 651 948</a>, grab the <a href="Messay-Mohammed-Resume.pdf" download="Messay-Mohammed-Resume.pdf">résumé</a>, or <a href="https://cal.com/messay-mohammed-w47ggg" target="_blank" rel="noopener">book a 20-minute intro call</a>. My <a href="https://github.com/moisoi" target="_blank" rel="noopener">GitHub</a> is public too.</p>
+        <aside class="connect-next reveal" aria-labelledby="connectNextTitle">
+          <div><p class="kicker"><span>THE NEXT STEP</span></p><h3 id="connectNextTitle">A good place to start.</h3></div>
+          <p>Tell me what you&rsquo;re making, the challenge you&rsquo;re solving, or simply what you&rsquo;d like to explore. A rough idea is more than enough.</p>
+          <span class="connect-next-mark" aria-hidden="true">↗</span>
+        </aside>
+        <p class="desk-alt reveal">Prefer talking? <a href="tel:+251900651948">Call +251 900 651 948</a>, grab the <a href="Messay-Mohammed-Resume.pdf" download="Messay-Mohammed-Resume.pdf">résumé</a>, send a message on <a href="https://t.me/bigfootprints" target="_blank" rel="noopener noreferrer">Telegram</a>, or <a href="https://cal.com/messay-mohammed-w47ggg" target="_blank" rel="noopener">book a 20-minute intro call</a>. My <a href="https://github.com/moisoi" target="_blank" rel="noopener">GitHub</a> is public too.</p>
       </div>
     </section>
 
     <footer>
       <span>© 2026 Messay Mohammed</span>
-      <button type="button" class="bg-toggle" id="bgMotionToggle" aria-pressed="false">Background motion · <b>On</b></button>
-      <span>Built with care, in the browser.</span>
+      <span>Shipped with coffee, crafted in code. No bugs were invited.</span>
     </footer>
 
   </main>
@@ -3667,22 +3392,6 @@
         <div class="case-block">
           <h4>The build</h4>
           <p id="caseBuild"></p>
-        </div>
-        <div class="case-status" id="caseStatus" hidden>
-          <div class="cs-group">
-            <h5 class="cs-heading working">
-              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5"/></svg>
-              Working now
-            </h5>
-            <ul class="cs-list" id="caseWorking"></ul>
-          </div>
-          <div class="cs-group">
-            <h5 class="cs-heading progress">
-              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="5.5" stroke-dasharray="2.6 2.6"/></svg>
-              In development
-            </h5>
-            <ul class="cs-list" id="caseProgress"></ul>
-          </div>
         </div>
         <div class="case-block">
           <h4>Stack</h4>
@@ -3715,22 +3424,31 @@
   // Backend edge functions stay server-side (the OpenRouter key never ships to the browser)
   const PORTFOLIO_API = 'https://bvamvnimijwjihjyffas.supabase.co/functions/v1';
 
-  // Hero scene: the Experience / Under the hood controls swap the stage layer
+  // Desktop: hover anywhere on the card; keyboard: focus. Touch: reveal
+  // 1.2 seconds after the scene enters view, without a toggle or tap trap.
   (function initHeroScene(){
     const stage = document.getElementById('heroStage');
-    const tabs = Array.from(document.querySelectorAll('.st-btn[data-view]'));
-    if (!stage || tabs.length === 0) return;
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        const view = tab.dataset.view;
-        stage.dataset.view = view;
-        tabs.forEach(t => {
-          const on = t === tab;
-          t.classList.toggle('active', on);
-          t.setAttribute('aria-selected', on ? 'true' : 'false');
-        });
-      });
-    });
+    const scene = document.querySelector('.hero-scene');
+    if (!stage || !scene) return;
+    const touch = window.matchMedia('(hover: none)').matches;
+    const show = view => { stage.dataset.view = view; };
+    if (!touch){
+      scene.addEventListener('mouseenter', () => show('hood'));
+      scene.addEventListener('mouseleave', () => { if (!scene.contains(document.activeElement)) show('experience'); });
+      scene.addEventListener('focusin', () => show('hood'));
+      scene.addEventListener('focusout', e => { if (!scene.contains(e.relatedTarget) && !scene.matches(':hover')) show('experience'); });
+      return;
+    }
+    let timer = null;
+    function enter(visible){
+      if (timer){ clearTimeout(timer); timer = null; }
+      if (!visible){ show('experience'); return; }
+      timer = setTimeout(() => { timer = null; if (!document.hidden) show('hood'); }, 1200);
+    }
+    if ('IntersectionObserver' in window){
+      const observer = new IntersectionObserver(entries => entries.forEach(e => enter(e.isIntersecting)), {threshold: .35});
+      observer.observe(scene);
+    } else enter(true);
   })();
 
   // Mobile nav toggle
@@ -3752,9 +3470,12 @@
   function updateProgress(){
     const h = document.documentElement;
     const max = h.scrollHeight - h.clientHeight;
-    progressBar.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + '%';
+    progressBar.style.transform = 'scaleX(' + (max > 0 ? Math.min(1, Math.max(0, h.scrollTop / max)) : 0) + ')';
   }
-  document.addEventListener('scroll', updateProgress, { passive: true });
+  let progressFrame = 0;
+  document.addEventListener('scroll', () => {
+    if (!progressFrame) progressFrame = requestAnimationFrame(() => { progressFrame = 0; updateProgress(); });
+  }, { passive: true });
   updateProgress();
 
   // Active section highlighting in nav
@@ -3781,13 +3502,12 @@
       document.querySelectorAll(sel).forEach(container => {
         Array.from(container.children).forEach((child, i) => {
           if (child.classList.contains('reveal')){
-            child.style.setProperty('--reveal-delay', Math.min(i * 0.07, 0.35) + 's');
+            child.style.setProperty('--reveal-delay', Math.min(i * 0.04, 0.12) + 's');
           }
         });
       });
     });
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduced || !('IntersectionObserver' in window)){
+    if (!('IntersectionObserver' in window)){
       els.forEach(el => el.classList.add('visible'));
       return;
     }
@@ -3822,7 +3542,8 @@
       problem: 'Petty cash, purchase orders, and attendance were tracked on paper and scattered spreadsheets. Approvals stalled in hallways, records went missing, and month-end reporting meant re-typing everything by hand.',
       build: 'A React + Vite mini app living inside Telegram, backed by a Node.js + NestJS API — structured request forms, role-based approvals, and one-click exports so every workflow leaves an auditable, shareable record.',
       stack: ['React + Vite', 'TypeScript', 'Node.js', 'NestJS', 'Telegram Mini Apps'],
-      outcome: 'Replaced manual paperwork across three workflows with an exportable digital process the whole company can use from Telegram.'
+      outcome: 'Replaced manual paperwork across three workflows with an exportable digital process the whole company can use from Telegram.',
+      links: [{ label: 'Open the app', href: 'https://meteku-teshome-general-forms.vercel.app/', live: true }]
     },
     hercycle: {
       code: 'P.03',
@@ -3831,20 +3552,8 @@
       lead: 'A premium period-tracking web app combining cycle insights, wellbeing tools, and an interactive garden in a warm, responsive experience — designed for women in their twenties.',
       problem: 'Most period trackers feel clinical and cold. The goal here is a companion-style experience: the interface shifts with the cycle phase, logging feels calm rather than bureaucratic, and wellbeing is treated as a whole — not just dates on a calendar.',
       build: 'A React + TypeScript app with four phase-aware themes (menstrual, follicular, ovulatory, luteal), Luna — an illustrated companion that changes with each phase — an interactive Sanctuary Garden, journeys with quests and cycle coins, insights screens, and a bilingual Amharic/English experience.',
-      working: [
-        'Phase-aware UI across all four cycle phases',
-        'Daily logging: flow, mood, and symptoms',
-        'Sanctuary Garden — the interactive companion space',
-        'Journeys, quests, and cycle coins gamification',
-        'Bilingual strings — Amharic and English'
-      ],
-      progress: [
-        'Authentication (Supabase auth)',
-        'Cloud data storage and sync',
-        'Cycle prediction engine'
-      ],
       stack: ['React', 'TypeScript', 'Supabase', 'Material UI', 'Framer Motion', 'Chart.js', 'i18next'],
-      outcome: 'In active development — the experience layer is fully built out on the frontend while authentication, persistent storage, and predictions are being wired up behind it.',
+      outcome: 'Launched as a responsive wellness experience with phase-aware design, Luna, the Sanctuary Garden, and bilingual support.',
       links: [
         { label: 'Open the live app', href: 'https://hercycle.pages.dev', live: true },
         { label: 'GitHub repository', href: 'https://github.com/moisoi/hercycle' }
@@ -3867,20 +3576,8 @@
       artKind: document.getElementById('caseArtKind'),
       contact: document.getElementById('caseContact'),
       close: document.getElementById('caseClose'),
-      status: document.getElementById('caseStatus'),
-      working: document.getElementById('caseWorking'),
-      progress: document.getElementById('caseProgress'),
       actions: document.getElementById('caseActions')
     };
-
-    function fillList(ul, items){
-      ul.innerHTML = '';
-      items.forEach(item => {
-        const li = document.createElement('li');
-        li.textContent = item;
-        ul.appendChild(li);
-      });
-    }
 
     function openCase(key){
       const data = caseStudies[key];
@@ -3899,14 +3596,6 @@
       els.outcome.textContent = data.outcome;
       els.artCode.textContent = data.code;
       els.artKind.textContent = data.kind;
-      // Completed vs in-development split (HerCycle; hidden for shipped projects)
-      if (data.working && data.progress){
-        fillList(els.working, data.working);
-        fillList(els.progress, data.progress);
-        els.status.hidden = false;
-      } else {
-        els.status.hidden = true;
-      }
       // Verified external destinations (live demo / repo)
       els.actions.innerHTML = '';
       (data.links || []).forEach(link => {
@@ -3937,15 +3626,11 @@
       document.documentElement.classList.add('modal-open');
     }
 
-    // Standard cards open via click, Enter, or Space (the wide HerCycle card
-    // carries its own explicit links, so it is excluded from full-card opening)
-    document.querySelectorAll('.proj-card[data-case]:not(.proj-wide)').forEach(card => {
-      card.addEventListener('click', () => openCase(card.dataset.case));
-      card.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' '){
-          e.preventDefault();
-          openCase(card.dataset.case);
-        }
+    // Click anywhere on a project card to open its case study; the real
+    // buttons remain the keyboard-accessible controls (no nested button roles).
+    document.querySelectorAll('.proj-card[data-case]').forEach(card => {
+      card.addEventListener('click', e => {
+        if (!e.target.closest('button, a')) openCase(card.dataset.case);
       });
     });
     // Explicit case-study buttons anywhere on the page (hero scene, wide card, …)
@@ -3956,19 +3641,39 @@
       });
     });
 
-    els.close.addEventListener('click', () => modal.close());
+    let closingTimer = null;
+    function closeCase(){
+      if (!modal.open || closingTimer) return;
+      modal.classList.add('closing');
+      closingTimer = setTimeout(() => { closingTimer = null; modal.classList.remove('closing'); if (modal.open) modal.close(); }, 200);
+    }
+    els.close.addEventListener('click', closeCase);
+    modal.addEventListener('cancel', e => { e.preventDefault(); closeCase(); });
     // Backdrop click — only when the click lands on the dialog element itself
     modal.addEventListener('click', (e) => {
-      if (e.target === modal) modal.close();
+      if (e.target === modal) closeCase();
     });
-    // Contact link closes the dialog, then the anchor jump proceeds
-    els.contact.addEventListener('click', () => modal.close());
+    // Closing a modal restores focus to its opener. Handle this one anchor
+    // explicitly so that restoration cannot cancel the smooth scroll. Keep a
+    // real URL hash and native scrolling (including user interruption/history).
+    els.contact.addEventListener('click', e => {
+      e.preventDefault();
+      modal.close();
+      document.documentElement.classList.remove('modal-open');
+      const target = document.getElementById('contact');
+      if (!target) return;
+      if (location.hash !== '#contact') history.pushState(null, '', '#contact');
+      target.focus({ preventScroll: true });
+      requestAnimationFrame(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+    });
     // Escape fires 'close' natively; keep scroll state in sync either way
       modal.addEventListener('close', () => {
+      if (closingTimer){ clearTimeout(closingTimer); closingTimer = null; }
+      modal.classList.remove('closing');
       document.documentElement.classList.remove('modal-open');
     });
 
-    // Let other modules (console, stackfall) open case studies too
+    // Allow other page components to open case studies.
     window.openCaseStudy = openCase;
   })();
 
@@ -4000,8 +3705,11 @@
       telegram: {
         name: 'Telegram',
         best: 'Quick questions & short chats',
-        pending: true,
-        note: 'The handle gets linked here once it is set up — until then the composer below or email reach me just fine.'
+        handle: 'Chat on Telegram',
+        hideHandle: true,
+        actionLabel: 'Open Telegram',
+        actionHref: 'https://t.me/bigfootprints',
+        note: 'Opens Telegram in a new tab.'
       },
       upwork: {
         name: 'Upwork',
@@ -4019,7 +3727,6 @@
     const cdCopy = document.getElementById('cdCopy');
     const cdAction = document.getElementById('cdAction');
     const cdNote = document.getElementById('cdNote');
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let currentKey = 'email';
     let morphTimer = null;
 
@@ -4031,6 +3738,7 @@
       cdName.textContent = ch.name;
       cdBest.textContent = ch.best;
       if (card) cdIllo.innerHTML = card.querySelector('.dchan-illo').innerHTML;
+      cdHandle.parentElement.hidden = !!ch.hideHandle;
       if (ch.pending){
         cdHandle.textContent = 'Link coming soon';
         cdHandle.classList.add('pending');
@@ -4073,10 +3781,6 @@
         if (on && focusTab) t.focus();
       });
       if (morphTimer) clearTimeout(morphTimer);
-      if (reduced){
-        renderDetail(key);
-        return;
-      }
       detail.classList.add('morph');
       morphTimer = setTimeout(() => {
         renderDetail(key);
@@ -4235,16 +3939,22 @@
           body: JSON.stringify(payload)
         });
         const body = await res.json().catch(() => ({}));
-        if (res.status === 201 || res.status === 200){
-          setStatus('ok', 'Accepted for delivery. I read and reply to every message myself — expect an answer on your email within a day or two.');
+        if (res.status === 201 && body.delivery === 'accepted'){
+          setStatus('ok', 'Your message was accepted by the email service for delivery.');
           try { sessionStorage.removeItem(DRAFT_KEY); } catch (_) {}
           form.reset();
           syncProjectFields();
           syncPreview();
           submitBtn.textContent = originalLabel;
         } else if (res.status === 409){
-          setStatus('err', 'This exact message already went through a few minutes ago — no need to resend. If it was a mistake, tweak the text and try again.');
+          setStatus('err', 'A matching message was recently submitted. Delivery may still be in progress; please email directly if you need to follow up.');
           submitBtn.textContent = 'Send through this site';
+        } else if (res.status === 503){
+          setStatus('err', body.error === 'delivery_not_configured' ? 'Email delivery is not configured yet. Your message is still here — please email messaymohammed@gmail.com directly.' : 'The contact service is unavailable. Your message is still here — please email messaymohammed@gmail.com directly.');
+          submitBtn.textContent = 'Retry';
+        } else if (res.status === 504){
+          setStatus('err', 'Delivery could not be confirmed. Your message is still here — please email directly before retrying to avoid duplicates.');
+          submitBtn.textContent = 'Retry';
         } else if (res.status === 429){
           setStatus('err', (body && body.hint) || 'A little too many messages in a short window — your text is safe here; wait a few minutes and press send again.');
           submitBtn.textContent = 'Retry';
@@ -4290,7 +4000,11 @@
         groups.forEach(g => {
           const match = f === 'all' || g.dataset.skillGroup === f;
           g.classList.toggle('hidden', !match);
-          if (match) shown++;
+          g.classList.remove('filter-enter');
+          if (match){
+            shown++;
+            requestAnimationFrame(() => { if (!g.classList.contains('hidden')) g.classList.add('filter-enter'); });
+          }
         });
         if (toast){
           toast.innerHTML = 'Showing <b></b> · ' + shown + (shown === 1 ? ' group' : ' groups');
@@ -4303,8 +4017,7 @@
     });
   })();
 
-  // ---------- Stackfall + messay.sh console ----------
-  // One shared tech inventory feeds the falling field, the filterable list, and the console's stack/inspect commands.
+  // Shared technology inventory: used by the rain and the readable landscape below.
   const TECH = [
     { name: 'React', icon: 'assets/icons/tech/react.svg', cat: 'interface', role: 'Component UIs with state that stays manageable', projects: ['forms', 'hercycle'] },
     { name: 'Next.js', icon: 'assets/icons/tech/nextdotjs.svg', cat: 'interface', role: 'Server-rendered React for fast, indexable pages', projects: [] },
@@ -4327,65 +4040,240 @@
     { name: 'Redis', icon: 'assets/icons/tech/redis.svg', cat: 'data', role: 'Caching and queues at memory speed', projects: [] },
     { name: 'JWT / OAuth 2.0', icon: 'assets/icons/tech/jsonwebtokens.svg', cat: 'data', role: 'Tokens and third-party sign-in, done properly', projects: [] },
     { name: 'RBAC', cat: 'data', role: 'Roles and permissions instead of if-chains', projects: ['sports'] },
-    { name: 'Pen-testing basics', cat: 'data', role: 'Thinking like an attacker to defend the app', projects: [], learn: true },
+    { name: 'Pen-testing basics', cat: 'data', role: 'Thinking like an attacker to defend the app', projects: [] },
     { name: 'Docker', icon: 'assets/icons/tech/docker.svg', cat: 'tools', role: 'Same container on my machine and in production', projects: [] },
     { name: 'Git / GitHub', icon: 'assets/icons/tech/git.svg', cat: 'tools', role: 'Versioned work with reviewable history', projects: [] },
-    { name: 'AI engineering', cat: 'tools', role: 'Assistants, prompting, agentic workflows', projects: [], learn: true }
+    { name: 'Mermaid.js', icon: 'assets/icons/tech/mermaid.svg', cat: 'tools', role: 'Diagramming systems and workflows', projects: [] }
   ];
-  const TECH_CATS = {
-    interface: { label: 'Interface', color: 'var(--re-warm)' },
-    application: { label: 'Application & APIs', color: 'var(--re-cyan)' },
-    data: { label: 'Data & authentication', color: 'var(--re-coral)' },
-    tools: { label: 'Tools & delivery', color: '#a5b4fc' }
-  };
-  const TECH_PROJECTS = {
-    sports: 'Student Sports Hub',
-    forms: 'Business Forms Mini App',
-    hercycle: 'HerCycle'
-  };
-  function techByName(name){
-    const q = name.trim().toLowerCase();
-    return TECH.find(t => t.name.toLowerCase() === q || t.name.toLowerCase().replace(/[\s/.]+/g, '') === q.replace(/[\s/.]+/g, ''));
-  }
+  // Decorative full-stack ecosystem only: these additional logos do NOT imply
+  // portfolio experience and never appear in the readable verified stack.
+  const DECORATIVE_TECH = [
+    { name: 'AI engineering' },
+    { name: 'JavaScript', icon: 'assets/icons/tech/javascript.svg' },
+    { name: 'HTML', icon: 'assets/icons/tech/html5.svg' },
+    { name: 'CSS', icon: 'assets/icons/tech/css.svg' },
+    { name: 'Vue.js', icon: 'assets/icons/tech/vuedotjs.svg' },
+    { name: 'Angular', icon: 'assets/icons/tech/angular.svg' },
+    { name: 'Svelte', icon: 'assets/icons/tech/svelte.svg' },
+    { name: 'Python', icon: 'assets/icons/tech/python.svg' },
+    { name: 'Django', icon: 'assets/icons/tech/django.svg' },
+    { name: 'Flask', icon: 'assets/icons/tech/flask.svg' },
+    { name: 'Go', icon: 'assets/icons/tech/go.svg' },
+    { name: 'Rust', icon: 'assets/icons/tech/rust.svg' },
+    { name: 'PHP', icon: 'assets/icons/tech/php.svg' },
+    { name: 'Laravel', icon: 'assets/icons/tech/laravel.svg' },
+    { name: 'MongoDB', icon: 'assets/icons/tech/mongodb.svg' },
+    { name: 'SQLite', icon: 'assets/icons/tech/sqlite.svg' },
+    { name: 'GraphQL', icon: 'assets/icons/tech/graphql.svg' },
+    { name: 'NGINX', icon: 'assets/icons/tech/nginx.svg' },
+    { name: 'Kubernetes', icon: 'assets/icons/tech/kubernetes.svg' },
+    { name: 'Google Cloud', icon: 'assets/icons/tech/googlecloud.svg' },
+    { name: 'Vercel', icon: 'assets/icons/tech/vercel.svg' },
+    { name: 'Vite', icon: 'assets/icons/tech/vite.svg' },
+    { name: 'diagrams.net', icon: 'assets/icons/tech/diagramsdotnet.svg' },
+    { name: 'Chart.js', icon: 'assets/icons/tech/chartdotjs.svg' },
+    { name: 'Storybook', icon: 'assets/icons/tech/storybook.svg' },
+    { name: 'Swagger', icon: 'assets/icons/tech/swagger.svg' },
+    { name: 'Jira', icon: 'assets/icons/tech/jira.svg' },
+    { name: 'Linear', icon: 'assets/icons/tech/linear.svg' },
+    { name: 'Confluence', icon: 'assets/icons/tech/confluence.svg' },
+    { name: 'Obsidian', icon: 'assets/icons/tech/obsidian.svg' },
+    { name: 'Miro', icon: 'assets/icons/tech/miro.svg' },
+    { name: 'GitLab', icon: 'assets/icons/tech/gitlab.svg' },
+    { name: 'Figma', icon: 'assets/icons/tech/figma.svg' },
+    { name: 'Postman', icon: 'assets/icons/tech/postman.svg' },
+    { name: 'GitHub', icon: 'assets/icons/tech/github.svg' },
+    { name: 'shadcn/ui', icon: 'assets/icons/tech/shadcnui.svg' },
+    { name: 'Telegram', icon: 'assets/icons/tech/telegram.svg' },
+    { name: 'Notion', icon: 'assets/icons/tech/notion.svg' },
+    { name: 'Trello', icon: 'assets/icons/tech/trello.svg' },
+    { name: 'Jest', icon: 'assets/icons/tech/jest.svg' },
+    { name: 'Vitest', icon: 'assets/icons/tech/vitest.svg' },
+    { name: 'Cypress', icon: 'assets/icons/tech/cypress.svg' },
+    { name: 'ESLint', icon: 'assets/icons/tech/eslint.svg' },
+    { name: 'Prettier', icon: 'assets/icons/tech/prettier.svg' },
+  ];
+  (function renderLandscape(){
+    const host = document.getElementById('techLandscape');
+    if (!host) return;
+    const inventory = TECH.concat(DECORATIVE_TECH);
+    // A stable accessible inventory accompanies three decorative looping lanes.
+    const readable = document.createElement('ul');
+    readable.className = 'landscape-readable';
+    inventory.forEach(tech => {
+      const li = document.createElement('li');
+      li.textContent = tech.name;
+      readable.appendChild(li);
+    });
+    host.appendChild(readable);
+    const lists = [[], [], []];
+    inventory.forEach((tech, index) => lists[index % lists.length].push(tech));
+    function makeTile(tech){
+      const tile = document.createElement('span'); tile.className = 'landscape-tile';
+      if (tech.icon){
+        const img = document.createElement('img'); img.src = tech.icon; img.alt = ''; img.width = 18; img.height = 18; img.loading = 'lazy';
+        img.addEventListener('error', () => { img.hidden = true; }); tile.appendChild(img);
+      }
+      const name = document.createElement('span'); name.textContent = tech.name; tile.appendChild(name);
+      return tile;
+    }
+    lists.forEach((items, index) => {
+      const lane = document.createElement('div'); lane.className = 'landscape-lane' + (index % 2 ? ' reverse' : '');
+      lane.setAttribute('aria-hidden', 'true');
+      const track = document.createElement('div'); track.className = 'landscape-track';
+      track.style.setProperty('--lane-duration', (72 + index * 11) + 's');
+      for (let copy = 0; copy < 2; copy++){
+        const group = document.createElement('div'); group.className = 'landscape-sequence';
+        items.forEach(tech => group.appendChild(makeTile(tech)));
+        track.appendChild(group);
+      }
+      lane.appendChild(track); host.appendChild(lane);
+    });
+  })();
+
+  // A deliberately sandboxed portfolio shell: commands are interpreted locally,
+  // never passed to a server or evaluated as JavaScript. The boot log is static without JS.
+  (function initPortfolioShell(){
+    const root = document.getElementById('buildLog');
+    const form = document.getElementById('shellForm');
+    const input = document.getElementById('shellInput');
+    const historyEl = document.getElementById('shellHistory');
+    const pathEl = document.getElementById('shellPath');
+    if (!root || !form || !input || !historyEl || !pathEl) return;
+    form.hidden = false;
+    const lines = Array.from(root.querySelectorAll('[data-build-line]'));
+    const texts = lines.map(el => el.textContent);
+    const rows = lines.map(el => el.closest('.shell-line') || el);
+    let active = false, started = false, done = false, index = 0, offset = 0, timer = null;
+    function finishBoot(){
+      if (timer) clearTimeout(timer);
+      timer = null; done = true;
+      lines.forEach((line, i) => { line.textContent = texts[i]; rows[i].style.visibility = 'visible'; });
+    }
+    function tick(){
+      timer = null;
+      if (!active || document.hidden || done) return;
+      const line = lines[index]; rows[index].style.visibility = 'visible';
+      const isOutput = line.classList.contains('terminal-output') || line.classList.contains('terminal-success');
+      offset = isOutput ? texts[index].length : Math.min(offset + 2, texts[index].length);
+      line.textContent = texts[index].slice(0, offset);
+      if (offset >= texts[index].length){ index++; offset = 0; if (index === lines.length){ done = true; return; } }
+      timer = setTimeout(tick, offset ? 35 : (isOutput ? 100 : 260));
+    }
+    function visibility(on){
+      active = on;
+      if (!started && on && !done){ started = true; lines.forEach(line => { line.textContent = ''; }); rows.forEach(row => { row.style.visibility = 'hidden'; }); }
+      if (!on && timer){ clearTimeout(timer); timer = null; }
+      if (active && !document.hidden && !done && !timer) tick();
+    }
+    if ('IntersectionObserver' in window){
+      const io = new IntersectionObserver(entries => entries.forEach(entry => visibility(entry.isIntersecting)), { threshold: .15 }); io.observe(root);
+    } else visibility(true);
+    document.addEventListener('visibilitychange', () => { if (document.hidden && timer){ clearTimeout(timer); timer = null; } else if (active && !done && !timer) tick(); });
+    input.addEventListener('focus', finishBoot);
+
+    const files = {
+      'sports-hub/README.md': 'Student Sports Hub\nReact Native + Expo + Supabase\nA multi-school app for stories, schedules, and rosters.',
+      'business-forms/README.md': 'Business Forms Mini App\nReact + Vite · Node.js · NestJS\nA Telegram Mini App for three business workflows.\nhttps://meteku-teshome-general-forms.vercel.app/',
+      'hercycle/README.md': 'HerCycle — launched period tracking & wellness app\nReact + TypeScript · Supabase · bilingual experience\nhttps://hercycle.pages.dev'
+    };
+    const dirs = ['', 'sports-hub', 'business-forms', 'hercycle'];
+    let cwd = '', commands = [], historyIndex = 0;
+    const displayPath = () => '~/work' + (cwd ? '/' + cwd : '');
+    function resolve(path){
+      if (!path || path === '~') return '';
+      if (path.startsWith('~/work')) path = path.slice(6);
+      else if (path.startsWith('/home/guest/work')) path = path.slice(16);
+      else if (path.startsWith('/')) return null;
+      else path = (cwd ? cwd + '/' : '') + path;
+      const parts = [];
+      for (const part of path.split('/')){ if (!part || part === '.') continue; if (part === '..') parts.pop(); else parts.push(part); }
+      return parts.join('/');
+    }
+    function append(kind, content){
+      const line = document.createElement('div'); line.className = 'shell-result ' + kind; line.textContent = content; historyEl.appendChild(line);
+      while (historyEl.children.length > 80) historyEl.firstElementChild.remove();
+    }
+    const hints = 'Available commands: help, ls, pwd, cd, cat, whoami, uname, echo, clear.\nTry: ls  |  cd hercycle  |  cat README.md';
+    form.addEventListener('submit', e => {
+      e.preventDefault(); finishBoot();
+      const raw = input.value.trim(); input.value = '';
+      if (!raw) return;
+      commands.push(raw); if (commands.length > 40) commands.shift(); historyIndex = commands.length;
+      append('command', 'guest@portfolio:' + displayPath() + '$ ' + raw);
+      const words = raw.split(/\s+/), cmd = words[0], arg = words[1];
+      if (cmd === 'clear'){ historyEl.replaceChildren(); root.querySelector('.shell-boot').hidden = true; return; }
+      if (cmd === 'help') append('output', hints);
+      else if (cmd === 'pwd') append('output', '/home/guest/work' + (cwd ? '/' + cwd : ''));
+      else if (cmd === 'whoami') append('output', 'guest');
+      else if (cmd === 'uname') append('output', 'portfolio-simulated');
+      else if (cmd === 'echo') append('output', words.slice(1).join(' '));
+      else if (cmd === 'ls'){
+        const path = resolve(arg === '-1' || arg === '-l' ? '.' : arg || '.');
+        if (path === '') append('output', 'sports-hub/  business-forms/  hercycle/');
+        else if (dirs.includes(path)) append('output', 'README.md');
+        else if (path !== null && Object.hasOwn(files, path)) append('output', path.split('/').pop());
+        else append('error', 'ls: cannot access: No such file or directory');
+      } else if (cmd === 'cd'){
+        const path = resolve(arg || '~');
+        if (path !== null && dirs.includes(path)){ cwd = path; pathEl.textContent = displayPath(); }
+        else append('error', 'bash: cd: ' + (arg || '') + ': No such directory');
+      } else if (cmd === 'cat'){
+        const path = resolve(arg || '.');
+        if (path !== null && Object.hasOwn(files, path)) append('output', files[path]);
+        else append('error', 'cat: ' + (arg || '') + ': No such file');
+      } else append('error', 'bash: ' + cmd + ': command not found. Type help for supported commands.');
+    });
+    const shortcuts = document.getElementById('shellShortcuts');
+    if (shortcuts){
+      shortcuts.hidden = false;
+      shortcuts.addEventListener('click', e => {
+        const btn = e.target.closest('button[data-shell-command]');
+        if (!btn) return;
+        const draft = input.value;
+        input.value = btn.dataset.shellCommand;
+        form.requestSubmit();
+        input.value = draft;
+        input.focus();
+      });
+    }
+    input.addEventListener('keydown', e => {
+      if (e.key === 'ArrowUp' && commands.length){ e.preventDefault(); historyIndex = Math.max(0, historyIndex - 1); input.value = commands[historyIndex]; }
+      else if (e.key === 'ArrowDown' && commands.length){ e.preventDefault(); historyIndex = Math.min(commands.length, historyIndex + 1); input.value = commands[historyIndex] || ''; }
+    });
+  })();
 
   // ----- technology matrix rain: ONE global, site-wide decorative layer -----
-  // Layer joins the existing z-0 atmosphere tier (.field grid + .orb glows), fixed and
-  // transparent; main.wrap (z 1) keeps every card/nav/dialog above it. Rendering is a
+  // Transparent fixed layer above section backgrounds, with the positioned
+  // content containers above it; navigation and dialogs stay on higher tiers. Rendering is a
   // bounded DOM pool animated with transform3d/opacity on a single rAF loop (no Canvas/
   // WebGL/lib — ~70 nodes is trivially cheap and keeps text fallbacks crisp).
   const MATRIX_RAIN = {
-    streams: [ [560, 3], [820, 4], [1100, 6], [1440, 7], [Infinity, 9] ], // [minWidth, count]
+    streams: [ [560, 6], [820, 7], [1100, 9], [1440, 10], [Infinity, 12] ], // [minWidth, count]
     depth: {
-      far:  { size: [11, 15], opacity: [0.05, 0.085], speed: [6, 11]  },
-      mid:  { size: [16, 21], opacity: [0.09, 0.13],  speed: [11, 17] },
-      near: { size: [23, 29], opacity: [0.14, 0.2],   speed: [17, 24] }
+      far:  { size: [11, 15], opacity: [0.05, 0.085], speed: [8.64, 15.84]  },
+      mid:  { size: [16, 21], opacity: [0.09, 0.13],  speed: [15.84, 24.48] },
+      near: { size: [23, 29], opacity: [0.14, 0.2],   speed: [24.48, 34.56] }
     },
     tierPattern: ['far', 'mid', 'far', 'mid', 'far', 'near', 'far', 'mid', 'near'], // ~50/33/17 mix
-    gap: [120, 168],         // px vertical breathing room per stream
+    gap: [85, 110],         // px vertical breathing room per stream
     corridor: 34,            // px horizontal wobble within a stream
-    maxInstances: 70,        // hard cap on live logo nodes
+    maxInstances: 144,       // bounded pool; desktop has 45+ visible instances
     colors: ['#aab0c6', '#9aa2bc', '#b6bdd2'],  // palette-neutral slates
-    brandColors: false,      // reserved: sparse muted brand accents if ever wanted
-    storageKey: 'bg-motion'  // localStorage pref ('on' | 'off'); legacy 'sf-paused' migrated
+    brandColors: false       // palette-neutral, not full-color logos
   };
 
   (function initTechRain(){
     const layer = document.getElementById('techRain');
     if (!layer || window.__techRain) return; // remount/route-change guard: never duplicate
 
-    const reducedMq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    let reduced = reducedMq.matches;
-    let pref = null; // 'on' | 'off' | null (auto)
-    try {
-      pref = localStorage.getItem(MATRIX_RAIN.storageKey);
-      if (pref === null && localStorage.getItem('sf-paused') === '1') pref = 'off'; // migrate legacy pause
-    } catch (_) {}
     let hidden = document.hidden;
 
     const chips = [];    // { el, strip, base, cycle, cursorSlot }
     let streams = [];    // { el, speed, dist, total, lead, queue, cursor }
     let rafId = null;
     let lastT = 0;
+    let paintT = 0;
     const deadIcons = new Set();
     const iconSeen = new Set();
 
@@ -4396,7 +4284,7 @@
     }
     const rand = (a, b) => a + Math.random() * (b - a);
     function shuffled(){
-      const a = TECH.slice();
+      const a = TECH.concat(DECORATIVE_TECH);
       for (let i = a.length - 1; i > 0; i--){
         const j = Math.floor(Math.random() * (i + 1));
         const t = a[i]; a[i] = a[j]; a[j] = t;
@@ -4411,15 +4299,16 @@
       im.onerror = () => {
         deadIcons.add(tech.icon);
         // graceful degradation: repaint live instances of this glyph as text tiles
-        chips.forEach(c => { if (c.el.dataset.tech === tech.name) renderChip(c, tech); });
+        chips.forEach(c => { if (c.el.dataset.icon === tech.icon) renderChip(c, c.tech); });
       };
       im.src = tech.icon;
     }
 
     function renderChip(chip, tech){
       chip.el.innerHTML = '';
+      chip.tech = tech;
       chip.el.dataset.tech = tech.name;
-      chip.el.title = tech.name;
+      chip.el.dataset.icon = tech.icon || '';
       if (tech.icon && !deadIcons.has(tech.icon)){
         const g = document.createElement('i');
         g.className = 'rt-glyph';
@@ -4452,12 +4341,16 @@
       layer.innerHTML = '';
       chips.length = 0;
       streams = [];
-      const n = streamCount();
       const vh = window.innerHeight || 800;
       const w = window.innerWidth || 1024;
-      let perStream = Math.ceil((vh + 2 * Math.max(...MATRIX_RAIN.gap)) / MATRIX_RAIN.gap[0]) + 1;
-      perStream = Math.max(4, Math.min(perStream, Math.floor(MATRIX_RAIN.maxInstances / n)));
+      // Reduce columns rather than recycling inside the viewport on tall screens.
+      const perStream = Math.min(MATRIX_RAIN.maxInstances, Math.max(4, Math.ceil((vh + 2 * Math.max(...MATRIX_RAIN.gap)) / MATRIX_RAIN.gap[0]) + 1));
+      const n = Math.max(1, Math.min(streamCount(), Math.floor(MATRIX_RAIN.maxInstances / perStream)));
       const stripW = w / n;
+      // Populate from a shuffled logo-only cycle first; this avoids an initial
+      // field of repeated text fallbacks and makes the breadth immediately visible.
+      const initialLogos = shuffled().filter(tech => tech.icon);
+      let initialCursor = 0;
       for (let i = 0; i < n; i++){
         const tier = MATRIX_RAIN.tierPattern[i % MATRIX_RAIN.tierPattern.length];
         const gap = rand(...MATRIX_RAIN.gap);
@@ -4485,7 +4378,7 @@
           el.className = 'rt-chip';
           el.setAttribute('aria-hidden', 'true');
           const chip = { el, strip, base: j * gap, cycle: -1, tier, size: 0, x: 0 };
-          const tech = strip.queue[strip.cursor++ % strip.queue.length];
+          const tech = initialLogos[initialCursor++ % initialLogos.length];
           recycleChip(chip, tech);
           const raw = strip.phase + chip.base;
           chip.cycle = Math.floor(raw / strip.total);
@@ -4504,16 +4397,17 @@
     }
 
     function effectiveMotion(){
-      if (pref === 'off') return false;
-      if (hidden) return false;
-      if (reduced && pref !== 'on') return false; // reduced-motion: static unless user opts in
-      return true;
+      return !hidden; // save resources in hidden tabs; always resume when visible
     }
 
     function frame(t){
       rafId = null;
       if (!effectiveMotion()){ lastT = 0; return; }
-      const dt = lastT ? Math.min((t - lastT) / 1000, 0.05) : 0;
+      // Updating at ~30 Hz is sufficient for this slow, subtle atmosphere and
+      // halves DOM writes on 60 Hz displays (more on high-refresh screens).
+      if (paintT && t - paintT < 32){ rafId = requestAnimationFrame(frame); return; }
+      paintT = t;
+      const dt = lastT ? Math.min((t - lastT) / 1000, 0.1) : 0;
       lastT = t;
       streams.forEach(s => { if (dt) s.dist += s.speed * dt; });
       chips.forEach(c => {
@@ -4532,40 +4426,16 @@
     function kick(){
       if (!rafId && effectiveMotion()){
         lastT = 0;
+        paintT = 0;
         rafId = requestAnimationFrame(frame);
       }
     }
 
-    // ----- controls: footer toggle + stackfall panel pause (one shared state) -----
-    const sfPause = document.getElementById('sfPause');
-    const bgToggle = document.getElementById('bgMotionToggle');
-    function syncControls(){
-      const on = effectiveMotion();
-      if (sfPause){
-        sfPause.setAttribute('aria-pressed', on ? 'false' : 'true');
-        sfPause.textContent = on ? 'Pause motion' : 'Resume motion';
-      }
-      if (bgToggle){
-        bgToggle.setAttribute('aria-pressed', on ? 'false' : 'true');
-        const b = bgToggle.querySelector('b');
-        if (b) b.textContent = on ? 'On' : 'Off';
-      }
-      layer.classList.toggle('paused', !on);
-    }
-    function toggleMotion(){
-      pref = effectiveMotion() ? 'off' : 'on';
-      try { localStorage.setItem(MATRIX_RAIN.storageKey, pref); } catch (_) {}
-      syncControls();
-      kick();
-    }
-    if (sfPause) sfPause.addEventListener('click', toggleMotion);
-    if (bgToggle) bgToggle.addEventListener('click', toggleMotion);
-
     document.addEventListener('visibilitychange', () => {
       hidden = document.hidden;
-      kick(); // frame loop self-cancels when hidden via effectiveMotion()
+      if (hidden && rafId){ cancelAnimationFrame(rafId); rafId = null; lastT = 0; }
+      if (!hidden) kick();
     });
-    if (reducedMq.addEventListener) reducedMq.addEventListener('change', e => { reduced = e.matches; syncControls(); kick(); });
 
     let resizeTimer = null;
     let lastN = streamCount();
@@ -4586,272 +4456,16 @@
     });
 
     build();
-    syncControls();
     kick();
 
-    // Stackfall/console inspect now highlights the GLOBAL layer
     window.__techRain = {
       count: () => chips.length,
       streamCount: () => streams.length,
       running: () => effectiveMotion()
     };
-    window.__stackfall = {
-      inspect(entry){
-        layer.classList.add('inspecting');
-        chips.forEach(c => c.el.classList.toggle('lit', c.el.dataset.tech === entry.name));
-      },
-      clear(){
-        layer.classList.remove('inspecting');
-        chips.forEach(c => c.el.classList.remove('lit'));
-      }
-    };
   })();
 
 
-  // ----- the stationary, always-available list + detail -----
-  (function initStackList(){
-    const filtersEl = document.getElementById('sfFilters');
-    const listEl = document.getElementById('sfList');
-    const detail = document.getElementById('sfDetail');
-    if (!filtersEl || !listEl || !detail) return;
-    const dName = document.getElementById('sfDetailName');
-    const dRole = document.getElementById('sfDetailRole');
-    const dUsed = document.getElementById('sfDetailUsed');
-    const dClose = document.getElementById('sfDetailClose');
-
-    const cats = ['all', 'interface', 'application', 'data', 'tools'];
-    cats.forEach((cat, i) => {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'sf-filter' + (i === 0 ? ' active' : '');
-      btn.setAttribute('aria-pressed', i === 0 ? 'true' : 'false');
-      btn.dataset.filter = cat;
-      btn.textContent = cat === 'all' ? 'All · ' + TECH.length : TECH_CATS[cat].label;
-      filtersEl.appendChild(btn);
-    });
-
-    Object.keys(TECH_CATS).forEach(cat => {
-      const group = document.createElement('div');
-      group.className = 'sf-group';
-      group.dataset.cat = cat;
-      const head = document.createElement('p');
-      head.className = 'sf-group-label';
-      head.textContent = TECH_CATS[cat].label;
-      group.appendChild(head);
-      const row = document.createElement('div');
-      row.className = 'sf-row';
-      TECH.filter(t => t.cat === cat).forEach(tech => {
-        const chip = document.createElement('button');
-        chip.type = 'button';
-        chip.className = 'sf-tech' + (tech.learn ? ' learn' : '');
-        chip.dataset.tech = tech.name;
-        chip.innerHTML = '<span></span>' + (tech.learn ? ' <span class="learn">learning</span>' : '');
-        chip.firstChild.textContent = tech.name;
-        chip.addEventListener('click', () => inspectTech(tech));
-        row.appendChild(chip);
-      });
-      group.appendChild(row);
-      listEl.appendChild(group);
-    });
-
-    filtersEl.addEventListener('click', (e) => {
-      const btn = e.target.closest('.sf-filter');
-      if (!btn) return;
-      Array.from(filtersEl.children).forEach(b => {
-        const on = b === btn;
-        b.classList.toggle('active', on);
-        b.setAttribute('aria-pressed', on ? 'true' : 'false');
-      });
-      const f = btn.dataset.filter;
-      Array.from(listEl.children).forEach(group => {
-        group.style.display = (f === 'all' || group.dataset.cat === f) ? '' : 'none';
-      });
-    });
-
-    dClose.addEventListener('click', () => {
-      detail.hidden = true;
-      if (window.__stackfall) window.__stackfall.clear();
-    });
-  })();
-
-  // shared inspect: detail card + rain highlight + optional console echo
-  function inspectTech(tech, echo){
-    const detail = document.getElementById('sfDetail');
-    const dName = document.getElementById('sfDetailName');
-    const dRole = document.getElementById('sfDetailRole');
-    const dUsed = document.getElementById('sfDetailUsed');
-    if (detail && dName && dRole && dUsed){
-      dName.textContent = tech.name + (tech.learn ? ' · learning' : '');
-      dRole.textContent = TECH_CATS[tech.cat].label + ' — ' + tech.role;
-      dUsed.innerHTML = '';
-      if (tech.projects.length){
-        tech.projects.forEach(key => {
-          const b = document.createElement('button');
-          b.type = 'button';
-          b.className = 'sf-proj';
-          b.textContent = TECH_PROJECTS[key] + ' — view case study';
-          b.addEventListener('click', () => {
-            if (typeof window.openCaseStudy === 'function') window.openCaseStudy(key);
-          });
-          dUsed.appendChild(b);
-        });
-      } else {
-        const span = document.createElement('span');
-        span.className = 'sf-none';
-        span.textContent = 'in the toolbox — not tied to a public case study yet';
-        dUsed.appendChild(span);
-      }
-      detail.hidden = false;
-    }
-    if (window.__stackfall) window.__stackfall.inspect(tech);
-    if (echo) printInspection(tech);
-  }
-
-  // ----- messay.sh console -----
-  const consolePrint = (function initMessaySh(){
-    const log = document.getElementById('consoleLog');
-    const chipsHost = document.getElementById('consoleChips');
-    const form = document.getElementById('consoleForm');
-    const input = document.getElementById('consoleInput');
-    if (!log || !form || !input) return null;
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    function println(text, cls){
-      const row = document.createElement('div');
-      row.className = 'csl-row' + (cls ? ' ' + cls : '');
-      const lines = String(text).split('\n');
-      lines.forEach((ln, i) => {
-        if (i) row.appendChild(document.createElement('br'));
-        row.appendChild(document.createTextNode(ln));
-      });
-      log.appendChild(row);
-      log.scrollTop = log.scrollHeight;
-      return row;
-    }
-
-    const COMMANDS = {
-      whoami(){
-        println('Messay Mohammed — full-stack & mobile developer.\nbased in Addis Ababa, shipping to the internet.\ncurrently expanding into AI engineering (honestly: learning by building).', 'out');
-      },
-      projects(){
-        println('P.01  Student Sports Hub — React Native + Supabase · shipped (Sep–Dec 2025)\nP.02  Business Forms Mini App — Telegram mini app + NestJS · delivered (Feb 2026)\nP.03  HerCycle — period tracking & wellness · in development (live preview at hercycle.pages.dev)\ntip: the Work section above has the full case studies.', 'out');
-      },
-      stack(){
-        println('interface        React · Next.js · TypeScript · Tailwind · React Native · Expo · Framer Motion · MUI\napps & apis      Node.js · NestJS · Express · FastAPI · REST design · WebSockets\ndata & auth      PostgreSQL · MySQL · Supabase · Firebase · Redis · JWT/OAuth · RBAC · pen-testing (basics)\ntools            Docker · Git/GitHub · AI-assisted workflows (learning)\n"inspect <name>" zooms into one, e.g. inspect supabase', 'out');
-      },
-      process(){
-        println('1. listen — what does this actually need to do?\n2. sketch the flow before the pixels\n3. build vertical slices: screen → api → data, end to end\n4. watch a real person use it, fix what confuses them\n5. ship, then iterate from reality', 'out');
-      },
-      principles(){
-        println('- interfaces should feel alive, not loud\n- honest labels beat clever marketing\n- a form should never lose your text\n- performance is a feature; accessibility is a requirement', 'out');
-      },
-      contact(){
-        println('email   messaymohammed@gmail.com\ncall    +251 900 651 948\nbook    cal.com/messay-mohammed-w47ggg\ngithub  github.com/moisoi\nor use the composer in the Contact section below.', 'out');
-      },
-      flow(){
-        const flow = document.createElement('div');
-        flow.className = 'csl-flow';
-        ['button', 'validation', 'authorisation', 'database', 'confirmed ✓'].forEach((step, i, arr) => {
-          const s = document.createElement('span');
-          s.className = 'step';
-          s.textContent = step;
-          flow.appendChild(s);
-          if (i < arr.length - 1){
-            const a = document.createElement('span');
-            a.className = 'arrow';
-            a.textContent = '→';
-            flow.appendChild(a);
-          }
-        });
-        log.appendChild(flow);
-        println('one request\u2019s illustrated journey — a diagram, not a live trace.', 'out dim');
-        log.scrollTop = log.scrollHeight;
-      }
-    };
-
-    function printHelp(){
-      println('available: whoami · projects · stack · process · principles · contact · flow · inspect <tech> · help · clear', 'out');
-    }
-
-    function printInspection(tech){
-      const used = tech.projects.length
-        ? 'used in: ' + tech.projects.map(k => TECH_PROJECTS[k]).join(', ')
-        : 'in the toolbox — no public case study yet';
-      println('\u27e8 ' + tech.name + ' \u27e9 — ' + TECH_CATS[tech.cat].label + '\n' + tech.role + '\n' + used + (tech.learn ? '\nstatus: actively learning' : ''), 'out');
-    }
-
-    function run(raw){
-      const cmd = raw.trim();
-      if (!cmd) return;
-      println('guest@messay.sh ❯ ' + cmd, 'cmd-echo');
-      const parts = cmd.split(/\s+/);
-      const verb = parts[0].toLowerCase();
-      if (verb === 'clear'){
-        log.innerHTML = '';
-        println('clean slate. try "whoami" or "stack".', 'out dim');
-        return;
-      }
-      if (verb === 'help'){
-        printHelp();
-        return;
-      }
-      if (verb === 'inspect'){
-        const arg = parts.slice(1).join(' ');
-        if (!arg){ println('inspect what? e.g. inspect react', 'out dim'); return; }
-        const tech = techByName(arg);
-        if (tech) inspectTech(tech, false) || printInspection(tech);
-        else println('nothing verified under "' + arg + '" — "stack" lists everything.', 'out');
-        return;
-      }
-      if (Object.prototype.hasOwnProperty.call(COMMANDS, verb)){
-        COMMANDS[verb]();
-        return;
-      }
-      println('command not found: ' + verb + ' — this shell only runs a curated set. "help" shows them.', 'out');
-    }
-
-    // command chips — typed input without the typing
-    if (chipsHost){
-      ['whoami', 'projects', 'stack', 'flow', 'contact', 'help'].forEach(c => {
-        const b = document.createElement('button');
-        b.type = 'button';
-        b.className = 'csl-chip' + (c === 'help' ? ' warn' : '');
-        b.textContent = c;
-        b.addEventListener('click', () => { run(c); input.focus(); });
-        chipsHost.appendChild(b);
-      });
-    }
-
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const val = input.value;
-      input.value = '';
-      run(val);
-    });
-
-    // boot sequence
-    const bootLines = [
-      ['messay.sh — visitor shell v2.1', 'banner'],
-      ['booting personality module… ok', 'out dim'],
-      ['mounting /projects /stack /principles… ok', 'out dim'],
-      ['I build interfaces with personality and systems with follow-through.', 'out'],
-      ['type help for commands, or tap a chip', 'out dim']
-    ];
-    if (reduced){
-      bootLines.forEach(([text, cls]) => println(text, cls));
-    } else {
-      let i = 0;
-      (function next(){
-        if (i >= bootLines.length) return;
-        println(bootLines[i][0], bootLines[i][1]);
-        i++;
-        setTimeout(next, i === 4 ? 420 : 150);
-      })();
-    }
-
-    window.__consoleInspect = printInspection;
-    return println;
-  })();
 </script>
 
   <div class="chat-widget">
@@ -4887,7 +4501,7 @@
         <input type="text" id="chatInput" placeholder="Ask a question…" autocomplete="off" aria-label="Type your question">
         <button type="submit" class="chat-send" aria-label="Send message"><svg width="16" height="16"><use href="#i-send"></use></svg></button>
       </form>
-      <div class="chat-footer-note">Prefer talking directly? <a href="mailto:messaymohammed@gmail.com">Email Messay</a> or <a href="https://cal.com/messay-mohammed-w47ggg" target="_blank" rel="noopener">book a call</a>.</div>
+      <div class="chat-footer-note">Prefer talking directly? <a href="mailto:messaymohammed@gmail.com">Email Messay</a> send a message on <a href="https://t.me/bigfootprints" target="_blank" rel="noopener noreferrer">Telegram</a>, or <a href="https://cal.com/messay-mohammed-w47ggg" target="_blank" rel="noopener">book a call</a>.</div>
     </div>
 
     <div class="chat-launcher" id="chatLauncher">
@@ -4907,13 +4521,13 @@
   (function initPortfolioChat(){
     const KB = [
       { keys: ['skill','tech','stack','know','technolog','framework','language','tool'],
-        reply: "Interface: React, Next.js, TypeScript, Tailwind, React Native, Expo, Framer Motion, MUI. Backend: Node.js, NestJS, Express, FastAPI. Data & auth: PostgreSQL, MySQL, Supabase, Firebase, Redis, JWT/OAuth, RBAC — plus pen-testing basics. Tools: Docker, Git, AI-assisted workflows. The Stackfall field above lists all of it." },
+        reply: "Interface: React, Next.js, TypeScript, Tailwind, React Native, Expo, Framer Motion, MUI. Backend: Node.js, NestJS, Express, FastAPI. Data & auth: PostgreSQL, MySQL, Supabase, Firebase, Redis, JWT/OAuth, RBAC — plus pen-testing basics. Tools: Docker, Git, AI-assisted workflows. The Capabilities section lists the portfolio stack." },
       { keys: ['project','portfolio','built','build','app ','apps','sports hub','business forms'],
-        reply: "Three right now: Student Sports Hub (React Native + Supabase, multi-school sports app, Sep–Dec 2025), Business Forms Mini App (Telegram mini app with a NestJS API, Feb 2026), and HerCycle (period tracking & wellness web app, in active development). Full write-ups are in the Work section." },
+        reply: "Three right now: Student Sports Hub (React Native + Supabase, multi-school sports app, Sep–Dec 2025), Business Forms Mini App (Telegram mini app with a NestJS API, Feb 2026; app: https://meteku-teshome-general-forms.vercel.app/), and HerCycle (launched period tracking & wellness web app). Full write-ups are in the Work section." },
       { keys: ['hercycle','period','wellness','cycle','luna','garden'],
-        reply: "HerCycle is his personal project — a premium period-tracking and wellness web app (React + TypeScript + Supabase) with phase-aware themes, a companion named Luna, an interactive garden, and bilingual Amharic/English support. It's live at hercycle.pages.dev; authentication, cloud sync, and cycle predictions are still in development." },
+        reply: "HerCycle is his personal project — a premium period-tracking and wellness web app (React + TypeScript + Supabase) with phase-aware themes, a companion named Luna, an interactive garden, and bilingual Amharic/English support. The app has launched at hercycle.pages.dev." },
       { keys: ['experience','worked','job','role','company','companies','career'],
-        reply: "Contract roles: Dewel Marketing and Consultancy (student sports app, Sep–Dec 2025) and Meteku Teshome General Work PLC (business forms mini app, Feb 2026). Currently an Operations Intern at MMCY (Jun–Jul 2026) while building HerCycle on the side." },
+        reply: "Contract roles: Dewel Marketing and Consultancy (student sports app, Sep–Dec 2025) and Meteku Teshome General Work PLC (business forms mini app, Feb 2026). Currently an Operations Intern at MMCY (Jun–Jul 2026) and launched HerCycle as a personal project." },
       { keys: ['educat','degree','school','university','hilcoe','study','studied','college','certificat'],
         reply: "Bachelor of Computer Science from HILCOE School of Computer Science and Technology (2020–2025), plus certificates in 2D & 3D Modeling for Product Development and MMCY Workforce Training." },
       { keys: ['available','availability','hire','hiring','freelance','full-time','full time','contract work','notice'],
@@ -4933,7 +4547,7 @@
       { keys: ['language','amharic','english','speak'],
         reply: "He speaks Amharic (native) and English (professional)." },
       { keys: ['who is messay','who are you','about him','about you','tell me about','what does he do'],
-        reply: "Messay is a full-stack & mobile developer based in Addis Ababa, working across React, React Native, Node.js, and Supabase — currently learning AI engineering. Two contract products shipped, one personal app in the works. The About section has the full picture." },
+        reply: "Messay is a full-stack & mobile developer based in Addis Ababa, working across React, React Native, Node.js, and Supabase. His work includes two contract products and the launched HerCycle app. The About section has the full picture." },
       { keys: ['why hire','why should','different','stand out','best fit'],
         reply: "Two things recruiters tend to flag: he ships end-to-end on real client work, and he pairs that with genuine UI/UX care rather than treating design as an afterthought. The Work section is the best judge." }
     ];
